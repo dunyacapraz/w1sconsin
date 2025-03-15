@@ -131,39 +131,50 @@ const D2PuanHesaplama = () => {
     let aciklama = "";
 
     if (tip === 'TN') {
-      // TN: Psikomotor hızı (Algıladığını harekete dökme, kavrama hızı) hakkında bilgi verir.
-      if (percentile <= 10) {
+    // TN: Psikomotor hızı (Algıladığını harekete dökme, kavrama hızı) hakkında bilgi verir.
+    if (percentile < 10) {
         yorum = "🔴 Kritik Sorun";
         aciklama = "Çok düşük psikomotor hız! Algı-kavrama ve harekete dökmede ciddi sorunlar var.";
-      } else if (percentile <= 25) {
-        yorum = "🟠 Düşük Performans";
-        aciklama = "Psikomotor hız düşük; algılama ve hareket arasındaki tepki süresi yavaş.";
-      } else if (percentile <= 75) {
+    } else if (percentile <= 25) {
+        yorum = "🟠 Sınırda";
+        aciklama = "Psikomotor hız idealin altında; algılama ve tepki süresinde tutarlılık eksik.";
+    } else if (percentile <= 75) {
+        yorum = "🟡 Normal";
+        aciklama = "Beklenen düzeyde psikomotor hız. Algı ve eylem arasında dengeli bir performans.";
+    } else if (percentile <= 90) {
         yorum = "🟢 İyi";
-        aciklama = "Normal psikomotor hız. Algı ve hareket arasında iyi bir denge mevcut.";
-      } else {
-        yorum = "🔵 Çok İyi";
-        aciklama = "Çok yüksek psikomotor hız! Hızlı algılama ve anında tepki veriyor.";
-      }
-      aciklama += "\n(TN: Psikomotor hızı; algılama, kavrama ve harekete dökme becerilerini niceliksel olarak ölçer.)";
-    } else if (tip === 'TN-E') {
-      // TN-E: Test Performansı; %75 üzerinde olmalı.
-      // Bu parametre, psikomotor hız ile seçici dikkat arasındaki dengeyi gösterir.
-      if (percentile <= 10) {
+        aciklama = "Hızlı psikomotor tepki; algıladığını hızla harekete dökme becerisi gelişmiş.";
+    } else if (percentile <= 97.1) {
+        yorum = "🔵 Yüksek";
+        aciklama = "Üst düzey psikomotor hız! Sonuçlar seçkin performans seviyesini gösteriyor.";
+    } else {
+        yorum = "🟣 Çok Yüksek";
+        aciklama = "Olağanüstü psikomotor hız! Algıdan harekete geçişte mükemmel bir yetenek.";
+    }
+    aciklama += "\n(TN: Psikomotor hızı; algılama, kavrama ve harekete dökme becerilerini niceliksel olarak ölçer.)";
+} else if (tip === 'TN-E') {
+    // TN-E: Test Performansı; psikomotor hız ile seçici dikkat arasındaki dengeyi gösterir
+    if (percentile < 10) {
         yorum = "🔴 Kritik Sorun";
-        aciklama = "Test performansı çok düşük; psikomotor hız ve dikkat arasında ciddi dengesizlik mevcut.";
-      } else if (percentile <= 25) {
-        yorum = "🟠 Düşük Performans";
-        aciklama = "Performans yetersiz; geliştirilmesi gereken alanlar var.";
-      } else if (percentile <= 75) {
+        aciklama = "Test performansı çok düşük! Psikomotor-dikkat dengesinde ciddi bozulma mevcut.";
+    } else if (percentile <= 25) {
+        yorum = "🟠 Sınırda";
+        aciklama = "Performans risk sınırında; motor hız ve dikkat dağılması kombinasyonu zayıf.";
+    } else if (percentile <= 75) {
+        yorum = "🟡 Normal";
+        aciklama = "Beklenen performans seviyesi; temel test kriterleri karşılanmış durumda.";
+    } else if (percentile <= 90) {
         yorum = "🟢 İyi";
-        aciklama = "Normal performans; test kriterleri genel olarak karşılanmış.";
-      } else {
-        yorum = "🔵 Çok İyi";
-        aciklama = "Üstün performans; psikomotor hız ve seçici dikkat arasında ideal denge sağlanmış.";
-      }
-      aciklama += "\n(TN-E: Test Performansı; ideal olarak %75 üzeri olmalıdır. Bu, genel dikkat ve motor becerilerin kalitesini yansıtır.)";
-    } else if (tip === 'E1') {
+        aciklama = "Test performansı ideal aralıkta; hız-dikkat dengesi optimum seviyede.";
+    } else if (percentile <= 97.1) {
+        yorum = "🔵 Yüksek";
+        aciklama = "Üstün performans; zorlu koşullarda bile tutarlılık gösteriyor.";
+    } else {
+        yorum = "🟣 Çok Yüksek";
+        aciklama = "Olağanüstü performans! Motor beceri ve odaklanma mükemmel uyumlu.";
+    }
+    aciklama += "\n(TN-E: Test Performansı; ideal olarak %75 üzeri olmalıdır. Bu, genel dikkat ve motor becerilerin kalitesini yansıtır.)";
+} else if (tip === 'E1') {
       // E1: Seçici Dikkat; hata sayısı arttıkça dikkat düşüklüğü söz konusu.
       // 15-20 hata hafif, 20-30 hata orta, 30+ hata ciddi.
       if (deger >= 30) {
@@ -201,37 +212,48 @@ const D2PuanHesaplama = () => {
       return `${deger} => ${yorum}\n   ${aciklama}`;
     } else if (tip === 'HataYuzdesi') {
       // Hata Yüzdesi: Odaklanma düzeyi ve dikkat problemini ölçer.
-      if (percentile <= 10) {
-        yorum = "🔴 Kritik Dikkat Problemi";
-        aciklama = "Hata yüzdesi çok yüksek; odaklanma ciddi şekilde bozulmuş.";
-      } else if (percentile <= 25) {
-        yorum = "🟠 Hafif Dikkat Problemi";
-        aciklama = "Hata yüzdesi ideal aralıkta değil; odaklanmada hafif sorunlar var.";
-      } else if (percentile <= 50) {
-        yorum = "🟡 Orta Dikkat Problemi";
-        aciklama = "Orta düzeyde hata; dikkat ve çalışma kalitesinde eksiklikler mevcut.";
-      } else {
-        yorum = "🔵 Üstün Dikkat";
-        aciklama = "Hata yüzdesi düşük; odaklanma ve dikkat seviyesi ideal.";
-      }
-      aciklama += "\n(Hata Yüzdesi: 0'a yaklaştıkça ideal, 2,5'ten uzaklaştıkça dikkat problemleri artar.)";
+     if (percentile < 10) {
+    yorum = "🔴 Sorun";
+    aciklama = "Performans kritik düzeyde düşük: Acil müdahale önerilir.";
+} else if (percentile <= 25) {
+    yorum = "🟠 Sınırda";
+    aciklama = "Performans idealin altında: Takip ve geliştirme önerilir.";
+} else if (percentile <= 75) {
+    yorum = "🟡 Normal";
+    aciklama = "Beklenen düzeyde performans: Rutin takip yeterli.";
+} else if (percentile <= 90) {
+    yorum = "🟢 İyi";
+    aciklama = "İdeal üstü performans: Sürdürülebilir başarı seviyesi.";
+} else if (percentile <= 97.1) {
+    yorum = "🔵 Yüksek";
+    aciklama = "Üstün performans: Kayda değer bir başarı seviyesi.";
+} else {
+    yorum = "🟣 Çok Yüksek";
+    aciklama = "Olağanüstü performans: En üst düzeyde başarı gösterilmiştir.";
+}
     } else if (tip === 'FR') {
-      // FR: Dikkat salınımı ve sürekliliğini, motivasyon ve psikomotor hızdaki istikrarı gösterir.
-      if (percentile <= 10) {
-        yorum = "🔴 Sorun Var";
-      } else if (percentile <= 25) {
-        yorum = "🟠 Sınırda";
-      } else if (percentile <= 75) {
-        yorum = "🟡 Normal";
-      } else if (percentile <= 90) {
-        yorum = "🟢 İyi";
-      } else if (percentile <= 97.1) {
-        yorum = "🔵 Yüksek";
-      } else {
-        yorum = "🎉 Çok Yüksek";
-      }
-      aciklama = "FR: Dikkat salınımı, sürekliliği ve motivasyon istikrarını ölçer. Düşük değer, düşük motivasyon ve istikrarsızlık ifade eder.";
+    // FR: TN puanları arasındaki maksimum fark (dikkat istikrarı ve motivasyon göstergesi)
+    if (percentile < 10) {
+        yorum = "🔴 Kritik İstikrarsızlık";
+        aciklama = "Aşırı yüksek fark! (%" + percentile + ") Ciddi dikkat dalgalanmaları ve motivasyon sorunları gözleniyor.";
+    } else if (percentile <= 25) {
+        yorum = "🟠 Riskli Dağılım";
+        aciklama = "Büyük performans farkı (%" + percentile + "). Dikkatte belirgin salınımlar ve odaklanma zorlukları mevcut.";
+    } else if (percentile <= 75) {
+        yorum = "🟡 Normal Varyasyon";
+        aciklama = "Kabul edilebilir seviyede fark (%" + percentile + "). Zaman zaman küçük konsantrasyon dalgalanmaları görülüyor.";
+    } else if (percentile <= 90) {
+        yorum = "🟢 İstikrarlı Performans";
+        aciklama = "Düşük fark (%" + percentile + "). Tutarlı dikkat yönetimi ve sağlam motivasyon seviyesi.";
+    } else if (percentile <= 97.1) {
+        yorum = "🔵 Üstün Tutarlılık";
+        aciklama = "Minimum performans farkı (%" + percentile + "). Yüksek seviyede odaklanma becerisi ve sürekli motivasyon.";
     } else {
+        yorum = "🎉 Olağanüstü Denge";
+        aciklama = "Neredeyse sıfır fark (%" + percentile + ")! Mükemmel düzeyde istikrar ve kontrol.";
+    }
+    aciklama += "\n(FR: En yüksek ve en düşük TN puanları arası farkı gösterir. Düşük değerler istikrarlı performansı, yüksek değerler dikkat dalgalanmalarını işaret eder.)";
+} else {
       // Diğer parametreler için genel yorum
       if (percentile <= 10) yorum = "🔴 Kritik Sorun";
       else if (percentile <= 25) yorum = "🟠 Düşük Performans";
@@ -267,8 +289,6 @@ const D2PuanHesaplama = () => {
 🎯 TN-E Değeri             : ${TM_H}
    ${yorumla(TM_H, 'TN-E').padEnd(45)}
 
-🧠 Konsantrasyon Puanı     : ${KP.toFixed(2)}/5 
-
 ⚠️ E1 (Seçici Dikkat)      : ${yorumla(H1, 'E1').padEnd(45)}
    (15-20: Hafif, 20-30: Orta, 30+: Ciddi)
 
@@ -277,9 +297,10 @@ const D2PuanHesaplama = () => {
 
 🌀 FR                     : ${yorumla(DO, 'FR').padEnd(45)}
 
-🔍 İlk 4 Satır  : %${ilk4Sonuc.toFixed(2)} 
-📌 Orta 6 Satır : %${orta6Sonuc.toFixed(2)} 
-🎯 Son 4 Satır  : %${son4Sonuc.toFixed(2)} 
+🧠 Konsantrasyon Puanı     : ${KP.toFixed(2)}/5 
+🧠 İlk 4 Satır  : %${ilk4Sonuc.toFixed(2)} 
+🧠 Orta 6 Satır : %${orta6Sonuc.toFixed(2)} 
+🧠 Son 4 Satır  : %${son4Sonuc.toFixed(2)} 
     
     `;
     
