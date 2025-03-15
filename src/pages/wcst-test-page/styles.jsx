@@ -23,6 +23,7 @@ export const WcstWindow = styled.div`
 
   @media screen and (max-width: 700px) {
     font-size: var(--font-s);
+    padding: 10px;
   }
 `;
 
@@ -45,6 +46,11 @@ export const ResponseCards = styled.div`
   align-items: center;
   margin-top: 2rem;
   padding: 1rem;
+
+  @media screen and (max-width: 700px) {
+    margin-top: 1rem;
+    padding: 0.5rem;
+  }
 `;
 
 // Uyarı mesajı için stil (animasyonlu)
@@ -61,6 +67,10 @@ export const Warning = styled.div`
     top: 0.5rem;
     font-size: var(--font-s);
   }
+
+  @media screen and (max-width: 700px) {
+    font-size: var(--font-xs);
+  }
 `;
 
 export const WarningButton = styled.div`
@@ -75,6 +85,10 @@ export const WarningButton = styled.div`
   @media screen and (max-width: 1000px) {
     top: 0.5rem;
     font-size: var(--font-s);
+  }
+
+  @media screen and (max-width: 700px) {
+    font-size: var(--font-xs);
   }
 `;
 
@@ -110,7 +124,6 @@ export const Start = styled.div`
 
     @media screen and (max-width: 700px) {
       width: 235px;
-      font-size: var(--font-s);
     }
   }
 `;
@@ -132,6 +145,7 @@ export const Button = styled.button`
   @media screen and (max-width: 700px) {
     padding: 10px 20px;
     font-size: var(--font-s);
+    margin-top: 250px;
   }
 
   &:hover {
@@ -168,6 +182,11 @@ export const LoadingSpinner = styled.div`
     100% {
       transform: rotate(360deg);
     }
+  }
+
+  @media screen and (max-width: 700px) {
+    width: 30px;
+    height: 30px;
   }
 `;
 
