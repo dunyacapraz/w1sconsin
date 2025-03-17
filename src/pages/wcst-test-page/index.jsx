@@ -29,7 +29,7 @@ function WcstWindow() {
   const { resCount, resColor, resFigure } = responseCards[cardIndex] || {};  // responseCards[cardIndex] güvenli erişim
 
   // Test bitirme kontrolü: 6 kategori tamamlanmışsa veya 128 karta ulaşılmışsa
-  const testCompleted = completedCategories === 6 || cardIndex >= 128;
+  const testCompleted = completedCategories === 3 || cardIndex >= 128;
 
   // Target kartlar listesi
   const targetCardsList = (
@@ -95,7 +95,7 @@ function WcstWindow() {
       setCategoryCorrect(0);
     }
 
-    if (newCategoryCorrect === 10) {
+    if (newCategoryCorrect === 3) {
       setCategoryCorrect(0);
       setCompletedCategories((prevCompleted) => {
         const newCompleted = prevCompleted + 1;
