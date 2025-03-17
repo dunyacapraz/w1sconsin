@@ -6,7 +6,7 @@ function WcstTable() {
   const { result, completedCategories } = useContext(WcstContext);
   const safeResult = result || [];
 
-  const rowsPerColumn = 18;
+  const rowsPerColumn = 22;
   const totalColumns = Math.ceil(safeResult.length / rowsPerColumn);
 
   const columns = Array.from({ length: totalColumns }, (_, columnIndex) =>
