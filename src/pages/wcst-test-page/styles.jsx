@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { NavLink } from "react-router-dom";
 
-// Aşağıdan yukarı animasyon
+// Aşağıdan yukarı animasyon (değişmedi)
 const slideUp = keyframes`
   from {
     transform: translateY(20px);
@@ -13,7 +13,7 @@ const slideUp = keyframes`
   }
 `;
 
-// Genel WCST penceresi stili
+// Genel WCST penceresi stili (sadece mobil değişiklik)
 export const WcstWindow = styled.div`
   min-height: 95vh;
   margin: auto;
@@ -23,6 +23,7 @@ export const WcstWindow = styled.div`
 
   @media screen and (max-width: 700px) {
     font-size: var(--font-s);
+    padding: 0.5rem; /* Mobil için padding eklendi */
   }
 `;
 
@@ -33,17 +34,30 @@ export const CompletedOptions = styled.div`
   align-items: center;
   justify-content: center;
   height: 70vh;
+
+  /* Mobil için değişiklik yok */
 `;
 
-// Kartlar için genel stil
+// Kartlar için genel stil (sadece mobil değişiklik)
 export const TargetCards = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
 
   @media screen and (max-width: 700px) {
-    flex-direction: column;
-    align-items: center;
+    overflow-x: auto; /* Yatay kaydırma eklendi */
+    padding: 0.5rem 1rem;
+    justify-content: flex-start; /* Kartları sola hizala */
+    -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
+    scrollbar-width: none; /* Firefox scrollbar gizleme */
+    
+    &::-webkit-scrollbar {
+      display: none; /* Chrome/Safari scrollbar gizleme */
+    }
+
+    > div {
+      flex-shrink: 0; /* Kartların küçülmesini engelle */
+    }
   }
 `;
 
@@ -54,9 +68,11 @@ export const ResponseCards = styled.div`
   align-items: center;
   margin-top: 2rem;
   padding: 1rem;
+
+  /* Mobil için değişiklik yok */
 `;
 
-// Uyarı mesajı için stil (animasyonlu)
+// Uyarı mesajı için stil (sadece mobil değişiklik)
 export const Warning = styled.div`
   position: relative;
   top: 1rem;
@@ -84,10 +100,12 @@ export const WarningButton = styled.div`
   @media screen and (max-width: 1000px) {
     top: 0.5rem;
     font-size: var(--font-s);
+    position: static; /* Mobilde normal akışa dönsün */
+    margin-top: 1rem;
   }
 `;
 
-// NavLink buton stili
+// NavLink buton stili (sadece mobil değişiklik)
 export const NavLinkButton = styled(NavLink)`
   display: flex;
   justify-content: center;
@@ -102,7 +120,7 @@ export const NavLinkButton = styled(NavLink)`
   }
 `;
 
-// Başlangıç butonu ve konumlandırma
+// Başlangıç butonu ve konumlandırma (sadece mobil değişiklik)
 export const Start = styled.div`
   display: flex;
   flex-direction: column;
@@ -124,7 +142,7 @@ export const Start = styled.div`
   }
 `;
 
-// Modern buton stili
+// Modern buton stili (sadece mobil değişiklik)
 export const Button = styled.button`
   font-size: var(--font-l);
   color: white;
@@ -139,6 +157,7 @@ export const Button = styled.button`
   transition: all 0.3s ease-in-out;
 
   @media screen and (max-width: 700px) {
+    margin-top: 1rem; /* Mobilde daha uygun boşluk */
     padding: 10px 20px;
     font-size: var(--font-s);
   }
@@ -161,7 +180,7 @@ export const Button = styled.button`
   }
 `;
 
-// Yükleniyor simgesi
+// Yükleniyor simgesi (değişiklik yok)
 export const LoadingSpinner = styled.div`
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-top: 4px solid var(--text-color);
@@ -180,7 +199,7 @@ export const LoadingSpinner = styled.div`
   }
 `;
 
-// Sonuçlar için stil
+// Sonuçlar için stil (değişiklik yok)
 export const ResultContainer = styled.div`
   padding: 2rem;
   background-color: rgba(255, 255, 255, 0.1);
@@ -193,7 +212,7 @@ export const ResultContainer = styled.div`
   }
 `;
 
-// Başlangıç metni ve buton stili
+// Başlangıç metni ve buton stili (sadece mobil değişiklik)
 export const StartText = styled.div`
   font-size: var(--font-l);
   color: #ff9800;
