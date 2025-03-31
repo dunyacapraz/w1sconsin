@@ -4,6 +4,7 @@ import { targetCards } from "../../services/target-cards";
 import { responseCards } from "../../services/response-cards";
 import * as S from "./styles";
 import { WcstContext } from "../../components/context";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function WcstWindow() {
   const {
@@ -14,6 +15,8 @@ function WcstWindow() {
     completedCategories,
     setCompletedCategories,
   } = useContext(WcstContext);
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const [cardIndex, setCardIndex] = useState(0);
   const [open, setOpen] = useState(false);
@@ -482,7 +485,7 @@ function WcstWindow() {
     console.warn("İndirilecek sonuç bulunamadı");
     return;
   }
-  
+
   // Sadece istenen alanları içeren yeni bir dizi oluştur
   const simplifiedResults = result.map(item => ({
     response: item.response,
@@ -511,16 +514,19 @@ function WcstWindow() {
   }
 };
 
+  const handleShowAndDownload = () => {
+    downloadResultsAsJson();
+    navigate("/wcst-test-result");
+  };
+
   return (
   <S.WcstWindow>
     {testInfo ? (
       testCompleted ? (
         <S.CompletedOptions>
-          <S.NavLinkButton to="/wcst-test-result">
-            <S.Button>Sonuçları Göster</S.Button>
-          </S.NavLinkButton>
-          <S.Button onClick={downloadResultsAsJson}>
-            Sonuçları İndir
+          {/* Removed the S.NavLinkButton and modified the S.Button */}
+          <S.Button onClick={handleShowAndDownload}>
+            Sonuçları Göster ve İndir
           </S.Button>
         </S.CompletedOptions>
       ) : (
