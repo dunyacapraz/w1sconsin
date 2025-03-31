@@ -129,12 +129,12 @@ function WcstWindow() {
       setLastPerseverativeResponse(null);
 
       // console.log(
-      //   "Kategori değişimi tamamlandı. Yeni kategori:",
-      //   category === "color"
-      //     ? "figure"
-      //     : category === "figure"
-      //     ? "count"
-      //     : "color"
+      //  "Kategori değişimi tamamlandı. Yeni kategori:",
+      //  category === "color"
+      //    ? "figure"
+      //    : category === "figure"
+      //    ? "count"
+      //    : "color"
       // );
     }
   }, [pendingCategoryChange, category, completedCategories]);
@@ -146,7 +146,15 @@ function WcstWindow() {
         <div
           key={index}
           onClick={() => {
-            clickHandle({ target });
+            if (!open) { // Sadece 'open' false ise tıklamayı işle
+              clickHandle({ target });
+            }
+          }}
+          style={{
+            opacity: open ? 0.5 : 1, // 'open' true ise opacity'i düşür
+            pointerEvents: open ? 'none' : 'auto', // 'open' true ise tıklamayı engelle
+            transition: 'opacity 0.3s ease-in-out', // İsteğe bağlı: Yumuşak geçiş için
+            cursor: open ? 'default' : 'pointer', // İsteğe bağlı: İmleci de değiştir
           }}
         >
           <Card
@@ -257,7 +265,7 @@ function WcstWindow() {
     // Belirsiz cevap veya saf olmayan cevap geldiğinde ardışık saf yanlış sayacını sıfırla
     if (isAmbiguousAnswer || !isPureAnswer || isOther) {
       // console.log(
-      //   "Belirsiz veya saf olmayan cevap - Ardışık saf yanlış sayacı sıfırlandı"
+      //  "Belirsiz veya saf olmayan cevap - Ardışık saf yanlış sayacı sıfırlandı"
       // );
       setConsecutivePureIncorrect(0);
     }
@@ -279,8 +287,8 @@ function WcstWindow() {
           // Minimum 2 ardışık saf yanlış olması şartını ekle
           if (newConsecutiveCount >= 2) {
             // console.log(
-            //   `Gerçek ardışık saf yanlış cevap (${newConsecutiveCount}) - Perseveratif ilke belirlendi:`,
-            //   currentResponseCategory
+            //  `Gerçek ardışık saf yanlış cevap (${newConsecutiveCount}) - Perseveratif ilke belirlendi:`,
+            //  currentResponseCategory
             // );
             setPerseverativeCategory(currentResponseCategory);
             isPerseverative = true;
@@ -296,8 +304,8 @@ function WcstWindow() {
           setLastPureIncorrectCategory(currentResponseCategory);
           setConsecutivePureIncorrect(1);
           // console.log(
-          //   "Yeni saf yanlış cevap kategorisi:",
-          //   currentResponseCategory
+          //  "Yeni saf yanlış cevap kategorisi:",
+          //  currentResponseCategory
           // );
         }
 
@@ -309,8 +317,8 @@ function WcstWindow() {
           isPerseverative = true;
           isPerseverativeError = true;
           // console.log(
-          //   "Perseveratif hata - İlkeye göre:",
-          //   currentResponseCategory
+          //  "Perseveratif hata - İlkeye göre:",
+          //  currentResponseCategory
           // );
           setLastPerseverativeResponse(currentResponseCategory);
         }
@@ -326,7 +334,7 @@ function WcstWindow() {
         // Yeni bir perseveratif ilke belirlenmemişse önceki kategoriye göre kontrol yap
         if (prevCategory === "color" && colorMatch) {
           // console.log(
-          //   "Kategori değişimi sonrası önceki kategoriye (color) göre perseveratif hata. Yeni perseveratif ilke: color"
+          //  "Kategori değişimi sonrası önceki kategoriye (color) göre perseveratif hata. Yeni perseveratif ilke: color"
           // );
           setPerseverativeCategory("color");
           isPerseverative = true;
@@ -334,7 +342,7 @@ function WcstWindow() {
           setLastPerseverativeResponse("color");
         } else if (prevCategory === "figure" && figureMatch) {
           // console.log(
-          //   "Kategori değişimi sonrası önceki kategoriye (figure) göre perseveratif hata. Yeni perseveratif ilke: figure"
+          //  "Kategori değişimi sonrası önceki kategoriye (figure) göre perseveratif hata. Yeni perseveratif ilke: figure"
           // );
           setPerseverativeCategory("figure");
           isPerseverative = true;
@@ -342,7 +350,7 @@ function WcstWindow() {
           setLastPerseverativeResponse("figure");
         } else if (prevCategory === "count" && countMatch) {
           // console.log(
-          //   "Kategori değişimi sonrası önceki kategoriye (count) göre perseveratif hata. Yeni perseveratif ilke: count"
+          //  "Kategori değişimi sonrası önceki kategoriye (count) göre perseveratif hata. Yeni perseveratif ilke: count"
           // );
           setPerseverativeCategory("count");
           isPerseverative = true;
@@ -390,33 +398,33 @@ function WcstWindow() {
     const isNonPerseverativeError = !isCorrect && !isPerseverativeError;
 
     // console.log("Sonuç:", {
-    //   cardIndex,
-    //   response: currentCard,
-    //   currentCategory: category,
-    //   prevCategory,
-    //   currentResponseCategory,
-    //   responseCategories,
-    //   color: colorMatch,
-    //   figure: figureMatch,
-    //   count: countMatch,
-    //   isCorrect,
-    //   perseverativeCategory,
-    //   isPerseverative,
-    //   isPerseverativeError,
-    //   isNonPerseverativeError,
-    //   categoryChanged,
-    //   isAmbiguousAnswer,
-    //   chainBroken,
-    //   responseChain: responseChain.length,
-    //   lastPerseverativeResponse,
-    //   consecutivePureIncorrect:
-    //     isPureAnswer && !isCorrect
-    //       ? lastPureIncorrectCategory === currentResponseCategory
-    //         ? consecutivePureIncorrect + 1
-    //         : 1
-    //       : 0,
-    //   lastPureIncorrectCategory,
-    //   categoryCorrect,
+    //  cardIndex,
+    //  response: currentCard,
+    //  currentCategory: category,
+    //  prevCategory,
+    //  currentResponseCategory,
+    //  responseCategories,
+    //  color: colorMatch,
+    //  figure: figureMatch,
+    //  count: countMatch,
+    //  isCorrect,
+    //  perseverativeCategory,
+    //  isPerseverative,
+    //  isPerseverativeError,
+    //  isNonPerseverativeError,
+    //  categoryChanged,
+    //  isAmbiguousAnswer,
+    //  chainBroken,
+    //  responseChain: responseChain.length,
+    //  lastPerseverativeResponse,
+    //  consecutivePureIncorrect:
+    //    isPureAnswer && !isCorrect
+    //      ? lastPureIncorrectCategory === currentResponseCategory
+    //        ? consecutivePureIncorrect + 1
+    //        : 1
+    //      : 0,
+    //  lastPureIncorrectCategory,
+    //  categoryCorrect,
     // });
 
     // Sonucu kaydet
@@ -480,39 +488,39 @@ function WcstWindow() {
     setCardIndex(0);
   };
 
- const downloadResultsAsJson = () => {
-  if (!result || result.length === 0) {
-    console.warn("İndirilecek sonuç bulunamadı");
-    return;
-  }
+  const downloadResultsAsJson = () => {
+    if (!result || result.length === 0) {
+      console.warn("İndirilecek sonuç bulunamadı");
+      return;
+    }
 
-  // Sadece istenen alanları içeren yeni bir dizi oluştur
-  const simplifiedResults = result.map(item => ({
-    response: item.response,
-    categoryComplete: item.categoryComplete,
-    category: item.category,
-    responseCategories: item.responseCategories,
-    currentCategory: item.currentCategory,
-    prevCategory: item.prevCategory,
-    cardIndex: item.cardIndex
-  }));
+    // Sadece istenen alanları içeren yeni bir dizi oluştur
+    const simplifiedResults = result.map(item => ({
+      response: item.response,
+      categoryComplete: item.categoryComplete,
+      category: item.category,
+      responseCategories: item.responseCategories,
+      currentCategory: item.currentCategory,
+      prevCategory: item.prevCategory,
+      cardIndex: item.cardIndex
+    }));
 
-  try {
-    const blob = new Blob([JSON.stringify(simplifiedResults, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `wcst-results-${new Date().toISOString()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error("JSON indirme hatası:", error);
-  }
-};
+    try {
+      const blob = new Blob([JSON.stringify(simplifiedResults, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `wcst-results-${new Date().toISOString()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("JSON indirme hatası:", error);
+    }
+  };
 
   const handleShowAndDownload = () => {
     downloadResultsAsJson();
@@ -520,31 +528,31 @@ function WcstWindow() {
   };
 
   return (
-  <S.WcstWindow>
-    {testInfo ? (
-      testCompleted ? (
-        <S.CompletedOptions>
-          {/* Removed the S.NavLinkButton and modified the S.Button */}
-          <S.Button onClick={handleShowAndDownload}>
-            Sonuçları Göster ve İndir
-          </S.Button>
-        </S.CompletedOptions>
+    <S.WcstWindow>
+      {testInfo ? (
+        testCompleted ? (
+          <S.CompletedOptions>
+            {/* Removed the S.NavLinkButton and modified the S.Button */}
+            <S.Button onClick={handleShowAndDownload}>
+              Sonuçları Göster ve İndir
+            </S.Button>
+          </S.CompletedOptions>
+        ) : (
+          <>
+            <S.TargetCards>{targetCardsList}</S.TargetCards>
+            <S.ResponseCards>{responseCardsList}</S.ResponseCards>
+          </>
+        )
       ) : (
-        <>
-          <S.TargetCards>{targetCardsList}</S.TargetCards>
-          <S.ResponseCards>{responseCardsList}</S.ResponseCards>
-        </>
-      )
-    ) : (
-      <S.Start>
-        <div>
-          <S.WarningButton>Hazır olduğunuzda Başla'ya basın</S.WarningButton>
-          <S.Button onClick={handleStart}>Başla</S.Button>
-        </div>
-      </S.Start>
-    )}
-  </S.WcstWindow>
-);
+        <S.Start>
+          <div>
+            <S.WarningButton>Hazır olduğunuzda Başla'ya basın</S.WarningButton>
+            <S.Button onClick={handleStart}>Başla</S.Button>
+          </div>
+        </S.Start>
+      )}
+    </S.WcstWindow>
+  );
 }
 
 export default WcstWindow;
