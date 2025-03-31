@@ -10,7 +10,7 @@ function WcstTable() {
   const [selectedCards, setSelectedCards] = useState([]); 
   const [unselectedCards, setUnselectedCards] = useState([]); 
 
-  const rowsPerColumn = 18;
+  const rowsPerColumn = 22;
   const totalColumns = Math.ceil(safeResult.length / rowsPerColumn);
 
   const columns = Array.from({ length: totalColumns }, (_, columnIndex) =>
