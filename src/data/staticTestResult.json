@@ -213,7 +213,8 @@
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "color"
+      "color",
+	  "figure"
     ],
     "currentCategory": "figure",
     "prevCategory": "color",
@@ -288,7 +289,8 @@
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "figure"
+      "figure",
+	  "count"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -304,7 +306,7 @@
     "category": 2,
     "responseCategories": [
       "color",
-      "figure"
+      "count"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -335,7 +337,7 @@
     "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "figure"
+      "count"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
