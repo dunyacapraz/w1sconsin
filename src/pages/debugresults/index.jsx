@@ -8,7 +8,6 @@ const MAX_CORRECT_CONSECUTIVE = 10;
 
 // İlk kategorinin tamamlanıp tamamlanmadığını kontrol eder
 function isFirstCategoryCompleted(results) {
-    // ... (Bu fonksiyon değişmeden kalır) ...
     const firstCategory = CATEGORY_ORDER[0];
     let correctCount = 0;
 
@@ -167,37 +166,81 @@ export default function DebugResults() {
         } // Aşama 1 Döngü Sonu
 
         // --- AŞAMA 2: Gerçek Sandviç Kuralı (Değişiklik Yok) ---
-        const finalIsPerseverative = [...isPerseverative_pass1];
-        const finalDetails = JSON.parse(JSON.stringify(details_pass1));
+       const finalIsPerseverative = [...isPerseverative_pass1];
+const finalDetails = JSON.parse(JSON.stringify(details_pass1));
 
-        for (let i = 1; i < staticTestResult.length - 1; i++) {
-             const currentResponse = staticTestResult[i];
-             const responseCategories = currentResponse.responseCategories || [];
-             const isAmbiguous = responseCategories.length >= 2;
+for (let i = 0; i < staticTestResult.length; i++) {
+  // Aşama 1'de işaretlenmiş olanları atla
+  if (isPerseverative_pass1[i]) {
+    continue;
+  }
+  
+  let prevPerseverativeIndex = -1;
+  let nextPerseverativeIndex = -1;
 
-             if (isAmbiguous && !isPerseverative_pass1[i] && isPerseverative_pass1[i - 1] && isPerseverative_pass1[i + 1]) {
-                 const prevDetail = details_pass1[i - 1];
-                 const nextDetail = details_pass1[i + 1];
+  // Önceki en yakın perseveratif tepkiyi bul
+  for (let j = i - 1; j >= 0; j--) {
+    if (isPerseverative_pass1[j]) {
+      prevPerseverativeIndex = j;
+      break;
+    }
+  }
 
-                 if (prevDetail?.perseverativeCategory && prevDetail.perseverativeCategory === nextDetail?.perseverativeCategory) {
-                     const sandwichCategory = prevDetail.perseverativeCategory;
-                     if (responseCategories.includes(sandwichCategory)) {
-                         finalIsPerseverative[i] = true;
-                         const isError = !responseCategories.includes(currentResponse.currentCategory);
-                         const isCorrect = !isError;
-                         const existingDebugInfo = finalDetails[i]?.debugInfo || '';
-                         finalDetails[i] = {
-                             isPerseverative: true,
-                             isError: isError,
-                             isCorrectPerseverative: isCorrect,
-                             explanation: `Sandviç Kuralı: ${sandwichCategory}`,
-                             perseverativeCategory: sandwichCategory,
-                             debugInfo: existingDebugInfo
-                         };
-                     }
-                 }
-             }
-        } // Aşama 2 Döngü Sonu
+  // Sonraki en yakın perseveratif tepkiyi bul
+  for (let k = i + 1; k < staticTestResult.length; k++) {
+    if (isPerseverative_pass1[k]) {
+      nextPerseverativeIndex = k;
+      break;
+    }
+  }
+
+  // Hem önceki hem sonraki perseveratif tepkiler var mı kontrol et
+  if (prevPerseverativeIndex !== -1 && nextPerseverativeIndex !== -1) {
+    // Önceki ve sonraki perseveratif tepkilerin kategorileri aynı mı?
+    const prevCategory = details_pass1[prevPerseverativeIndex].perseverativeCategory;
+    const nextCategory = details_pass1[nextPerseverativeIndex].perseverativeCategory;
+    
+    // Eğer kategoriler aynıysa, aradaki tüm tepkilerde kesintisiz zincir kontrolü yap
+    if (prevCategory === nextCategory) {
+      // Zincir kırılması kontrolü
+      let isChainBroken = false;
+      
+      // Önceki perseveratif ve sonraki perseveratif arasındaki tüm tepkileri kontrol et
+      for (let j = prevPerseverativeIndex + 1; j < nextPerseverativeIndex; j++) {
+        const intermediateResponse = staticTestResult[j];
+        const intermediateCategories = intermediateResponse.responseCategories || [];
+        
+        // Eğer aradaki bir tepki perseveratif kategoriyi içermiyorsa, zincir kırılmış demektir
+        if (!intermediateCategories.includes(prevCategory)) {
+          isChainBroken = true;
+          break;
+        }
+      }
+      
+      // Zincir kırılmamışsa ve mevcut tepki perseveratif kategoriyi içeriyorsa sandviç kuralını uygula
+      if (!isChainBroken) {
+        const currentResponse = staticTestResult[i];
+        const responseCategories = currentResponse.responseCategories || [];
+        
+        if (responseCategories.includes(prevCategory)) {
+          finalIsPerseverative[i] = true;
+          const isError = !responseCategories.includes(currentResponse.currentCategory);
+          const isCorrect = !isError;
+
+          finalDetails[i] = {
+            ...finalDetails[i],
+            isPerseverative: true,
+            isError: isError,
+            isCorrectPerseverative: isCorrect,
+            explanation: `Sandviç Kuralı: ${prevCategory}`,
+            perseverativeCategory: prevCategory,
+            debugInfo: `Kesintisiz sandviç zinciri: ${prevPerseverativeIndex + 1}-${nextPerseverativeIndex + 1}, Kategori: ${prevCategory}`
+          };
+        }
+      }
+    }
+  }
+}
 
 
         // --- Final Hesaplamalar (Değişiklik Yok) ---
