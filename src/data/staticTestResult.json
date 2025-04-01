@@ -1,14 +1,16 @@
 [
   {
     "response": {
-      "resCount": 4,
-      "resColor": "red",
+      "resCount": 2,
+      "resColor": "green",
       "resFigure": "star"
     },
     "categoryComplete": false,
     "category": 1,
     "responseCategories": [
-      "color"
+      "color",
+      "figure",
+      "count"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -18,13 +20,12 @@
     "response": {
       "resCount": 2,
       "resColor": "yellow",
-      "resFigure": "cross"
+      "resFigure": "triangle"
     },
     "categoryComplete": false,
     "category": 1,
     "responseCategories": [
-      "color",
-      "figure"
+      "color"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -32,14 +33,14 @@
   },
   {
     "response": {
-      "resCount": 2,
-      "resColor": "yellow",
+      "resCount": 3,
+      "resColor": "blue",
       "resFigure": "triangle"
     },
     "categoryComplete": true,
     "category": 1,
     "responseCategories": [
-      "count"
+      "color"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -47,15 +48,14 @@
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "green",
+      "resCount": 3,
+      "resColor": "red",
       "resFigure": "star"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 1,
     "responseCategories": [
-      "color",
-      "figure"
+      "color"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -64,13 +64,14 @@
   {
     "response": {
       "resCount": 1,
-      "resColor": "blue",
+      "resColor": "yellow",
       "resFigure": "cross"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 1,
     "responseCategories": [
-      "color"
+      "color",
+      "figure"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -78,14 +79,15 @@
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "blue",
-      "resFigure": "cross"
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "triangle"
     },
     "categoryComplete": true,
     "category": 1,
     "responseCategories": [
-      "color"
+      "color",
+      "count"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -93,16 +95,15 @@
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "blue",
-      "resFigure": "circle"
+      "resCount": 2,
+      "resColor": "yellow",
+      "resFigure": "cross"
     },
     "categoryComplete": true,
     "category": 1,
     "responseCategories": [
       "color",
-      "figure",
-      "count"
+      "figure"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -111,13 +112,14 @@
   {
     "response": {
       "resCount": 1,
-      "resColor": "yellow",
-      "resFigure": "circle"
+      "resColor": "green",
+      "resFigure": "star"
     },
     "categoryComplete": true,
     "category": 1,
     "responseCategories": [
-      "color"
+      "color",
+      "figure"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -125,14 +127,15 @@
   },
   {
     "response": {
-      "resCount": 3,
-      "resColor": "red",
-      "resFigure": "circle"
+      "resCount": 4,
+      "resColor": "blue",
+      "resFigure": "star"
     },
     "categoryComplete": true,
     "category": 1,
     "responseCategories": [
-      "color"
+      "color",
+      "count"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -140,14 +143,15 @@
   },
   {
     "response": {
-      "resCount": 4,
+      "resCount": 1,
       "resColor": "red",
-      "resFigure": "cross"
+      "resFigure": "circle"
     },
     "categoryComplete": true,
     "category": 1,
     "responseCategories": [
-      "color"
+      "color",
+      "count"
     ],
     "currentCategory": "color",
     "prevCategory": null,
@@ -155,61 +159,61 @@
   },
   {
     "response": {
-      "resCount": 2,
+      "resCount": 4,
       "resColor": "blue",
       "resFigure": "triangle"
-    },
-    "categoryComplete": true,
-    "category": 1,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "color",
-    "prevCategory": null,
-    "cardIndex": 10
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "blue",
-      "resFigure": "circle"
-    },
-    "categoryComplete": true,
-    "category": 1,
-    "responseCategories": [
-      "color",
-      "figure"
-    ],
-    "currentCategory": "color",
-    "prevCategory": null,
-    "cardIndex": 11
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "red",
-      "resFigure": "circle"
-    },
-    "categoryComplete": true,
-    "category": 1,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "color",
-    "prevCategory": null,
-    "cardIndex": 12
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "circle"
     },
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
       "color",
-      "figure"
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 10
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 11
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 12
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "yellow",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "color"
     ],
     "currentCategory": "figure",
     "prevCategory": "color",
@@ -217,9 +221,9 @@
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "yellow",
-      "resFigure": "triangle"
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "star"
     },
     "categoryComplete": false,
     "category": 2,
@@ -232,9 +236,9 @@
   },
   {
     "response": {
-      "resCount": 2,
-      "resColor": "red",
-      "resFigure": "cross"
+      "resCount": 1,
+      "resColor": "green",
+      "resFigure": "circle"
     },
     "categoryComplete": false,
     "category": 2,
@@ -242,19 +246,18 @@
       "color"
     ],
     "currentCategory": "figure",
-    "prevCategory": "color",
+    "prevCategory": null,
     "cardIndex": 15
   },
   {
     "response": {
       "resCount": 4,
-      "resColor": "yellow",
-      "resFigure": "circle"
+      "resColor": "red",
+      "resFigure": "star"
     },
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "figure",
       "count"
     ],
     "currentCategory": "figure",
@@ -263,133 +266,8 @@
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "green",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 17
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "green",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 17
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 18
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "green",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "figure",
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 19
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "green",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 20
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "green",
-      "resFigure": "star"
-    },
-    "categoryComplete": true,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 21
-  },
-  {
-    "response": {
       "resCount": 2,
       "resColor": "yellow",
-      "resFigure": "circle"
-    },
-    "categoryComplete": true,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 22
-  },
-  {
-    "response": {
-      "resCount": 1,
-      "resColor": "yellow",
-      "resFigure": "circle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 23
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "red",
       "resFigure": "triangle"
     },
     "categoryComplete": false,
@@ -399,18 +277,128 @@
     ],
     "currentCategory": "figure",
     "prevCategory": null,
-    "cardIndex": 24
+    "cardIndex": 17
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "yellow",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 18
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "red",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 19
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "red",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 20
   },
   {
     "response": {
       "resCount": 1,
-      "resColor": "red",
+      "resColor": "blue",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 21
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 22
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 23
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 24
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "blue",
       "resFigure": "circle"
     },
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
       "color",
+      "figure",
       "count"
     ],
     "currentCategory": "figure",
@@ -426,7 +414,8 @@
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "figure"
+      "color",
+      "count"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -435,13 +424,14 @@
   {
     "response": {
       "resCount": 1,
-      "resColor": "green",
-      "resFigure": "circle"
+      "resColor": "yellow",
+      "resFigure": "triangle"
     },
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "figure"
+      "figure",
+      "count"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -449,14 +439,16 @@
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "red",
+      "resCount": 3,
+      "resColor": "yellow",
       "resFigure": "cross"
     },
-    "categoryComplete": true,
+    "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "figure"
+      "color",
+      "figure",
+      "count"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -464,14 +456,13 @@
   },
   {
     "response": {
-      "resCount": 2,
-      "resColor": "blue",
-      "resFigure": "circle"
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "star"
     },
     "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "color",
       "figure"
     ],
     "currentCategory": "figure",
@@ -480,25 +471,12 @@
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "yellow",
-      "resFigure": "circle"
+      "resCount": 1,
+      "resColor": "green",
+      "resFigure": "cross"
     },
     "categoryComplete": true,
     "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 30
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "yellow",
-      "resFigure": "circle"
-    },
-    "categoryComplete": false,
-    "category": 2,
     "responseCategories": [
       "color"
     ],
@@ -508,29 +486,14 @@
   },
   {
     "response": {
-      "resCount": 4,
+      "resCount": 1,
       "resColor": "yellow",
-      "resFigure": "circle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 30
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "blue",
       "resFigure": "star"
     },
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "color"
+      "figure"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -539,6 +502,21 @@
   {
     "response": {
       "resCount": 2,
+      "resColor": "yellow",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 32
+  },
+  {
+    "response": {
+      "resCount": 2,
       "resColor": "green",
       "resFigure": "circle"
     },
@@ -550,65 +528,72 @@
     ],
     "currentCategory": "figure",
     "prevCategory": null,
-    "cardIndex": 32
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "circle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
-    "prevCategory": null,
     "cardIndex": 33
   },
   {
     "response": {
-      "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 34
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 34
-  },
-  {
-    "response": {
-      "resCount": 3,
+      "resCount": 2,
       "resColor": "green",
-      "resFigure": "circle"
+      "resFigure": "star"
     },
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "figure"
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 34
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "figure",
+      "count"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
     "cardIndex": 35
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 36
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
+    "cardIndex": 37
   },
   {
     "response": {
@@ -619,38 +604,7 @@
     "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 36
-  },
-  {
-    "response": {
-      "resCount": 1,
-      "resColor": "yellow",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 37
-  },
-  {
-    "response": {
-      "resCount": 1,
-      "resColor": "red",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "count"
+      "figure"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -658,15 +612,14 @@
   },
   {
     "response": {
-      "resCount": 2,
-      "resColor": "green",
+      "resCount": 1,
+      "resColor": "red",
       "resFigure": "cross"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "color",
-      "count"
+      "figure"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -674,59 +627,29 @@
   },
   {
     "response": {
-      "resCount": 2,
+      "resCount": 4,
       "resColor": "green",
-      "resFigure": "cross"
+      "resFigure": "triangle"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "color",
-      "count"
+      "figure"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 39
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "green",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 39
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [],
     "currentCategory": "figure",
     "prevCategory": null,
     "cardIndex": 40
   },
   {
     "response": {
-      "resCount": 3,
+      "resCount": 1,
       "resColor": "blue",
-      "resFigure": "triangle"
+      "resFigure": "cross"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "count"
+      "figure"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -734,11 +657,11 @@
   },
   {
     "response": {
-      "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "circle"
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "cross"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
       "figure"
@@ -750,10 +673,10 @@
   {
     "response": {
       "resCount": 4,
-      "resColor": "blue",
-      "resFigure": "triangle"
+      "resColor": "red",
+      "resFigure": "star"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
       "figure"
@@ -766,629 +689,577 @@
     "response": {
       "resCount": 3,
       "resColor": "red",
-      "resFigure": "star"
-    },
-    "categoryComplete": true,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 44
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "yellow",
-      "resFigure": "star"
+      "resFigure": "cross"
     },
     "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 45
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "red",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
       "figure",
       "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 44
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "red",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 45
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "green",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
     "cardIndex": 46
   },
   {
     "response": {
       "resCount": 2,
-      "resColor": "red",
+      "resColor": "green",
       "resFigure": "triangle"
     },
-    "categoryComplete": true,
-    "category": 2,
+    "categoryComplete": false,
+    "category": 3,
     "responseCategories": [
-      "color",
       "figure"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "count",
+    "prevCategory": "figure",
     "cardIndex": 47
   },
   {
     "response": {
-      "resCount": 3,
-      "resColor": "red",
-      "resFigure": "circle"
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "star"
     },
-    "categoryComplete": true,
-    "category": 2,
+    "categoryComplete": false,
+    "category": 3,
     "responseCategories": [
+      "color",
       "figure"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 48
   },
   {
     "response": {
       "resCount": 1,
-      "resColor": "yellow",
-      "resFigure": "cross"
+      "resColor": "blue",
+      "resFigure": "circle"
     },
-    "categoryComplete": true,
-    "category": 2,
+    "categoryComplete": false,
+    "category": 3,
     "responseCategories": [
-      "color",
-      "figure"
+      "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 49
   },
   {
     "response": {
       "resCount": 4,
-      "resColor": "red",
-      "resFigure": "circle"
+      "resColor": "green",
+      "resFigure": "cross"
     },
-    "categoryComplete": true,
-    "category": 2,
+    "categoryComplete": false,
+    "category": 3,
     "responseCategories": [
-      "color"
+      "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 50
   },
   {
     "response": {
-      "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "cross"
+      "resCount": 4,
+      "resColor": "red",
+      "resFigure": "triangle"
     },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 51
   },
   {
     "response": {
       "resCount": 3,
-      "resColor": "red",
-      "resFigure": "triangle"
+      "resColor": "green",
+      "resFigure": "circle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 52
   },
   {
     "response": {
       "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "triangle"
+      "resColor": "red",
+      "resFigure": "cross"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "color",
+      "figure",
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 53
   },
   {
     "response": {
-      "resCount": 2,
+      "resCount": 1,
       "resColor": "green",
       "resFigure": "circle"
     },
-    "categoryComplete": false,
-    "category": 2,
+    "categoryComplete": true,
+    "category": 3,
     "responseCategories": [
       "figure"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 54
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "red",
-      "resFigure": "star"
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "circle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "figure"
+      "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 55
   },
   {
     "response": {
-      "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "cross"
+      "resCount": 1,
+      "resColor": "red",
+      "resFigure": "star"
     },
-    "categoryComplete": true,
-    "category": 2,
+    "categoryComplete": false,
+    "category": 3,
     "responseCategories": [
       "color",
-      "figure",
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 56
   },
   {
     "response": {
-      "resCount": 1,
+      "resCount": 3,
       "resColor": "red",
       "resFigure": "triangle"
     },
     "categoryComplete": true,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 57
   },
   {
     "response": {
-      "resCount": 2,
+      "resCount": 4,
       "resColor": "green",
-      "resFigure": "cross"
+      "resFigure": "star"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "color",
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 58
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "green",
-      "resFigure": "star"
+      "resCount": 4,
+      "resColor": "yellow",
+      "resFigure": "cross"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "color",
-      "figure"
+      "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 59
   },
   {
     "response": {
-      "resCount": 1,
+      "resCount": 2,
       "resColor": "red",
       "resFigure": "circle"
     },
-    "categoryComplete": false,
-    "category": 2,
+    "categoryComplete": true,
+    "category": 3,
     "responseCategories": [
-      "figure"
+      "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 60
   },
   {
     "response": {
       "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "cross"
+      "resColor": "red",
+      "resFigure": "triangle"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "figure",
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 61
   },
   {
     "response": {
       "resCount": 2,
-      "resColor": "red",
-      "resFigure": "star"
+      "resColor": "blue",
+      "resFigure": "cross"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "figure",
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 62
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "blue",
-      "resFigure": "circle"
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "cross"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "color",
-      "figure"
+      "figure",
+      "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 63
   },
   {
     "response": {
-      "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "circle"
+      "resCount": 4,
+      "resColor": "red",
+      "resFigure": "cross"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "color",
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 64
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "yellow",
-      "resFigure": "star"
+      "resCount": 3,
+      "resColor": "red",
+      "resFigure": "circle"
     },
-    "categoryComplete": false,
-    "category": 2,
+    "categoryComplete": true,
+    "category": 3,
     "responseCategories": [
-      "figure"
+      "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 65
   },
   {
     "response": {
-      "resCount": 2,
-      "resColor": "red",
-      "resFigure": "circle"
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "triangle"
     },
-    "categoryComplete": false,
-    "category": 2,
+    "categoryComplete": true,
+    "category": 3,
     "responseCategories": [
-      "figure"
+      "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 66
   },
   {
     "response": {
       "resCount": 3,
-      "resColor": "green",
-      "resFigure": "cross"
+      "resColor": "yellow",
+      "resFigure": "triangle"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "figure",
+      "color",
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 67
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "yellow",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": true,
-    "category": 2,
-    "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 68
-  },
-  {
-    "response": {
-      "resCount": 2,
+      "resCount": 3,
       "resColor": "green",
       "resFigure": "triangle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "figure"
+      "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 68
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "cross"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 69
   },
   {
     "response": {
-      "resCount": 2,
-      "resColor": "red",
+      "resCount": 1,
+      "resColor": "yellow",
       "resFigure": "circle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "figure"
+      "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 70
   },
   {
     "response": {
       "resCount": 1,
-      "resColor": "red",
+      "resColor": "green",
       "resFigure": "triangle"
     },
-    "categoryComplete": true,
-    "category": 2,
+    "categoryComplete": false,
+    "category": 1,
     "responseCategories": [
-      "color",
       "figure",
       "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 71
   },
   {
     "response": {
       "resCount": 2,
-      "resColor": "blue",
-      "resFigure": "cross"
+      "resColor": "yellow",
+      "resFigure": "circle"
     },
-    "categoryComplete": true,
-    "category": 2,
+    "categoryComplete": false,
+    "category": 1,
     "responseCategories": [
       "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 72
   },
   {
     "response": {
       "resCount": 3,
       "resColor": "green",
-      "resFigure": "triangle"
+      "resFigure": "star"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "count"
+      "color",
+      "figure"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 73
   },
   {
     "response": {
       "resCount": 4,
-      "resColor": "red",
-      "resFigure": "star"
+      "resColor": "yellow",
+      "resFigure": "circle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
+      "figure",
       "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 74
   },
   {
     "response": {
-      "resCount": 3,
+      "resCount": 1,
       "resColor": "red",
-      "resFigure": "cross"
+      "resFigure": "triangle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "color"
+      "color",
+      "figure",
+      "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 75
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "blue",
-      "resFigure": "triangle"
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "cross"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "color"
+      "figure",
+      "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 76
   },
   {
     "response": {
       "resCount": 3,
-      "resColor": "red",
-      "resFigure": "star"
+      "resColor": "yellow",
+      "resFigure": "circle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
+      "color",
       "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 77
   },
   {
     "response": {
       "resCount": 3,
-      "resColor": "green",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 78
-  },
-  {
-    "response": {
-      "resCount": 1,
-      "resColor": "green",
-      "resFigure": "circle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 79
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "blue",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 80
-  },
-  {
-    "response": {
-      "resCount": 2,
       "resColor": "yellow",
       "resFigure": "cross"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 78
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "red",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
     "responseCategories": [
       "color",
       "figure"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 81
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 79
   },
   {
     "response": {
-      "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "star"
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "cross"
     },
-    "categoryComplete": false,
-    "category": 2,
+    "categoryComplete": true,
+    "category": 1,
     "responseCategories": [
       "color"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 82
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "yellow",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 83
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "yellow",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure",
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 84
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 80
   },
   {
     "response": {
@@ -1396,15 +1267,45 @@
       "resColor": "yellow",
       "resFigure": "triangle"
     },
-    "categoryComplete": false,
-    "category": 2,
+    "categoryComplete": true,
+    "category": 1,
     "responseCategories": [
-      "figure",
-      "count"
+      "color"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 85
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 81
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 82
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "yellow",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 83
   },
   {
     "response": {
@@ -1413,14 +1314,29 @@
       "resFigure": "triangle"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "figure",
-      "count"
+      "color"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 86
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 84
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 85
   },
   {
     "response": {
@@ -1429,137 +1345,199 @@
       "resFigure": "star"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
       "figure",
       "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 86
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 87
   },
   {
     "response": {
-      "resCount": 2,
-      "resColor": "yellow",
-      "resFigure": "circle"
+      "resCount": 4,
+      "resColor": "blue",
+      "resFigure": "star"
     },
-    "categoryComplete": true,
-    "category": 2,
+    "categoryComplete": false,
+    "category": 1,
     "responseCategories": [
+      "color",
       "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 88
   },
   {
     "response": {
       "resCount": 3,
-      "resColor": "green",
-      "resFigure": "cross"
+      "resColor": "red",
+      "resFigure": "circle"
     },
-    "categoryComplete": false,
-    "category": 2,
+    "categoryComplete": true,
+    "category": 1,
     "responseCategories": [
-      "figure",
-      "count"
+      "color"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 89
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 90
   },
   {
     "response": {
       "resCount": 2,
       "resColor": "green",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 90
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "yellow",
       "resFigure": "cross"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
       "color",
-      "figure"
+      "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 91
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "yellow",
-      "resFigure": "triangle"
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "star"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
       "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 92
   },
   {
     "response": {
       "resCount": 1,
       "resColor": "blue",
-      "resFigure": "star"
+      "resFigure": "triangle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "figure"
+      "color"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 93
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "green",
-      "resFigure": "triangle"
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "circle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "figure",
-      "count"
+      "color",
+      "figure"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 94
   },
   {
     "response": {
       "resCount": 3,
-      "resColor": "green",
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 95
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "red",
       "resFigure": "circle"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "figure"
+      "color"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 95
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 96
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 97
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 98
   },
   {
     "response": {
@@ -1568,125 +1546,64 @@
       "resFigure": "cross"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "figure"
+      "color"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 96
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "red",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": true,
-    "category": 2,
-    "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 97
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "blue",
-      "resFigure": "circle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "figure",
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 98
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "blue",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure",
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 99
   },
   {
     "response": {
       "resCount": 4,
-      "resColor": "blue",
-      "resFigure": "star"
+      "resColor": "yellow",
+      "resFigure": "triangle"
     },
     "categoryComplete": true,
-    "category": 2,
+    "category": 1,
     "responseCategories": [
-      "figure"
+      "color"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 100
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "blue",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": true,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 101
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "blue",
+      "resCount": 1,
+      "resColor": "red",
       "resFigure": "star"
     },
-    "categoryComplete": false,
-    "category": 2,
+    "categoryComplete": true,
+    "category": 1,
     "responseCategories": [
       "color",
       "count"
     ],
-    "currentCategory": "figure",
-    "prevCategory": null,
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 101
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
     "cardIndex": 102
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "yellow",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 103
-  },
-  {
-    "response": {
-      "resCount": 4,
+      "resCount": 2,
       "resColor": "red",
       "resFigure": "cross"
     },
@@ -1696,12 +1613,12 @@
       "color"
     ],
     "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 104
+    "prevCategory": "color",
+    "cardIndex": 103
   },
   {
     "response": {
-      "resCount": 4,
+      "resCount": 1,
       "resColor": "yellow",
       "resFigure": "star"
     },
@@ -1709,6 +1626,21 @@
     "category": 2,
     "responseCategories": [
       "color"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 104
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "figure"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -1717,22 +1649,7 @@
   {
     "response": {
       "resCount": 4,
-      "resColor": "green",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 106
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "green",
+      "resColor": "yellow",
       "resFigure": "circle"
     },
     "categoryComplete": false,
@@ -1743,30 +1660,30 @@
     ],
     "currentCategory": "figure",
     "prevCategory": null,
-    "cardIndex": 107
+    "cardIndex": 106
   },
   {
     "response": {
       "resCount": 3,
       "resColor": "blue",
-      "resFigure": "cross"
+      "resFigure": "star"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "color"
+      "figure"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
-    "cardIndex": 108
+    "cardIndex": 107
   },
   {
     "response": {
-      "resCount": 3,
-      "resColor": "red",
-      "resFigure": "triangle"
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "circle"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
       "color",
@@ -1774,17 +1691,35 @@
     ],
     "currentCategory": "figure",
     "prevCategory": null,
+    "cardIndex": 108
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "blue",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": null,
     "cardIndex": 109
   },
   {
     "response": {
-      "resCount": 2,
-      "resColor": "blue",
+      "resCount": 1,
+      "resColor": "yellow",
       "resFigure": "cross"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
+      "color",
       "figure"
     ],
     "currentCategory": "figure",
@@ -1794,13 +1729,14 @@
   {
     "response": {
       "resCount": 1,
-      "resColor": "green",
-      "resFigure": "cross"
+      "resColor": "red",
+      "resFigure": "circle"
     },
     "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "figure"
+      "color",
+      "count"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -1808,30 +1744,14 @@
   },
   {
     "response": {
-      "resCount": 2,
-      "resColor": "red",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": true,
-    "category": 2,
-    "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 112
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "red",
+      "resCount": 4,
+      "resColor": "yellow",
       "resFigure": "triangle"
     },
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "color",
-      "figure"
+      "color"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -1840,8 +1760,8 @@
   {
     "response": {
       "resCount": 1,
-      "resColor": "yellow",
-      "resFigure": "cross"
+      "resColor": "green",
+      "resFigure": "star"
     },
     "categoryComplete": false,
     "category": 2,
@@ -1855,43 +1775,13 @@
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "yellow",
-      "resFigure": "cross"
-    },
-    "categoryComplete": true,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 113
-  },
-  {
-    "response": {
-      "resCount": 1,
-      "resColor": "yellow",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 113
-  },
-  {
-    "response": {
-      "resCount": 1,
+      "resCount": 4,
       "resColor": "blue",
-      "resFigure": "circle"
+      "resFigure": "triangle"
     },
     "categoryComplete": false,
     "category": 2,
     "responseCategories": [
-      "color",
       "figure"
     ],
     "currentCategory": "figure",
@@ -1900,15 +1790,14 @@
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "blue",
-      "resFigure": "triangle"
+      "resCount": 4,
+      "resColor": "red",
+      "resFigure": "cross"
     },
     "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "figure",
-      "count"
+      "figure"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -1917,27 +1806,13 @@
   {
     "response": {
       "resCount": 2,
-      "resColor": "red",
+      "resColor": "yellow",
       "resFigure": "cross"
     },
     "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 116
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "red",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
+      "color",
       "figure"
     ],
     "currentCategory": "figure",
@@ -1947,38 +1822,10 @@
   {
     "response": {
       "resCount": 2,
-      "resColor": "red",
-      "resFigure": "cross"
+      "resColor": "yellow",
+      "resFigure": "star"
     },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 116
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "red",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 116
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "red",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
       "figure",
@@ -1990,28 +1837,13 @@
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "green",
+      "resCount": 2,
+      "resColor": "red",
       "resFigure": "cross"
     },
     "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 118
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "green",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
       "figure"
     ],
     "currentCategory": "figure",
@@ -2021,43 +1853,13 @@
   {
     "response": {
       "resCount": 4,
-      "resColor": "green",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 118
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "green",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 118
-  },
-  {
-    "response": {
-      "resCount": 1,
-      "resColor": "green",
+      "resColor": "yellow",
       "resFigure": "star"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "count"
+      "figure"
     ],
     "currentCategory": "figure",
     "prevCategory": null,
@@ -2069,20 +1871,7 @@
       "resColor": "blue",
       "resFigure": "cross"
     },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 120
-  },
-  {
-    "response": {
-      "resCount": 1,
-      "resColor": "blue",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
       "figure"
@@ -2097,55 +1886,9 @@
       "resColor": "blue",
       "resFigure": "cross"
     },
-    "categoryComplete": false,
+    "categoryComplete": true,
     "category": 2,
     "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 120
-  },
-  {
-    "response": {
-      "resCount": 1,
-      "resColor": "blue",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 120
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "green",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 121
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "green",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
       "figure"
     ],
     "currentCategory": "figure",
@@ -2154,254 +1897,93 @@
   },
   {
     "response": {
-      "resCount": 1,
-      "resColor": "green",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 122
-  },
-  {
-    "response": {
-      "resCount": 1,
-      "resColor": "green",
-      "resFigure": "cross"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 122
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 123
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 123
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 123
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "blue",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 123
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 124
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 124
-  },
-  {
-    "response": {
-      "resCount": 3,
-      "resColor": "yellow",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 124
-  },
-  {
-    "response": {
       "resCount": 2,
-      "resColor": "green",
-      "resFigure": "star"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color",
-      "figure",
-      "count"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 125
-  },
-  {
-    "response": {
-      "resCount": 2,
-      "resColor": "green",
+      "resColor": "red",
       "resFigure": "star"
     },
     "categoryComplete": true,
     "category": 2,
-    "responseCategories": [],
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
     "currentCategory": "figure",
     "prevCategory": null,
-    "cardIndex": 125
+    "cardIndex": 122
   },
   {
     "response": {
       "resCount": 2,
-      "resColor": "green",
-      "resFigure": "star"
+      "resColor": "red",
+      "resFigure": "circle"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
-      "color",
-      "figure",
+      "figure"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 123
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 124
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "red",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 125
   },
   {
     "response": {
-      "resCount": 4,
-      "resColor": "green",
-      "resFigure": "triangle"
+      "resCount": 3,
+      "resColor": "red",
+      "resFigure": "star"
     },
     "categoryComplete": false,
-    "category": 2,
+    "category": 3,
     "responseCategories": [
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 126
   },
   {
     "response": {
       "resCount": 4,
-      "resColor": "green",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 126
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "green",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "color"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 126
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "green",
-      "resFigure": "triangle"
-    },
-    "categoryComplete": false,
-    "category": 2,
-    "responseCategories": [
-      "figure"
-    ],
-    "currentCategory": "figure",
-    "prevCategory": null,
-    "cardIndex": 126
-  },
-  {
-    "response": {
-      "resCount": 4,
-      "resColor": "green",
+      "resColor": "red",
       "resFigure": "circle"
     },
-    "categoryComplete": false,
-    "category": 2,
+    "categoryComplete": true,
+    "category": 3,
     "responseCategories": [
       "figure",
       "count"
     ],
-    "currentCategory": "figure",
+    "currentCategory": "count",
     "prevCategory": null,
     "cardIndex": 127
   }
