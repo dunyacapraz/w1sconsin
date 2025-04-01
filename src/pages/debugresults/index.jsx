@@ -6,6 +6,73 @@ import staticTestResult from "../../data/staticTestResult.json";
 const CATEGORY_ORDER = ['color', 'figure', 'count'];
 const MAX_CORRECT_CONSECUTIVE = 10;
 
+const NORMS = {
+  '5-11': {
+    '20-54': {
+      totalResponses: { X: 121.70, Ss: 13.27 },
+      totalErrors: { X: 55.38, Ss: 20.84 },
+      totalCorrect: { X: 66.28, Ss: 13.29 },
+      completedCategories: { X: 3.45, Ss: 1.78 },
+      perseverativeResponses: { X: 34.44, Ss: 16.94 },
+      perseverativeErrors: { X: 29.85, Ss: 13.55 },
+      nonPerseverativeErrors: { X: 25.25, Ss: 11.62 },
+      perseverativeErrorPercentage: { X: 23.88, Ss: 9.87 },
+      firstCategoryTrials: { X: 19.22, Ss: 13.17 },
+      conceptualResponses: { X: 50.25, Ss: 18.15 },
+      conceptualResponsePercentage: { X: 42.85, Ss: 19.07 },
+      failureToMaintainSet: { X: 0.80, Ss: 0.95 },
+      learningToLearn: { X: -0.02, Ss: 0.08 }
+    },
+    '55-72': {
+      totalResponses: { X: 122.04, Ss: 13.43 },
+      totalErrors: { X: 55.71, Ss: 19.11 },
+      totalCorrect: { X: 66.32, Ss: 9.65 },
+      completedCategories: { X: 3.18, Ss: 1.63 },
+      perseverativeResponses: { X: 38.36, Ss: 17.77 },
+      perseverativeErrors: { X: 32.71, Ss: 13.78 },
+      nonPerseverativeErrors: { X: 22.79, Ss: 10.16 },
+      perseverativeErrorPercentage: { X: 26.09, Ss: 9.95 },
+      firstCategoryTrials: { X: 22.36, Ss: 14.93 },
+      conceptualResponses: { X: 49.29, Ss: 14.96 },
+      conceptualResponsePercentage: { X: 42.00, Ss: 17.74 },
+      failureToMaintainSet: { X: 1.00, Ss: 0.90 },
+      learningToLearn: { X: -0.03, Ss: 0.07 }
+    }
+  },
+  '12+': {
+    '20-54': {
+      totalResponses: { X: 106.25, Ss: 21.12 },
+      totalErrors: { X: 34.61, Ss: 21.37 },
+      totalCorrect: { X: 71.40, Ss: 10.03 },
+      completedCategories: { X: 4.98, Ss: 1.59 },
+      perseverativeResponses: { X: 19.39, Ss: 13.57 },
+      perseverativeErrors: { X: 17.69, Ss: 11.11 },
+      nonPerseverativeErrors: { X: 16.72, Ss: 12.17 },
+      perseverativeErrorPercentage: { X: 15.48, Ss: 7.65 },
+      firstCategoryTrials: { X: 15.72, Ss: 8.34 },
+      conceptualResponses: { X: 62.23, Ss: 13.93 },
+      conceptualResponsePercentage: { X: 61.99, Ss: 20.11 },
+      failureToMaintainSet: { X: 0.75, Ss: 0.91 },
+      learningToLearn: { X: -0.01, Ss: 0.07 }
+    },
+    '55-78': {
+      totalResponses: { X: 104.68, Ss: 20.49 },
+      totalErrors: { X: 34.23, Ss: 22.19 },
+      totalCorrect: { X: 70.45, Ss: 8.86 },
+      completedCategories: { X: 4.77, Ss: 1.95 },
+      perseverativeResponses: { X: 19.50, Ss: 12.70 },
+      perseverativeErrors: { X: 16.77, Ss: 10.34 },
+      nonPerseverativeErrors: { X: 17.41, Ss: 13.68 },
+      perseverativeErrorPercentage: { X: 14.96, Ss: 7.08 },
+      firstCategoryTrials: { X: 18.14, Ss: 12.30 },
+      conceptualResponses: { X: 58.14, Ss: 14.64 },
+      conceptualResponsePercentage: { X: 59.16, Ss: 21.24 },
+      failureToMaintainSet: { X: 0.41, Ss: 0.59 },
+      learningToLearn: { X: -0.01, Ss: 0.03 }
+    }
+  }
+};
+
 // İlk kategorinin tamamlanıp tamamlanmadığını kontrol eder
 function isFirstCategoryCompleted(results) {
     const firstCategory = CATEGORY_ORDER[0];
@@ -27,12 +94,14 @@ function isFirstCategoryCompleted(results) {
     return correctCount >= MAX_CORRECT_CONSECUTIVE;
 }
 
-
 export default function DebugResults() {
     const [selectedCards, setSelectedCards] = useState([]);
     const [perseverativeStats, setPerseverativeStats] = useState({ tepki: 0, hata: 0 });
     const [perseverativeResponses, setPerseverativeResponses] = useState([]);
     const [perseverativeDetails, setPerseverativeDetails] = useState([]);
+    const [age, setAge] = useState('');
+    const [education, setEducation] = useState('');
+	
 
     useEffect(() => {
         // --- AŞAMA 1: Temel Perseverasyon Kuralları (Sandviç Hariç) ---
@@ -386,7 +455,203 @@ export default function DebugResults() {
         learningToLearn: learningToLearn || 'Yetersiz veri'
     };
 }, [staticTestResult, perseverativeStats]);
+ 
+  const getNormGroup = () => {
+        if (!age || !education) return null;
+        const ageNum = parseInt(age);
+        
+        let ageRange = '';
+        if (education === '5-11') {
+            ageRange = ageNum >= 55 ? '55-72' : '20-54';
+        } else {
+            ageRange = ageNum >= 55 ? '55-78' : '20-54';
+        }
+        
+        return NORMS[education]?.[ageRange] || null;
+    };
 
+    const compareWithNorm = (scoreKey) => {
+        const normGroup = getNormGroup();
+        if (!normGroup || !scores || typeof scores[scoreKey] !== 'number') return null;
+        
+        const userValue = scores[scoreKey];
+        const normValue = normGroup[scoreKey]?.X;
+        const normSD = normGroup[scoreKey]?.Ss;
+
+        if (!normValue || !normSD) return null;
+        
+        const zScore = (userValue - normValue) / normSD;
+        
+        return {
+            userValue,
+            normValue,
+            normSD,
+            zScore,
+            interpretation: zScore > 1 ? 'Yüksek' : zScore < -1 ? 'Düşük' : 'Normal'
+        };
+    };
+
+    const generateClinicalComment = () => {
+    if (!age || !education) return <p>Lütfen yaş ve eğitim bilgilerini giriniz</p>;
+    
+    const comparisons = {
+        dikkat: [
+            { label: "Toplam Hata", ...compareWithNorm('totalErrors') },
+            { label: "Kurulum Sürdürme", ...compareWithNorm('failureToMaintainSet') }
+        ],
+        perseveratif: [
+            { label: "Toplam Tepki", ...compareWithNorm('totalResponses') },
+            { label: "Toplam Hata", ...compareWithNorm('totalErrors') },
+            { label: "Tamamlanan Kategori", ...compareWithNorm('completedCategories') },
+            { label: "Perseveratif Tepki", ...compareWithNorm('perseverativeResponses') },
+            { label: "Perseveratif Hata", ...compareWithNorm('perseverativeErrors') },
+            { label: "Perseveratif Olmayan Hata", ...compareWithNorm('nonPerseverativeErrors') },
+            { label: "Perseveratif Hata %", ...compareWithNorm('perseverativeErrorPercentage') },
+            { label: "Kavramsal Tepki %", ...compareWithNorm('conceptualResponsePercentage') }
+        ],
+        kavramsal: [
+            { label: "Toplam Doğru", ...compareWithNorm('totalCorrect') },
+            { label: "Kavramsal Tepki", ...compareWithNorm('conceptualResponses') },
+            { label: "Kurulum Sürdürme", ...compareWithNorm('failureToMaintainSet') }
+        ],
+        kurulum: [
+            { label: "Kurulum Sürdürme", ...compareWithNorm('failureToMaintainSet') }
+        ]
+    };
+
+    return (
+    <div style={{ 
+        marginTop: 20, 
+        padding: '25px 30px',
+        borderRadius: 12,
+       
+       
+    }}>
+        <h3 style={{
+            margin: '0 0 25px 0',
+            color: '#00a7cf', // Başlık rengini sayfa temasına uygun yaptım
+            fontSize: '24px',
+            fontWeight: 600,
+            borderBottom: '2px solid rgba(0, 167, 207, 0.3)',
+            paddingBottom: '12px'
+        }}>
+            <span style={{ color: '#00a7cf' }}>▹</span> Klinik Yorum
+        </h3>
+
+        {/* Demografik Bilgiler */}
+        <div style={{ 
+            marginBottom: 30,
+            display: 'flex',
+            gap: 25,
+            alignItems: 'center',
+            padding: '15px 20px',
+            backgroundColor: 'rgba(0, 167, 207, 0.05)', // Hafif mavi arka plan
+            borderRadius: 8
+        }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{
+                    backgroundColor: '#00a7cf',
+                    color: 'white',
+                    padding: '6px 12px',
+					fontSize: 14,
+                    fontWeight: 500
+                }}>
+                    Yaş: {age}
+                </span>
+            </div>
+            <div style={{ 
+                width: 1, 
+                height: 30, 
+                backgroundColor: 'rgba(255, 255, 255, 0.2)' 
+            }}></div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{
+                    backgroundColor: '#00a7cf',
+                    color: 'white',
+                    padding: '6px 12px',
+                    borderRadius: 20,
+                    fontSize: 14,
+                    fontWeight: 500
+                }}>
+                    Eğitim: {education === '5-11' ? '5-11 Yıl' : '12+ Yıl'}
+                </span>
+            </div>
+        </div>
+
+        {/* Performans Değerlendirmesi */}
+        <div style={{ 
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: 20
+        }}>
+            {Object.entries(comparisons).map(([category, metrics]) => (
+                <div key={category} style={{
+                    padding: 20,
+                    backgroundColor: 'rgba(0, 167, 207, 0.03)',
+                    borderRadius: 10,
+                    border: '1px solid rgba(0, 167, 207, 0.1)'
+                }}>
+                    <h4 style={{
+                        margin: '0 0 15px 0',
+                        color: '#00a7cf',
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: 0.5
+                    }}>
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </h4>
+                    
+                    <div style={{ display: 'grid', gap: 12 }}>
+                        {metrics.map((metric, index) => (
+                            <div key={index} style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                padding: '12px 15px',
+                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                borderRadius: 8,
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+                            }}>
+                                <span style={{ 
+                                    fontSize: 14,
+                                    color: 'rgba(255, 255, 255, 0.9)',
+                                    fontWeight: 500 
+                                }}>
+                                    {metric.label}
+                                </span>
+                                
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    <span style={{
+                                        color: metric.interpretation === 'Yüksek' ? '#ff4d4d' :
+                                               metric.interpretation === 'Düşük' ? '#ffa502' : '#00a7cf',
+                                        fontWeight: 600,
+                                        fontSize: 13
+                                    }}>
+                                        {metric.interpretation}
+                                    </span>
+                                    {metric.percentile && (
+                                        <span style={{
+                                            backgroundColor: 'rgba(0, 167, 207, 0.2)',
+                                            color: '#00a7cf',
+                                            padding: '4px 8px',
+                                            borderRadius: 12,
+                                            fontSize: 12,
+                                            fontWeight: 500
+                                        }}>
+                                            {metric.percentile}%
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+);
+};
 
     // Tablo görünümü için sütunlara böl
     const rowsPerColumn = 22;
@@ -396,48 +661,50 @@ export default function DebugResults() {
     );
 
     return (
-        <S.Div>
-            {/* Tablo görünümü */}
-            <S.Table>
-                {columns.map((column, colIndex) => (
-                    <S.Column key={colIndex}>
-                        {column.map((item, index) => {
-                            const globalIndex = colIndex * rowsPerColumn + index;
-                            const detail = perseverativeDetails[globalIndex];
-                            const isCorrect = item.responseCategories?.includes(item.currentCategory);
-                            const showPH = detail?.isPerseverative && detail?.isCorrectPerseverative;
-                            const showP = detail?.isPerseverative && !showPH;
+  <S.Div>
+    {/* Tablo görünümü */}
+    <S.Table>
+      {columns.map((column, colIndex) => (
+        <S.Column key={colIndex}>
+          {column.map((item, index) => {
+            const globalIndex = colIndex * rowsPerColumn + index;
+            const detail = perseverativeDetails[globalIndex];
+            const isCorrect = item.responseCategories?.includes(item.currentCategory);
+            const showPH = detail?.isPerseverative && detail?.isCorrectPerseverative;
+            const showP = detail?.isPerseverative && !showPH;
 
-                            return (
-                                <S.Line key={globalIndex} onClick={() => setSelectedCards(prev => [...prev, item])}>
-                                    {/* Kutucuklar */}
-                                    <S.Box isNumber isCorrect={isCorrect}>{globalIndex + 1}</S.Box>
-                                    <S.Box isCorrect={item.responseCategories?.includes('color')}>R</S.Box>
-                                    <S.Box isCorrect={item.responseCategories?.includes('figure')}>Ş</S.Box>
-                                    <S.Box isCorrect={item.responseCategories?.includes('count')}>M</S.Box>
-                                    <S.Box isCorrect={!['color', 'figure', 'count'].some(c => item.responseCategories?.includes(c))}>D</S.Box>
-                                    {/* Perseverasyon göstergeleri */}
-                                    <S.Box isCorrect={false} style={{ visibility: showP ? 'visible' : 'hidden', color: 'white', fontWeight: 'bold', backgroundColor: 'transparent', border: 'none' }}>P</S.Box>
-                                    <S.Box isCorrect={false} style={{ visibility: showPH ? 'visible' : 'hidden', color: 'red', fontWeight: 'bold', backgroundColor: 'transparent', border: 'none' }}>PH</S.Box>
-                                </S.Line>
-                            );
-                        })}
-                    </S.Column>
-                ))}
-            </S.Table>
+            return (
+              <S.Line key={globalIndex} onClick={() => setSelectedCards(prev => [...prev, item])}>
+                {/* Kutucuklar */}
+                <S.Box isNumber isCorrect={isCorrect}>{globalIndex + 1}</S.Box>
+                <S.Box isCorrect={item.responseCategories?.includes('color')}>R</S.Box>
+                <S.Box isCorrect={item.responseCategories?.includes('figure')}>Ş</S.Box>
+                <S.Box isCorrect={item.responseCategories?.includes('count')}>M</S.Box>
+                <S.Box isCorrect={!['color', 'figure', 'count'].some(c => item.responseCategories?.includes(c))}>D</S.Box>
+                {/* Perseverasyon göstergeleri */}
+                <S.Box isCorrect={false} style={{ visibility: showP ? 'visible' : 'hidden', color: 'white', fontWeight: 'bold', backgroundColor: 'transparent', border: 'none' }}>P</S.Box>
+                <S.Box isCorrect={false} style={{ visibility: showPH ? 'visible' : 'hidden', color: 'red', fontWeight: 'bold', backgroundColor: 'transparent', border: 'none' }}>PH</S.Box>
+              </S.Line>
+            );
+          })}
+        </S.Column>
+      ))}
+    </S.Table>
 
-            {/* Sonuçlar paneli */}
-            <S.Results>
-                <table>
-                    <thead><tr><th>Test Puanları</th><th>Değer</th></tr></thead>
-                    <tbody>
-                        {scores && [
-                            ["Toplam tepki sayısı", scores.totalResponses],
-                            ["Toplam yanlış sayısı", scores.totalErrors],
-                            ["Toplam doğru sayısı", scores.totalCorrect],
-							 ["Tamamlanan kategori sayısı", scores.completedCategories],
-                            ["Perseveratif tepki", scores.perseverativeResponses],
-                            ["Perseveratif hata", scores.perseverativeErrors],
+    {/* Sonuçlar paneli */}
+    <S.Results>
+      {/* 1. Bölüm: Skor Tablosu */}
+      <div style={{ marginBottom: 30 }}>
+        <table>
+          <thead><tr><th>Test Puanları</th><th>Değer</th></tr></thead>
+          <tbody>
+  {scores && [
+    ["Toplam tepki sayısı", scores.totalResponses],
+    ["Toplam yanlış sayısı", scores.totalErrors],
+    ["Toplam doğru sayısı", scores.totalCorrect],
+    ["Tamamlanan kategori sayısı", scores.completedCategories],
+    ["Perseveratif tepki", scores.perseverativeResponses],
+    ["Perseveratif hata", scores.perseverativeErrors],
     ["Perseveratif olmayan hata", scores.nonPerseverativeErrors],
     ["Perseveratif hata yüzdesi", scores.perseverativeErrorPercentage],
     ["İlk kategori deneme sayısı", scores.firstCategoryTrials],
@@ -445,35 +712,106 @@ export default function DebugResults() {
     ["Kavramsal tepki %", scores.conceptualResponsePercentage],
     ["Kurulum başarısızlık", scores.failureToMaintainSet],
     ["Öğrenmeyi öğrenme", scores.learningToLearn]
-                        ].map(([label, value], i) => (
-                            (value !== undefined && value !== null) && (<tr key={i}><td>{label}</td><td>{value}</td></tr>)
-                        ))}
-                    </tbody>
-                </table>
-                {/* Detaylı açıklamalar */}
-                <div style={{ marginTop: '20px', maxHeight: '300px', overflowY: 'auto', border: '1px solid #ccc', padding: '10px' }}>
-                    <h3>Perseveratif Tepki Açıklaması</h3>
-                    <p>Tabloda "P" hatalı perseveratif tepkileri, "PH" ise doğru perseveratif tepkileri gösterir.</p>
-                    <p>Açıklamalarda "Sandviç Kuralı" önceki ve sonraki yanıtın perseveratif olmasını gerektirir. "Yeni İlke (Tetikleyici)" sadece ilkeyi başlatan ikinci ardışık yanıtı işaretler.</p>
-                    <ul>
-                        {staticTestResult.map((item, index) => {
-                            const detail = perseverativeDetails[index];
-                            if (detail?.isPerseverative || detail?.debugInfo) {
-                                return (
-                                    <li key={index} style={{ borderBottom: '1px dashed #eee', paddingBottom: '5px', marginBottom: '5px' }}>
-                                        Yanıt #{index + 1}: "{item.responseCategories?.join(', ') || 'BOŞ'}" (Doğru: {item.currentCategory})
-                                        {detail?.isPerseverative && ` - ${detail.explanation || 'Perseveratif'}`}
-                                        {detail?.isError === true && ` (HATA)`}
-                                        {detail?.isCorrectPerseverative === true && ` (DOĞRU - PH)`}
-                                        {detail?.debugInfo && ` [DEBUG: ${detail.debugInfo}]`}
-                                    </li>
-                                );
-                            }
-                            return null;
-                        })}
-                    </ul>
+  ].map(([label, value], i) => (
+    (value !== undefined && value !== null) && (
+      <tr key={i}>
+        <td>{label}</td>
+        <td>
+          {typeof value === 'number' 
+            ? Number.isInteger(value) 
+              ? value 
+              : value.toFixed(2) 
+            : value}
+        </td>
+      </tr>
+    )
+  ))}
+</tbody>
+        </table>
+      </div>
+    </S.Results>
+
+    {/* 2. Bölüm: Demografik Bilgiler */}
+    <S.DemographicSection>
+      <h3>Demografik Bilgiler</h3>
+      <div className="input-group">
+        <div className="input-field">
+          <label>Yaş</label>
+          <input
+            type="number"
+            placeholder="Yaş"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            min="0"
+            max="120"
+          />
+        </div>
+        <div className="input-field">
+          <label>Eğitim Süresi</label>
+          <select
+            value={education}
+            onChange={(e) => setEducation(e.target.value)}
+          >
+            <option value="">Seçiniz</option>
+            <option value="5-11">5-11 Yıl</option>
+            <option value="12+">12+ Yıl</option>
+          </select>
+        </div>
+      </div>
+    </S.DemographicSection>
+
+    {/* 3. Bölüm: Klinik Yorum - Results'ın dışına taşındı */}
+    <S.ClinicalSection>
+      
+      <div className="clinical-content" style={{ width: '100%' }}>
+        {generateClinicalComment()}
+      </div>
+    </S.ClinicalSection>
+
+    {/* 4. Bölüm: Perseveratif Açıklamalar */}
+    <S.PerseverativeSection>
+      <h3>Perseveratif Tepki Analizi</h3>	
+      <div className="info-text">
+        <p>Tabloda görülen işaretler:</p>
+        <ul>
+          <li><strong>P:</strong> Hatalı perseveratif tepki</li>
+          <li><strong>PH:</strong> Doğru perseveratif tepki</li>
+        </ul>
+        <p className="rule-explanation">
+          <strong>Sandviç Kuralı:</strong> Önceki ve sonraki yanıtın perseveratif olmasını gerektirir.<br />
+          <strong>Yeni İlke (Tetikleyici):</strong> İlkeyi başlatan ikinci ardışık yanıtı işaretler.
+        </p>
+      </div>
+      <div className="explanation-list">
+        {staticTestResult.map((item, index) => {
+          const detail = perseverativeDetails[index];
+          if (detail?.isPerseverative || detail?.debugInfo) {
+            return (
+              <div key={index} className="explanation-item">
+                <div className="response-header">
+                  <span className="response-number">#{index + 1}</span>
+                  <span className="response-categories">"{item.responseCategories?.join(', ') || 'BOŞ'}"</span>
+                  <span className="correct-category">(Doğru: {item.currentCategory})</span>
+                  {detail?.isError && <span className="error-tag">HATA</span>}
+                  {detail?.isCorrectPerseverative && <span className="correct-tag">DOĞRU - PH</span>}
                 </div>
-            </S.Results>
-        </S.Div>
-    );
+                {detail?.isPerseverative && (
+                  <div className="explanation-text">
+                    {detail.explanation || 'Perseveratif tepki tespit edildi'}
+                  </div>
+                )}
+                {detail?.debugInfo && (
+                  <div className="debug-info">
+                    {detail.debugInfo}
+                  </div>
+                )}
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+    </S.PerseverativeSection>
+  </S.Div>
+);
 }
