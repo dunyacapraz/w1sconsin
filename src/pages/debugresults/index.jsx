@@ -372,9 +372,9 @@ export default function DebugResults() {
     const nonPerseverativeErrors = totalErrors - perseverativeStats.hata;
 
     // 8. Perseveratif hata yüzdesi (Düzeltilmiş)
-    const perseverativeErrorPercentage = totalResponses > 0
-        ? ((perseverativeStats.hata / totalResponses) * 100).toFixed(2)
-        : 0; // Toplam tepki yoksa sıfır döndür
+    const perseverativeErrorPercentage = totalResponses > 0 
+  ? parseFloat(((perseverativeStats.hata / totalResponses) * 100).toFixed(2)) 
+  : 0;
 
     // 9. İlk kategori deneme sayısı (Düzeltildi)
     let firstCategoryTrials = 0;
@@ -408,8 +408,10 @@ export default function DebugResults() {
         }
     });
 
-    // 11. Kavramsal düzey tepki yüzdesi
-    const conceptualResponsePercentage = ((conceptualResponses / totalResponses) * 100).toFixed(2);
+    // 11. Kavramsal düzey tepki yüzdesi (Düzeltilmiş)
+const conceptualResponsePercentage = totalResponses > 0 
+  ? parseFloat(((conceptualResponses / totalResponses) * 100).toFixed(2))
+  : 0;
 
     // 12. Kurulumu sürdürmede başarısızlık
     let failureToMaintainSet = 0;
@@ -470,77 +472,84 @@ export default function DebugResults() {
         return NORMS[education]?.[ageRange] || null;
     };
 
-    const compareWithNorm = (scoreKey) => {
-    const normGroup = getNormGroup();
-    if (!normGroup || !scores || typeof scores[scoreKey] !== 'number') return null;
-    
-    const userValue = scores[scoreKey];
-    const normValue = normGroup[scoreKey]?.X;
-    const normSD = normGroup[scoreKey]?.Ss;
+const compareWithNorm = (scoreKey) => {
+  const normGroup = getNormGroup();
+  if (!normGroup || !scores || typeof scores[scoreKey] !== 'number') return null;
 
-    if (!normValue || !normSD) return null;
-    
-    const zScore = (userValue - normValue) / normSD;
-    
-    // Metriklerin yönünü belirle (1: Yüksek iyi, -1: Yüksek kötü)
-    const metricDirection = {
-        totalResponses: -1,
-        totalErrors: -1,
-        totalCorrect: 1,
-        completedCategories: 1,
-        perseverativeResponses: -1,
-        perseverativeErrors: -1,
-        nonPerseverativeErrors: -1,
-        perseverativeErrorPercentage: -1,
-        conceptualResponsePercentage: 1,
-        failureToMaintainSet: -1,
-        learningToLearn: 1
-    }[scoreKey] || 0;
+  const userValue = scores[scoreKey];
+  const normMean = normGroup[scoreKey]?.X;
+  const normSD = normGroup[scoreKey]?.Ss;
 
-    let interpretation = 'Normal';
-    if (zScore > 1) {
-        interpretation = metricDirection === 1 ? 'İyi' : 'Zayıf';
-    } else if (zScore < -1) {
-        interpretation = metricDirection === 1 ? 'Zayıf' : 'İyi';
-    }
+  if (!normMean || !normSD) return null;
 
-    return {
-        userValue,
-        normValue,
-        normSD,
-        zScore,
-        interpretation,
-        direction: metricDirection
-    };
+  // Norm aralığını hesapla (Ortalama ± Standart Sapma)
+  const lowerBound = normMean - normSD;
+  const upperBound = normMean + normSD;
+
+  // Metriklerin yönünü belirle (1: Yüksek iyi, -1: Yüksek kötü)
+  const metricDirection = {
+    totalResponses: -1,
+    totalErrors: -1,
+    totalCorrect: 1,
+    completedCategories: 1,
+    perseverativeResponses: -1,
+    perseverativeErrors: -1,
+    nonPerseverativeErrors: -1,
+    perseverativeErrorPercentage: -1,
+    conceptualResponsePercentage: 1,
+    failureToMaintainSet: -1,
+    learningToLearn: 1
+  }[scoreKey] || 0;
+
+  // Yorum ve renk belirle
+  let interpretation = 'Normal';
+  let color = '#3498db'; // Mavi (Normal)
+
+  if (userValue < lowerBound) {
+    interpretation = metricDirection === 1 ? 'Zayıf' : 'İyi'; 
+    color = metricDirection === 1 ? '#e74c3c' : '#2ecc71'; 
+  } else if (userValue > upperBound) {
+    interpretation = metricDirection === 1 ? 'İyi' : 'Zayıf';
+    color = metricDirection === 1 ? '#2ecc71' : '#e74c3c'; 
+  }
+
+  return {
+    userValue,
+    normMean,
+    normSD,
+    lowerBound: parseFloat(lowerBound.toFixed(2)), // İki ondalık basamak
+    upperBound: parseFloat(upperBound.toFixed(2)),
+    interpretation,
+    color
+  };
 };
-
     const generateClinicalComment = () => {
     if (!age || !education) return <p>Lütfen yaş ve eğitim bilgilerini giriniz</p>;
     
     const comparisons = {
-        dikkat: [
-            { label: "Toplam Hata", ...compareWithNorm('totalErrors') },
-            { label: "Kurulum Sürdürme", ...compareWithNorm('failureToMaintainSet') }
-        ],
-        perseveratif: [
-            { label: "Toplam Tepki", ...compareWithNorm('totalResponses') },
-            { label: "Toplam Hata", ...compareWithNorm('totalErrors') },
-            { label: "Tamamlanan Kategori", ...compareWithNorm('completedCategories') },
-            { label: "Perseveratif Tepki", ...compareWithNorm('perseverativeResponses') },
-            { label: "Perseveratif Hata", ...compareWithNorm('perseverativeErrors') },
-            { label: "Perseveratif Olmayan Hata", ...compareWithNorm('nonPerseverativeErrors') },
-            { label: "Perseveratif Hata %", scoreKey: 'perseverativeErrorPercentage', direction: -1 },
-        { label: "Kavramsal Tepki %", scoreKey: 'conceptualResponsePercentage', direction: 1 }, 
-        ],
-        kavramsal: [
-            { label: "Toplam Doğru", ...compareWithNorm('totalCorrect') },
-            { label: "Kavramsal Tepki", ...compareWithNorm('conceptualResponses') },
-            { label: "Kurulum Sürdürme", ...compareWithNorm('failureToMaintainSet') }
-        ],
-        kurulum: [
-            { label: "Kurulum Sürdürme", ...compareWithNorm('failureToMaintainSet') }
-        ]
-    };
+  dikkat: [
+    { label: "Toplam Hata", ...compareWithNorm('totalErrors') },
+    { label: "Kurulum Sürdürme", ...compareWithNorm('failureToMaintainSet') }
+  ],
+  perseveratif: [
+    { label: "Toplam Tepki", ...compareWithNorm('totalResponses') },
+    { label: "Toplam Hata", ...compareWithNorm('totalErrors') },
+    { label: "Tamamlanan Kategori", ...compareWithNorm('completedCategories') },
+    { label: "Perseveratif Tepki", ...compareWithNorm('perseverativeResponses') },
+    { label: "Perseveratif Hata", ...compareWithNorm('perseverativeErrors') },
+    { label: "Perseveratif Olmayan Hata", ...compareWithNorm('nonPerseverativeErrors') },
+    { label: "Perseveratif Hata %", ...compareWithNorm('perseverativeErrorPercentage') }, // Düzeltildi
+    { label: "Kavramsal Tepki %", ...compareWithNorm('conceptualResponsePercentage') }    // Düzeltildi
+  ],
+  kavramsal: [
+    { label: "Toplam Doğru", ...compareWithNorm('totalCorrect') },
+    { label: "Kavramsal Tepki", ...compareWithNorm('conceptualResponses') },
+    { label: "Kurulum Sürdürme", ...compareWithNorm('failureToMaintainSet') }
+  ],
+  kurulum: [
+    { label: "Kurulum Sürdürme", ...compareWithNorm('failureToMaintainSet') }
+  ]
+};
 
     return (
     <div style={{ 
