@@ -272,22 +272,120 @@ export default function DebugResults() {
     // --- Geri Kalan Kod (useMemo, JSX return) ---
     // ... (Değişiklik yok) ...
     // Memoize edilmiş değerler
-    const scores = useMemo(() => {
-        if (!staticTestResult?.length) return null;
+   const scores = useMemo(() => {
+    if (!staticTestResult?.length) return null;
 
-        const totalCorrect = staticTestResult.filter(r =>
-            r.responseCategories?.includes(r.currentCategory)
-        ).length;
-        const totalResponses = staticTestResult.length;
+    const totalCorrect = staticTestResult.filter(r =>
+        r.responseCategories?.includes(r.currentCategory)
+    ).length;
+    const totalResponses = staticTestResult.length;
+    const totalErrors = totalResponses - totalCorrect;
 
-        return {
-            totalResponses: totalResponses,
-            totalCorrect: totalCorrect,
-            totalErrors: totalResponses - totalCorrect,
-            perseverativeResponses: perseverativeStats.tepki,
-            perseverativeErrors: perseverativeStats.hata,
-        };
-    }, [staticTestResult, perseverativeStats]);
+    // 6. Tamamlanan kategori sayısı
+    const completedCategories = CATEGORY_ORDER.reduce((count, category) => {
+        let categoryCompletedCount = 0;
+        let consecutiveCorrect = 0;
+        staticTestResult.forEach(response => {
+            if (response.currentCategory === category && response.responseCategories?.includes(category)) {
+                consecutiveCorrect++;
+                if (consecutiveCorrect >= MAX_CORRECT_CONSECUTIVE) {
+                    categoryCompletedCount++;
+                    consecutiveCorrect = 0; // Yeni bir seri için sıfırla
+                }
+            } else {
+                consecutiveCorrect = 0; // Seri kırıldı, sıfırla
+            }
+        });
+        return count + categoryCompletedCount;
+    }, 0);
+
+    // 7. Perseveratif olmayan hata sayısı
+    const nonPerseverativeErrors = totalErrors - perseverativeStats.hata;
+
+    // 8. Perseveratif hata yüzdesi (Düzeltilmiş)
+    const perseverativeErrorPercentage = totalResponses > 0
+        ? ((perseverativeStats.hata / totalResponses) * 100).toFixed(2)
+        : 0; // Toplam tepki yoksa sıfır döndür
+
+    // 9. İlk kategori deneme sayısı (Düzeltildi)
+    let firstCategoryTrials = 0;
+    let firstCategoryCompleted = false;
+    let consecutiveCorrect = 0;
+    staticTestResult.forEach(response => {
+        if (!firstCategoryCompleted) {
+            firstCategoryTrials++;
+            if (response.currentCategory === CATEGORY_ORDER[0]) {
+                if (response.responseCategories?.includes(CATEGORY_ORDER[0])) {
+                    consecutiveCorrect++;
+                    if (consecutiveCorrect >= MAX_CORRECT_CONSECUTIVE) {
+                        firstCategoryCompleted = true;
+                    }
+                } else {
+                    consecutiveCorrect = 0;
+                }
+            }
+        }
+    });
+
+    // 10. Kavramsal düzey tepki sayısı
+    let conceptualResponses = 0;
+    consecutiveCorrect = 0;
+    staticTestResult.forEach(response => {
+        if (response.responseCategories?.includes(response.currentCategory)) {
+            consecutiveCorrect++;
+            if (consecutiveCorrect >= 3) conceptualResponses++;
+        } else {
+            consecutiveCorrect = 0;
+        }
+    });
+
+    // 11. Kavramsal düzey tepki yüzdesi
+    const conceptualResponsePercentage = ((conceptualResponses / totalResponses) * 100).toFixed(2);
+
+    // 12. Kurulumu sürdürmede başarısızlık
+    let failureToMaintainSet = 0;
+    consecutiveCorrect = 0;
+    staticTestResult.forEach(response => {
+        if (response.responseCategories?.includes(response.currentCategory)) {
+            consecutiveCorrect++;
+        } else {
+            if (consecutiveCorrect >= 5 && consecutiveCorrect < 10) failureToMaintainSet++;
+            consecutiveCorrect = 0;
+        }
+    });
+
+    // 13. Öğrenmeyi öğrenme
+    let learningToLearn = null;
+    if (completedCategories >= 3) {
+        const categoryErrors = CATEGORY_ORDER.map(category => {
+            const categoryResponses = staticTestResult.filter(r => r.currentCategory === category);
+            const errors = categoryResponses.filter(r => !r.responseCategories?.includes(category)).length;
+            return (errors / categoryResponses.length) * 100;
+        }).filter(v => !isNaN(v));
+
+        const differences = [];
+        for (let i = 1; i < categoryErrors.length; i++) {
+            differences.push(categoryErrors[i - 1] - categoryErrors[i]);
+        }
+        learningToLearn = (differences.reduce((a, b) => a + b, 0) / differences.length).toFixed(2);
+    }
+
+    return {
+        totalResponses,
+        totalCorrect,
+        totalErrors,
+        perseverativeResponses: perseverativeStats.tepki,
+        perseverativeErrors: perseverativeStats.hata,
+        completedCategories,
+        nonPerseverativeErrors,
+        perseverativeErrorPercentage,
+        firstCategoryTrials: firstCategoryCompleted ? firstCategoryTrials : 'Tamamlanamadı', // Değişiklik burada
+        conceptualResponses,
+        conceptualResponsePercentage,
+        failureToMaintainSet,
+        learningToLearn: learningToLearn || 'Yetersiz veri'
+    };
+}, [staticTestResult, perseverativeStats]);
 
 
     // Tablo görünümü için sütunlara böl
@@ -339,6 +437,14 @@ export default function DebugResults() {
                             ["Toplam doğru sayısı", scores.totalCorrect],
                             ["Perseveratif tepki", scores.perseverativeResponses],
                             ["Perseveratif hata", scores.perseverativeErrors],
+							 ["Tamamlanan kategori sayısı", scores.completedCategories],
+    ["Perseveratif olmayan hata", scores.nonPerseverativeErrors],
+    ["Perseveratif hata %", scores.perseverativeErrorPercentage],
+    ["İlk kategori deneme sayısı", scores.firstCategoryTrials],
+    ["Kavramsal tepki sayısı", scores.conceptualResponses],
+    ["Kavramsal tepki %", scores.conceptualResponsePercentage],
+    ["Kurulum başarısızlık", scores.failureToMaintainSet],
+    ["Öğrenmeyi öğrenme", scores.learningToLearn]
                         ].map(([label, value], i) => (
                             (value !== undefined && value !== null) && (<tr key={i}><td>{label}</td><td>{value}</td></tr>)
                         ))}
