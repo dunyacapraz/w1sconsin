@@ -471,25 +471,48 @@ export default function DebugResults() {
     };
 
     const compareWithNorm = (scoreKey) => {
-        const normGroup = getNormGroup();
-        if (!normGroup || !scores || typeof scores[scoreKey] !== 'number') return null;
-        
-        const userValue = scores[scoreKey];
-        const normValue = normGroup[scoreKey]?.X;
-        const normSD = normGroup[scoreKey]?.Ss;
+    const normGroup = getNormGroup();
+    if (!normGroup || !scores || typeof scores[scoreKey] !== 'number') return null;
+    
+    const userValue = scores[scoreKey];
+    const normValue = normGroup[scoreKey]?.X;
+    const normSD = normGroup[scoreKey]?.Ss;
 
-        if (!normValue || !normSD) return null;
-        
-        const zScore = (userValue - normValue) / normSD;
-        
-        return {
-            userValue,
-            normValue,
-            normSD,
-            zScore,
-            interpretation: zScore > 1 ? 'Yüksek' : zScore < -1 ? 'Düşük' : 'Normal'
-        };
+    if (!normValue || !normSD) return null;
+    
+    const zScore = (userValue - normValue) / normSD;
+    
+    // Metriklerin yönünü belirle (1: Yüksek iyi, -1: Yüksek kötü)
+    const metricDirection = {
+        totalResponses: -1,
+        totalErrors: -1,
+        totalCorrect: 1,
+        completedCategories: 1,
+        perseverativeResponses: -1,
+        perseverativeErrors: -1,
+        nonPerseverativeErrors: -1,
+        perseverativeErrorPercentage: -1,
+        conceptualResponsePercentage: 1,
+        failureToMaintainSet: -1,
+        learningToLearn: 1
+    }[scoreKey] || 0;
+
+    let interpretation = 'Normal';
+    if (zScore > 1) {
+        interpretation = metricDirection === 1 ? 'İyi' : 'Zayıf';
+    } else if (zScore < -1) {
+        interpretation = metricDirection === 1 ? 'Zayıf' : 'İyi';
+    }
+
+    return {
+        userValue,
+        normValue,
+        normSD,
+        zScore,
+        interpretation,
+        direction: metricDirection
     };
+};
 
     const generateClinicalComment = () => {
     if (!age || !education) return <p>Lütfen yaş ve eğitim bilgilerini giriniz</p>;
@@ -506,8 +529,8 @@ export default function DebugResults() {
             { label: "Perseveratif Tepki", ...compareWithNorm('perseverativeResponses') },
             { label: "Perseveratif Hata", ...compareWithNorm('perseverativeErrors') },
             { label: "Perseveratif Olmayan Hata", ...compareWithNorm('nonPerseverativeErrors') },
-            { label: "Perseveratif Hata %", ...compareWithNorm('perseverativeErrorPercentage') },
-            { label: "Kavramsal Tepki %", ...compareWithNorm('conceptualResponsePercentage') }
+            { label: "Perseveratif Hata %", scoreKey: 'perseverativeErrorPercentage', direction: -1 },
+        { label: "Kavramsal Tepki %", scoreKey: 'conceptualResponsePercentage', direction: 1 }, 
         ],
         kavramsal: [
             { label: "Toplam Doğru", ...compareWithNorm('totalCorrect') },
@@ -622,14 +645,15 @@ export default function DebugResults() {
                                 </span>
                                 
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                    <span style={{
-                                        color: metric.interpretation === 'Yüksek' ? '#ff4d4d' :
-                                               metric.interpretation === 'Düşük' ? '#ffa502' : '#00a7cf',
-                                        fontWeight: 600,
-                                        fontSize: 13
-                                    }}>
-                                        {metric.interpretation}
-                                    </span>
+                                   <span style={{
+    color: metric.interpretation === 'İyi' ? '#2ecc71' :  // Yeşil (Olumlu)
+           metric.interpretation === 'Zayıf' ? '#e74c3c' : // Kırmızı (Olumsuz)
+           '#3498db',                                      // Mavi (Normal)
+    fontWeight: 600,
+    fontSize: 13
+}}>
+    {metric.interpretation}
+</span>
                                     {metric.percentile && (
                                         <span style={{
                                             backgroundColor: 'rgba(0, 167, 207, 0.2)',
