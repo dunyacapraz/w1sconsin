@@ -67,6 +67,7 @@ export const ClinicalSection = styled.div`
   padding: 25px;
   margin: 30px 0; /* Üst ve alt boşluk */
   background: rgba(255, 255, 255, 0.05);
+  
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   box-sizing: border-box;
