@@ -129,7 +129,7 @@ function WcstWindow() {
       setLastPerseverativeResponse(null);
 
       // console.log(
-      //  "Kategori değişimi tamamlandı. Yeni kategori:",
+      //  "Kategori değişimi tamamlandı. Yeni kategoris:",
       //  category === "color"
       //    ? "figure"
       //    : category === "figure"
