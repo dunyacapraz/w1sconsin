@@ -6,380 +6,318 @@ import staticTestResult from "../../data/staticTestResult.json";
 const CATEGORY_ORDER = ['color', 'figure', 'count'];
 const MAX_CORRECT_CONSECUTIVE = 10;
 
+// İlk kategorinin tamamlanıp tamamlanmadığını kontrol eder
+function isFirstCategoryCompleted(results) {
+    // ... (Bu fonksiyon değişmeden kalır) ...
+    const firstCategory = CATEGORY_ORDER[0];
+    let correctCount = 0;
+
+    for (let i = 0; i < results.length; i++) {
+        if (results[i].currentCategory !== firstCategory && correctCount < MAX_CORRECT_CONSECUTIVE) {
+           return true;
+        }
+        if (results[i].currentCategory === firstCategory) {
+            if (results[i].responseCategories?.includes(firstCategory)) {
+                correctCount++;
+                if (correctCount >= MAX_CORRECT_CONSECUTIVE) return true;
+            } else {
+                correctCount = 0;
+            }
+        }
+    }
+    return correctCount >= MAX_CORRECT_CONSECUTIVE;
+}
+
+
 export default function DebugResults() {
-  // State'ler
-  const [selectedCards, setSelectedCards] = useState([]);
-  const [perseverativeStats, setPerseverativeStats] = useState({
-    tepki: 0,
-    hata: 0
-  });
-  const [perseverativeResponses, setPerseverativeResponses] = useState([]);
-  const [perseverativeDetails, setPerseverativeDetails] = useState([]);
+    const [selectedCards, setSelectedCards] = useState([]);
+    const [perseverativeStats, setPerseverativeStats] = useState({ tepki: 0, hata: 0 });
+    const [perseverativeResponses, setPerseverativeResponses] = useState([]);
+    const [perseverativeDetails, setPerseverativeDetails] = useState([]);
 
-  // İlk kategorinin tamamlanıp tamamlanmadığını kontrol eder
-  function isFirstCategoryCompleted(results) {
-    const firstCategory = CATEGORY_ORDER[0];
-    let correctCount = 0;
+    useEffect(() => {
+        // --- AŞAMA 1: Temel Perseverasyon Kuralları (Sandviç Hariç) ---
+        const isPerseverative_pass1 = new Array(staticTestResult.length).fill(false);
+        const details_pass1 = new Array(staticTestResult.length).fill(null);
+        let newPrincipleCategory = null;
+        let consecutiveRuleTriggerCount = 0;
+        let prevIterationCategory = null;
+        const firstCategoryDone = isFirstCategoryCompleted(staticTestResult);
 
-    for (let i = 0; i < results.length; i++) {
-      if (results[i].currentCategory === firstCategory) {
-        if (results[i].responseCategories?.includes(firstCategory)) {
-          correctCount++;
-          if (correctCount >= MAX_CORRECT_CONSECUTIVE) return true;
-        } else {
-          correctCount = 0;
-        }
-      } else {
-        return true;
-      }
-    }
-    return false;
-  }
+        const updatePerseverationPass1 = (index, category, ruleExplanation, isTrigger = false) => {
+             if (index < 0 || index >= staticTestResult.length) return;
 
-  // Belirli bir kategorideki saf tepkileri sayar
-  function countConsecutivePureResponses(results, startIndex, category) {
-    let count = 0;
-    let sandwichOngoing = true;
-    let indices = [];
-    let sandwichIndices = [];
+             // Daha önce işaretlenmişse ve tetikleyici değilse veya aynı açıklama ise işlem yapma
+             if (isPerseverative_pass1[index]) {
+                 const existingDetail = details_pass1[index];
+                 if (isTrigger && existingDetail && !existingDetail.explanation.includes("Tetikleyici")) {
+                      // Mevcut açıklama tetikleyici değilse ve yeni gelen tetikleyiciyse birleştir (opsiyonel)
+                      // Şimdilik üzerine yazalım, tetikleyici daha önemli olabilir.
+                      // existingDetail.explanation = `${ruleExplanation}: ${category} (${existingDetail.explanation})`;
+                 } else if (existingDetail && existingDetail.explanation === `${ruleExplanation}: ${category}`) {
+                     return; // Zaten aynıysa dokunma
+                 } else if (!isTrigger) {
+                     // Farklı bir kuraldan işaretliyse ve bu tetikleyici değilse, eskisini koru.
+                     return;
+                 }
+                 // Eğer buraya geldiyse ya ilk işaretleme ya da tetikleyici ile üzerine yazma durumu
+             }
 
-    for (let i = startIndex; i < results.length && sandwichOngoing; i++) {
-      const response = results[i];
-      const responseCategories = response.responseCategories || [];
-      const currentCategory = response.currentCategory;
 
-      if (responseCategories.length === 1 && responseCategories[0] === category) {
-        indices.push(i);
-      } else if (responseCategories.includes(category) && responseCategories.length >= 2) {
-        if (indices.length >= 1) sandwichIndices.push(i);
-      } else {
-        sandwichOngoing = false;
-      }
-    }
-    return { count, indices, sandwichIndices, isValid: indices.length >= 1 && sandwichIndices.length >= 1 };
-  }
+            isPerseverative_pass1[index] = true;
+            const response = staticTestResult[index];
+            const isError = !response.responseCategories?.includes(response.currentCategory);
+            const isCorrect = !isError;
+            const existingDebugInfo = details_pass1[index]?.debugInfo || ''; // Varsa debug'ı koru
 
-  // Sandviç koşulunu kontrol eder (önceki ve sonraki saf tepkiler)
-  function checkSandwichCondition(results, index, category) {
-    let hasPreviousPure = false;
-    // Önceki saf tepkileri kontrol et
-    for (let i = index - 1; i >= 0; i--) {
-      const responseCategories = results[i].responseCategories || [];
-      if (responseCategories.length === 1 && responseCategories[0] === category) {
-        hasPreviousPure = true;
-        break;
-      } else if (responseCategories.length === 1 && responseCategories[0] !== category) {
-        break;
-      }
-    }
-
-    let hasNextPure = false;
-    // Sonraki saf tepkileri kontrol et
-    for (let i = index + 1; i < results.length; i++) {
-      const responseCategories = results[i].responseCategories || [];
-      if (responseCategories.length === 1 && responseCategories[0] === category) {
-        hasNextPure = true;
-        break;
-      } else if (responseCategories.length === 1 && responseCategories[0] !== category) {
-        break;
-      }
-    }
-
-    return hasPreviousPure && hasNextPure;
-  }
-
-  // Perseverasyon hesaplamalarını yapan ana efekt
-  useEffect(() => {
-    let perseveratifTepki = 0;
-    let perseveratifHata = 0;
-    const isPerseverative = new Array(staticTestResult.length).fill(false);
-    const details = new Array(staticTestResult.length).fill(null);
-    const firstCategoryCompleted = isFirstCategoryCompleted(staticTestResult);
-    let perseverationCategory = firstCategoryCompleted ? 'color' : null;
-    let activeChain = null;
-
-    // Perseverasyon güncelleme fonksiyonu
-    const updatePerseveration = (index, category, rule) => {
-      isPerseverative[index] = true;
-      perseveratifTepki++;
-
-      const isError = !staticTestResult[index].responseCategories.includes(
-        staticTestResult[index].currentCategory
-      );
-
-      if (isError) perseveratifHata++;
-
-      details[index] = {
-        isPerseverative: true,
-        isError: isError,
-        explanation: `${rule}: ${category} perseverasyonu`
-      };
-    };
-
-    // Sandviç tipi perseverasyonları işler
-    const updateSandwichPerseveration = (index, category) => {
-      const response = staticTestResult[index];
-      if (response.responseCategories?.length < 2) return;
-
-      const isSandwich = checkSandwichCondition(staticTestResult, index, category);
-
-      if (!isSandwich) return;
-
-      isPerseverative[index] = true;
-      perseveratifTepki++;
-
-      details[index] = {
-        isPerseverative: true,
-        isError: false,
-        explanation: `Sandviç: ${category} içeren müphem yanıt (öncesi ve sonrasında saf ${category} tepkisi var)`
-      };
-    };
-
-    // Yeni perseverasyon kalıbı başlatır
-    const handleNewPerseverationRule = (startIndex, category, indices, sandwichIndices) => {
-      perseverationCategory = category;
-      details[startIndex] = {
-        isPerseverative: false,
-        isError: true,
-        explanation: `Yeni perseverasyon kalıbı: ${category}`
-      };
-
-      for (let j = 1; j < indices.length; j++) {
-        updatePerseveration(indices[j], category, "Kural 3");
-      }
-
-      sandwichIndices.forEach(sandwichIndex => {
-        if (checkSandwichCondition(staticTestResult, sandwichIndex, category)) {
-          updateSandwichPerseveration(sandwichIndex, category);
-        }
-      });
-
-      activeChain = {
-        startIndex: indices.length > 0 ? indices[indices.length - 1] : startIndex,
-        category: category
-      };
-    };
-
-    // Zincir geçerliliğini kontrol eder
-    const validateChain = (currentIndex, category) => {
-      return checkSandwichCondition(staticTestResult, currentIndex, category);
-    };
-
-    // Ana döngü: Her tepkiyi işler
-    for (let i = 0; i < staticTestResult.length; i++) {
-      const current = staticTestResult[i];
-      const responseCategories = current.responseCategories || [];
-      const isPure = responseCategories.length === 1;
-      const currentCategory = current.currentCategory;
-
-      // Aktif zincir kontrolü
-      if (activeChain && !responseCategories.includes(activeChain.category)) {
-        activeChain = null;
-      }
-
-      // Kural 1: İlk kategori tamamlanmamışsa
-      if (!firstCategoryCompleted && isPure && !responseCategories.includes(currentCategory)) {
-        if (!perseverationCategory) {
-          perseverationCategory = responseCategories[0];
-          updatePerseveration(i, responseCategories[0], "Kural 1");
-        } else if (responseCategories[0] === perseverationCategory) {
-          updatePerseveration(i, perseverationCategory, "Kural 1");
-        } else {
-          const { indices, sandwichIndices, isValid } = countConsecutivePureResponses(staticTestResult, i, responseCategories[0]);
-          if (isValid) {
-            handleNewPerseverationRule(i, responseCategories[0], indices, sandwichIndices);
-          }
-        }
-      }
-
-      // Kural 2: İlk kategori tamamlanmışsa
-      else if (firstCategoryCompleted && isPure && !responseCategories.includes(currentCategory)) {
-        let previousCategory = null;
-        if (i > 0) {
-          for (let j = i - 1; j >= 0; j--) {
-            if (staticTestResult[j].currentCategory !== currentCategory) {
-              previousCategory = staticTestResult[j].currentCategory;
-              break;
-            }
-          }
-        }
-
-        if (previousCategory && responseCategories[0] === previousCategory) {
-          updatePerseveration(i, previousCategory, "Kural 2");
-        } else {
-          const { indices, sandwichIndices, isValid } = countConsecutivePureResponses(staticTestResult, i, responseCategories[0]);
-          if (isValid) {
-            handleNewPerseverationRule(i, responseCategories[0], indices, sandwichIndices);
-          }
-        }
-      }
-
-      // Sandviç tepkilerini işle
-      if (activeChain && responseCategories.length >= 2 && responseCategories.includes(activeChain.category)) {
-        if (checkSandwichCondition(staticTestResult, i, activeChain.category)) {
-          updateSandwichPerseveration(i, activeChain.category);
-        }
-      }
-
-      // Yeni zincir başlat
-      if (isPerseverative[i] && !activeChain) {
-        activeChain = {
-          startIndex: i,
-          category: staticTestResult[i].responseCategories[0]
+            details_pass1[index] = {
+                isPerseverative: true,
+                isError: isError,
+                isCorrectPerseverative: isCorrect,
+                explanation: `${ruleExplanation}: ${category}`,
+                perseverativeCategory: category,
+                debugInfo: existingDebugInfo // Debug bilgisini koru
+            };
         };
-      }
-    }
 
-    // Hata sayacını düzelt
-    let correctedPerseveratifHata = 0;
-    for (let i = 0; i < isPerseverative.length; i++) {
-      if (isPerseverative[i]) {
-        const isError = !staticTestResult[i].responseCategories?.includes(staticTestResult[i].currentCategory);
-        const isCorrectSandwich = details[i]?.explanation?.startsWith("Sandviç") && !isError;
-        if (isError && !isCorrectSandwich) {
-          correctedPerseveratifHata++;
+        // --- Aşama 1 Ana Döngü ---
+        for (let i = 0; i < staticTestResult.length; i++) {
+            const currentResponse = staticTestResult[i];
+            const responseCategories = currentResponse.responseCategories || [];
+            const currentCategory = currentResponse.currentCategory;
+            const isPure = responseCategories.length === 1;
+            const isCorrect = responseCategories.includes(currentCategory);
+            const isIncorrect = !isCorrect;
+
+            const categoryChanged = i > 0 && currentCategory !== prevIterationCategory;
+            if (categoryChanged && newPrincipleCategory !== null) {
+                newPrincipleCategory = null;
+                consecutiveRuleTriggerCount = 0;
+                details_pass1[i] = details_pass1[i] || {};
+                details_pass1[i].debugInfo = `(Aşama 1) Kategori değişikliği, Yeni İlke (${prevIterationCategory} -> ${currentCategory}) sıfırlandı. ${details_pass1[i].debugInfo || ''}`;
+            }
+
+            let actualPreviousCategory = null;
+            let matchesPreviousCategory = false;
+            // firstCategoryDone kontrolü burada önemli, sadece ilk kategori bitince önceki kategoriye bakılır.
+            if (firstCategoryDone && isPure) {
+                for (let j = i - 1; j >= 0; j--) {
+                    if (staticTestResult[j].currentCategory !== currentCategory) {
+                        actualPreviousCategory = staticTestResult[j].currentCategory;
+                        break;
+                    }
+                }
+                if (actualPreviousCategory && responseCategories[0] === actualPreviousCategory) {
+                    matchesPreviousCategory = true;
+                }
+            }
+
+            // Yeni kural tetikleme koşulu: Saf, yanlış, önceki kategoriyle eşleşmiyor VE ilk kategori tamamlanmış.
+            const canTriggerNewRule = firstCategoryDone && isPure && isIncorrect && !matchesPreviousCategory;
+            if (canTriggerNewRule) {
+                consecutiveRuleTriggerCount++;
+            } else {
+                consecutiveRuleTriggerCount = 0;
+            }
+
+            // --- YENİ İLKE TETİKLEME VE İŞARETLEME MANTIĞI (DEĞİŞTİRİLDİ) ---
+            if (consecutiveRuleTriggerCount >= 2) {
+                const principleCat = responseCategories[0]; // İlkeyi belirleyen kategori (mevcut saf yanıttan)
+
+                // Yeni ilke kategorisini ayarla (eğer değişmişse)
+                if (newPrincipleCategory !== principleCat) {
+                    newPrincipleCategory = principleCat;
+                    details_pass1[i] = details_pass1[i] || {}; // Debug info için obje oluştur
+                    details_pass1[i].debugInfo = `(Aşama 1) Yeni İlke '${newPrincipleCategory}' olarak ayarlandı (indeks ${i}). ${details_pass1[i].debugInfo || ''}`;
+                }
+
+                // Sadece MEVCUT yanıtı (i) "Tetikleyici" olarak işaretle.
+                // Açıklamayı, sayacın 2 mi yoksa daha fazla mı olduğuna göre ayarla.
+                const explanation = (consecutiveRuleTriggerCount === 2)
+                    ? "Yeni İlke (Tetikleyici)"         // Bu İLK tetikleyici yanıt (yani 2. ardışık)
+                    : "Yeni İlke (Tetikleyici Devam)"; // Bu 3. veya daha sonraki ardışık tetikleyici
+
+                // updatePerseverationPass1'i sadece 'i' indeksi için çağır.
+                updatePerseverationPass1(i, newPrincipleCategory, explanation, true); // 'true' ile tetikleyici olduğunu belirt
+
+                // --- ÖNEMLİ: i-1 İÇİN İŞARETLEME YAPILMIYOR ---
+                // Eski kod: updatePerseverationPass1(i - 1, newPrincipleCategory, "Yeni İlke (Tetikleyici - Önceki)", true); BU SATIR SİLİNDİ!
+
+            } else {
+                // Henüz yeni ilke tetiklenmedi VEYA tetikleme serisi bozuldu.
+                // Mevcut yanıt, HALİHAZIRDA AKTİF olan bir 'newPrincipleCategory'ye uyuyor mu VEYA 'Önceki Kategori İlkesi'ne mi uyuyor?
+                // (Aşama 1'de başka bir kuraldan zaten işaretlenmediyse kontrol et)
+                if (!isPerseverative_pass1[i]) {
+                    if (newPrincipleCategory !== null) { // Eğer AKTİF bir yeni ilke varsa
+                        if (isPure && responseCategories[0] === newPrincipleCategory) {
+                             // Bu yanıt saf ve aktif yeni ilkeye uyuyor (ama tetikleyici değil)
+                            updatePerseverationPass1(i, newPrincipleCategory, "Yeni İlke (Devam)");
+                        }
+                    } else { // Aktif yeni ilke YOKSA, fallback kuralını kontrol et
+                        if (firstCategoryDone && matchesPreviousCategory && isPure && isIncorrect) {
+                             // İlk kategori bitti, yanıt saf, yanlış ve önceki kategoriyle eşleşiyor
+                            updatePerseverationPass1(i, actualPreviousCategory, "Önceki Kategori İlkesi");
+                        }
+                    }
+                }
+            }
+            // --- Yeni İlke Mantığı Sonu ---
+
+            prevIterationCategory = currentCategory;
+        } // Aşama 1 Döngü Sonu
+
+        // --- AŞAMA 2: Gerçek Sandviç Kuralı (Değişiklik Yok) ---
+        const finalIsPerseverative = [...isPerseverative_pass1];
+        const finalDetails = JSON.parse(JSON.stringify(details_pass1));
+
+        for (let i = 1; i < staticTestResult.length - 1; i++) {
+             const currentResponse = staticTestResult[i];
+             const responseCategories = currentResponse.responseCategories || [];
+             const isAmbiguous = responseCategories.length >= 2;
+
+             if (isAmbiguous && !isPerseverative_pass1[i] && isPerseverative_pass1[i - 1] && isPerseverative_pass1[i + 1]) {
+                 const prevDetail = details_pass1[i - 1];
+                 const nextDetail = details_pass1[i + 1];
+
+                 if (prevDetail?.perseverativeCategory && prevDetail.perseverativeCategory === nextDetail?.perseverativeCategory) {
+                     const sandwichCategory = prevDetail.perseverativeCategory;
+                     if (responseCategories.includes(sandwichCategory)) {
+                         finalIsPerseverative[i] = true;
+                         const isError = !responseCategories.includes(currentResponse.currentCategory);
+                         const isCorrect = !isError;
+                         const existingDebugInfo = finalDetails[i]?.debugInfo || '';
+                         finalDetails[i] = {
+                             isPerseverative: true,
+                             isError: isError,
+                             isCorrectPerseverative: isCorrect,
+                             explanation: `Sandviç Kuralı: ${sandwichCategory}`,
+                             perseverativeCategory: sandwichCategory,
+                             debugInfo: existingDebugInfo
+                         };
+                     }
+                 }
+             }
+        } // Aşama 2 Döngü Sonu
+
+
+        // --- Final Hesaplamalar (Değişiklik Yok) ---
+        let finalPerseveratifTepki = 0;
+        let correctedPerseveratifHata = 0;
+        for (let i = 0; i < finalIsPerseverative.length; i++) {
+            if (finalIsPerseverative[i]) {
+                finalPerseveratifTepki++;
+                if (finalDetails[i]?.isError) {
+                    correctedPerseveratifHata++;
+                }
+            }
         }
-      }
-    }
 
-    // State güncellemeleri
-    setPerseverativeStats({ tepki: perseveratifTepki, hata: correctedPerseveratifHata });
-    setPerseverativeResponses(isPerseverative);
-    setPerseverativeDetails(details);
-  }, []);
+        // State güncellemeleri (Değişiklik Yok)
+        setPerseverativeStats({ tepki: finalPerseveratifTepki, hata: correctedPerseveratifHata });
+        setPerseverativeResponses(finalIsPerseverative);
+        setPerseverativeDetails(finalDetails);
 
-  // Memoize edilmiş değerler
-  const totalPerseverativeCount = useMemo(() => {
-    return perseverativeResponses.filter(isPerseverative => isPerseverative).length;
-  }, [perseverativeResponses]);
+    }, []); // Bağımlılık dizisi boş
 
-  const scores = useMemo(() => {
-    if (!staticTestResult?.length) return null;
+    // --- Geri Kalan Kod (useMemo, JSX return) ---
+    // ... (Değişiklik yok) ...
+    // Memoize edilmiş değerler
+     const scores = useMemo(() => {
+         if (!staticTestResult?.length) return null;
 
-    return {
-      totalResponses: staticTestResult.length,
-      totalCorrect: staticTestResult.filter(r =>
-        r.responseCategories?.includes(r.currentCategory)
-      ).length,
-      ...perseverativeStats,
-      displayedPerseverativeCount: totalPerseverativeCount
-    };
-  }, [staticTestResult, perseverativeStats, totalPerseverativeCount]);
+         const totalCorrect = staticTestResult.filter(r =>
+             r.responseCategories?.includes(r.currentCategory)
+         ).length;
+         const totalResponses = staticTestResult.length;
 
-  // Tablo görünümü için sütunlara böl
-  const rowsPerColumn = 22;
-  const columns = Array.from(
-    { length: Math.ceil(staticTestResult.length / rowsPerColumn) },
-    (_, i) => staticTestResult.slice(i * rowsPerColumn, (i + 1) * rowsPerColumn)
-  );
+         return {
+             totalResponses: totalResponses,
+             totalCorrect: totalCorrect,
+             totalErrors: totalResponses - totalCorrect,
+             perseverativeResponses: perseverativeStats.tepki,
+             perseverativeErrors: perseverativeStats.hata,
+         };
+     }, [staticTestResult, perseverativeStats]);
 
-  return (
-    <S.Div>
-      {/* Tablo görünümü */}
-      <S.Table>
-        {columns.map((column, colIndex) => (
-          <S.Column key={colIndex}>
-            {column.map((item, index) => {
-              const globalIndex = colIndex * rowsPerColumn + index;
-              const isCorrect = item.responseCategories?.includes(item.currentCategory);
-              const isPerseverative = perseverativeResponses[globalIndex];
-              const isSandwich = perseverativeDetails[globalIndex]?.explanation?.startsWith("Sandviç");
-              const showPH = isSandwich && item.responseCategories?.includes(item.currentCategory);
 
-              return (
-                <S.Line
-                  key={index}
-                  onClick={() => setSelectedCards(prev => [...prev, item])}
-                >
-                  {/* Kutucuklar */}
-                  <S.Box isNumber isCorrect={isCorrect}>
-                    {globalIndex + 1}
-                  </S.Box>
-                  <S.Box isCorrect={item.responseCategories?.includes('color')}>
-                    R
-                  </S.Box>
-                  <S.Box isCorrect={item.responseCategories?.includes('figure')}>
-                    Ş
-                  </S.Box>
-                  <S.Box isCorrect={item.responseCategories?.includes('count')}>
-                    M
-                  </S.Box>
-                  <S.Box
-                    isCorrect={!['color','figure','count'].some(c =>
-                      item.responseCategories?.includes(c))}
-                  >
-                    D
-                  </S.Box>
-                  {/* Perseverasyon göstergeleri */}
-                  <S.Box
-                    isCorrect={false}
-                    style={{
-                      visibility: isPerseverative ? 'visible' : 'hidden',
-                      backgroundColor: 'transparent',
-                      border: 'none'
-                    }}
-                  >
-                    P
-                  </S.Box>
-                  <S.Box
-                    isCorrect={false}
-                    style={{
-                      visibility: showPH ? 'visible' : 'hidden',
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      color: 'red'
-                    }}
-                  >
-                    PH
-                  </S.Box>
-                </S.Line>
-              );
-            })}
-          </S.Column>
-        ))}
-      </S.Table>
+    // Tablo görünümü için sütunlara böl
+    const rowsPerColumn = 22;
+    const columns = Array.from(
+        { length: Math.ceil(staticTestResult.length / rowsPerColumn) },
+        (_, i) => staticTestResult.slice(i * rowsPerColumn, (i + 1) * rowsPerColumn)
+    );
 
-      {/* Sonuçlar paneli */}
-      <S.Results>
-        <table>
-          <thead>
-            <tr>
-              <th>Test Puanları</th>
-              <th>Değer</th>
-            </tr>
-          </thead>
-          <tbody>
-            {scores && [
-              ["Toplam tepki sayısı", scores.totalResponses],
-              ["Toplam yanlış sayısı", scores.totalResponses - scores.totalCorrect],
-              ["Toplam doğru sayısı", scores.totalCorrect],
-              ["Perseveratif tepki", scores.displayedPerseverativeCount],
-              ["Perseveratif hata", scores.hata],
-            ].map(([label, value], i) => (
-              <tr key={i}>
-                <td>{label}</td>
-                <td>{value}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    return (
+        <S.Div>
+            {/* Tablo görünümü */}
+            <S.Table>
+                {columns.map((column, colIndex) => (
+                    <S.Column key={colIndex}>
+                        {column.map((item, index) => {
+                            const globalIndex = colIndex * rowsPerColumn + index;
+                            const detail = perseverativeDetails[globalIndex];
+                            const isCorrect = item.responseCategories?.includes(item.currentCategory);
+                            const showPH = detail?.isPerseverative && detail?.isCorrectPerseverative;
+                            const showP = detail?.isPerseverative && !showPH;
 
-        {/* Detaylı açıklamalar */}
-        <div style={{ marginTop: '20px' }}>
-          <h3>Perseveratif Tepki Açıklaması</h3>
-          <p>Tabloda "P" harfi ile işaretlenen yanıtlar perseveratif tepkilerdir.</p>
-          <ul>
-            {staticTestResult.map((item, index) => (
-              perseverativeResponses[index] && (
-                <li key={index}>
-                  Yanıt #{index + 1}: "{item.responseCategories?.join(', ')}" -
-                  {perseverativeDetails[index]?.explanation || "Perseveratif tepki"}
-                </li>
-              )
-            ))}
-          </ul>
-        </div>
-      </S.Results>
-    </S.Div>
-  );
+                            return (
+                                <S.Line key={globalIndex} onClick={() => setSelectedCards(prev => [...prev, item])}>
+                                    {/* Kutucuklar */}
+                                    <S.Box isNumber isCorrect={isCorrect}>{globalIndex + 1}</S.Box>
+                                    <S.Box isCorrect={item.responseCategories?.includes('color')}>R</S.Box>
+                                    <S.Box isCorrect={item.responseCategories?.includes('figure')}>Ş</S.Box>
+                                    <S.Box isCorrect={item.responseCategories?.includes('count')}>M</S.Box>
+                                    <S.Box isCorrect={!['color','figure','count'].some(c => item.responseCategories?.includes(c))}>D</S.Box>
+                                    {/* Perseverasyon göstergeleri */}
+                                    <S.Box isCorrect={false} style={{ visibility: showP ? 'visible' : 'hidden', color: 'white', fontWeight: 'bold', backgroundColor: 'transparent', border: 'none' }}>P</S.Box>
+                                    <S.Box isCorrect={false} style={{ visibility: showPH ? 'visible' : 'hidden', color: 'red', fontWeight: 'bold', backgroundColor: 'transparent', border: 'none' }}>PH</S.Box>
+                                </S.Line>
+                            );
+                        })}
+                    </S.Column>
+                ))}
+            </S.Table>
+
+            {/* Sonuçlar paneli */}
+            <S.Results>
+                 <table>
+                     <thead><tr><th>Test Puanları</th><th>Değer</th></tr></thead>
+                     <tbody>
+                          {scores && [
+                              ["Toplam tepki sayısı", scores.totalResponses],
+                              ["Toplam yanlış sayısı", scores.totalErrors],
+                              ["Toplam doğru sayısı", scores.totalCorrect],
+                              ["Perseveratif tepki", scores.perseverativeResponses],
+                              ["Perseveratif hata", scores.perseverativeErrors],
+                          ].map(([label, value], i) => (
+                              (value !== undefined && value !== null) && (<tr key={i}><td>{label}</td><td>{value}</td></tr>)
+                          ))}
+                      </tbody>
+                 </table>
+                 {/* Detaylı açıklamalar */}
+                 <div style={{ marginTop: '20px', maxHeight: '300px', overflowY: 'auto', border: '1px solid #ccc', padding: '10px' }}>
+                     <h3>Perseveratif Tepki Açıklaması</h3>
+                     <p>Tabloda "P" hatalı perseveratif tepkileri, "PH" ise doğru perseveratif tepkileri gösterir.</p>
+                     <p>Açıklamalarda "Sandviç Kuralı" önceki ve sonraki yanıtın perseveratif olmasını gerektirir. "Yeni İlke (Tetikleyici)" sadece ilkeyi başlatan ikinci ardışık yanıtı işaretler.</p>
+                     <ul>
+                         {staticTestResult.map((item, index) => {
+                             const detail = perseverativeDetails[index];
+                             if (detail?.isPerseverative || detail?.debugInfo) {
+                                 return (
+                                     <li key={index} style={{ borderBottom: '1px dashed #eee', paddingBottom: '5px', marginBottom: '5px' }}>
+                                         Yanıt #{index + 1}: "{item.responseCategories?.join(', ') || 'BOŞ'}" (Doğru: {item.currentCategory})
+                                         {detail?.isPerseverative && ` - ${detail.explanation || 'Perseveratif'}`}
+                                         {detail?.isError === true && ` (HATA)`}
+                                         {detail?.isCorrectPerseverative === true && ` (DOĞRU - PH)`}
+                                         {detail?.debugInfo && ` [DEBUG: ${detail.debugInfo}]`}
+                                     </li>
+                                 );
+                             }
+                             return null;
+                         })}
+                     </ul>
+                 </div>
+            </S.Results>
+        </S.Div>
+    );
 }
