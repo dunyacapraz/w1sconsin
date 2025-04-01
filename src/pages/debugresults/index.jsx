@@ -523,8 +523,25 @@ const compareWithNorm = (scoreKey) => {
     color
   };
 };
-    const generateClinicalComment = () => {
-    if (!age || !education) return <p>Lütfen yaş ve eğitim bilgilerini giriniz</p>;
+  const generateClinicalComment = () => {
+  if (!age || !education) return (
+    <div style={{ 
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '200px'
+    }}>
+      <p style={{ 
+        textAlign: 'center', 
+        color: '#666',
+        fontSize: '18px',
+        fontWeight: 500
+      }}>
+        Lütfen yaş ve eğitim bilgilerini giriniz
+      </p>
+    </div>
+  );
     
     const comparisons = {
   dikkat: [
