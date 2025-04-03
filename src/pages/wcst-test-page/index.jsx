@@ -94,7 +94,7 @@ function WcstWindow() {
   const { resCount, resColor, resFigure } = currentCard;
 
   const testCompleted =
-    completedCategories === 2 ||
+    completedCategories === 6 ||
     cardIndex >= 128 ||
     cardIndex >= randomizedCards.length;
 
@@ -231,7 +231,7 @@ function WcstWindow() {
       setCategoryCorrect(newCategoryCorrect);
 
       // Kategori değişimi kontrolü - 3 ardışık doğru cevap
-      if (newCategoryCorrect >= 3) {
+      if (newCategoryCorrect >= 10) {
         // console.log("3 doğru cevap tamamlandı, kategori değişimi başlatılıyor");
         setPendingCategoryChange(true);
       }
