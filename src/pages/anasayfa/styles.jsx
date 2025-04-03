@@ -19,28 +19,39 @@ export const Wrapper = styled.div`
   padding: 2rem;
   line-height: 1.6;
 `;
-
 export const Header = styled.header`
   text-align: center;
-  padding: 4rem 0;
-  background: linear-gradient(135deg, var(--primary) 0%, #4b3f9e 100%);
+  padding: 10rem 0; /* Yüksek padding ile genişletildi */
   border-radius: 1rem;
-  margin-bottom: 3rem;
-  box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+  margin-bottom: 6rem; /* Alt boşluk artırıldı */
   position: relative;
   overflow: hidden;
+  color: white;
+  
+  /* Resim daha net gözükmesi için opaklık azaltıldı */
+  background: url('/images/header-bg.jpg') center/cover no-repeat;
+  background-color: var(--primary);
+  
+  /* Opaklık için gradienti daha şeffaf yapıyoruz */
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2)),
+   url('/images/header-bg.jpg') center/cover no-repeat;
+
+  /* Fallback gradient (resim yüklenmezse) */
+  background-color: var(--primary);
 
   &::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    pointer-events: none;
+    top: -3rem; /* Yukarı doğru uzatıldı */
+    left: 0;
+    width: 100%;
+    height: calc(100% + 6rem); /* Yükseklik artırıldı */
+    background: rgba(0, 0, 0, 0.2); /* Daha şeffaf bir overlay */
+    z-index: 1;
   }
 `;
+
+
 
 export const Title = styled.h1`
   font-size: 3.5rem;

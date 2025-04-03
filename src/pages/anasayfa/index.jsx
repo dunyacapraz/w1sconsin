@@ -13,6 +13,7 @@ import {  FaMapMarkerAlt,
     FaFlask
 } from "react-icons/fa";
 
+
 function Anasayfa() {
 
    const tests = [
@@ -78,8 +79,6 @@ function Anasayfa() {
   return (
     <S.Wrapper>
       <S.Header>
-        <S.Title>Cognitive Check</S.Title>
-        <S.Subtitle>Nörobilişsel Değerlendirme ve Analiz </S.Subtitle>
       </S.Header>
 
       <S.Content>
