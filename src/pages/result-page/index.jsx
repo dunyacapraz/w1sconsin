@@ -1,9 +1,11 @@
-import WcstTable from "../../components/table";
+
+import DebugResults from "../debugresults";
 
 function ResultPage() {
   return (
     <div>
-      <WcstTable />
+      {/* <WcstTable /> */}
+      <DebugResults />
     </div>
   );
 }

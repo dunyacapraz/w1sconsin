@@ -28,11 +28,18 @@ export const WcstWindow = styled.div`
 
 export const CompletedOptions = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
   justify-content: center;
-  height: 70vh;
+  align-items: center;
+  height: 50vh;
+  width: 117vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  
+  /* Buton wrapper'ı */
+  > div {
+    text-align: center;
+  }
 `;
 
 // Kartlar için genel stil
@@ -126,38 +133,120 @@ export const Start = styled.div`
 
 // Modern buton stili
 export const Button = styled.button`
-  font-size: var(--font-l);
+  position: relative;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: white;
-  margin-top: 400px;
-  padding: 12px 24px;
-  border-radius: 50px;
   border: none;
-  background-color: #6200ea;
+  border-radius: 0.75rem;
   cursor: pointer;
+  margin-top: 400px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 1) 0%,
+    rgba(79, 70, 229, 1) 100%
+  );
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-transform: uppercase;
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
-
-  @media screen and (max-width: 700px) {
-    padding: 10px 20px;
-    font-size: var(--font-s);
-  }
-
+  letter-spacing: 0.5px;
+  
+  /* Hover efekti */
   &:hover {
-    background-color: #3700b3;
-    color: white;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(99, 102, 241, 0.25);
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.15),
+        transparent
+      );
+      transform: rotate(45deg);
+      animation: shine 1.5s;
+    }
   }
 
+  /* Aktif durum */
   &:active {
-    background-color: #03dac5;
-    color: #3700b3;
     transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.25);
   }
 
-  &:focus {
-    outline: none;
+  /* Devre dışı durum */
+  &:disabled {
+    background: #4a4866;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  /* Ikonlu butonlar için */
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.75rem;
+    vertical-align: middle;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: scale(1.1);
+  }
+
+  @keyframes shine {
+    0% { left: -50%; }
+    100% { left: 150%; }
+  }
+
+  /* Responsive boyutlar */
+  @media screen and (max-width: 768px) {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  /* Özel varyantlar */
+  &.secondary {
+    background: linear-gradient(
+      135deg,
+      rgba(203, 213, 225, 1) 0%,
+      rgba(148, 163, 184, 1) 100%
+    );
+    color: #1e293b;
+    
+    &:hover {
+      box-shadow: 0 6px 12px rgba(148, 163, 184, 0.25);
+    }
+  }
+
+  &.danger {
+    background: linear-gradient(
+      135deg,
+      rgba(239, 68, 68, 1) 0%,
+      rgba(185, 28, 28, 1) 100%
+    );
+    
+    &:hover {
+      box-shadow: 0 6px 12px rgba(239, 68, 68, 0.25);
+    }
   }
 `;
 

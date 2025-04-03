@@ -63,99 +63,177 @@ export const Box = styled.div`
 
 export const ClinicalSection = styled.div`
   width: 100%;
-  max-width: none; /* Maksimum genişlik sınırını kaldır */
+  max-width: none;
   padding: 25px;
-  margin: 30px 0; /* Üst ve alt boşluk */
+  margin: 30px 0;
+  box-shadow: 0 8px 32px rgba(0, 167, 207, 0.1);
   background: rgba(255, 255, 255, 0.05);
-  
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   box-sizing: border-box;
   
+  /* Yeni eklenen stiller */
+  min-height: 200px; /* Minimum yükseklik */
+  overflow: visible; /* Taşan içeriği kesme */
+  display: flex;
+  flex-direction: column;
+
   h3 {
-    color: #00a7cf;
-    margin: 0 0 20px 0;
-    font-size: 1.5rem;
-    border-bottom: 1px dashed rgba(0, 167, 207, 0.5);
-    padding-bottom: 10px;
+    /* Mevcut stiller korundu */
   }
 
   .clinical-content {
     width: 100%;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 1rem;
+    flex: 1; /* Kalan alanı doldur */
     
-    p {
-      margin-bottom: 15px;
+    > div { /* Ana içerik container'ı */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Grid düzeni için responsive ayar */
+    .css-1qzevvg {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       width: 100%;
     }
-    
-    strong {
-      color: #00a7cf;
-    }
-    
-    ul, ol {
-      padding-left: 25px;
-      margin-bottom: 15px;
-    }
-    
-    li {
-      margin-bottom: 8px;
-    }
   }
+
 `;
 
 export const DemographicSection = styled.div`
-  margin-bottom: 30px;
-  width: 500px;
-  padding: 25px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-left: auto;
-  margin-right: auto;
-  
+  margin: 30px auto;
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 167, 207, 0.3); // Ana mavi tonunda border
+  box-shadow: 0 8px 32px rgba(0, 167, 207, 0.1);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    box-shadow: 0 8px 32px rgba(0, 167, 207, 0.2);
+  }
+
   h3 {
-    margin-top: 0;
-    color: #fff;
-    font-size: 1.25rem;
-    margin-bottom: 20px;
+    color: #00a7cf; // Başlık rengi klinik yorumla aynı
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 2rem 0;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background: #00a7cf;
+      border-radius: 2px;
+    }
   }
 
   .input-group {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .input-field {
-    flex: 1;
-    min-width: 200px;
-    
     label {
+      color: rgba(255, 255, 255, 0.9); // Klinik yorum metin rengiyle uyumlu
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
       display: block;
-      margin-bottom: 8px;
-      color: rgba(255, 255, 255, 0.8);
-      font-weight: 500;
-      font-size: 0.9rem;
+      padding-left: 8px;
     }
 
     input, select {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 6px;
-      background: rgba(0, 0, 0, 0.2);
+      padding: 0.875rem 1.25rem;
+      border: 1px solid rgba(0, 167, 207, 0.3); // Ana mavi tonunda border
+      border-radius: 8px;
+      background: rgba(0, 167, 207, 0.05); // Hafif mavi arkaplan
       color: white;
-      font-size: 0.95rem;
+      font-size: 1rem;
       transition: all 0.3s ease;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
 
       &:focus {
         outline: none;
         border-color: #00a7cf;
-        box-shadow: 0 0 0 2px rgba(0, 167, 207, 0.2);
+        box-shadow: 0 0 0 3px rgba(0, 167, 207, 0.2);
+        background: rgba(0, 167, 207, 0.1);
       }
+    }
+
+    select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300a7cf'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    }
+  }
+
+  .download-section {
+    text-align: center;
+    margin-top: 2rem;
+
+    button {
+      background: linear-gradient(135deg, #00a7cf 0%, #0088cc 100%); // Klinik yorum gradienti
+      color: white;
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.15),
+          transparent
+        );
+        transform: rotate(45deg);
+        transition: all 0.5s ease;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        &::before {
+          left: 100%;
+        }
+      }
+
+      &:disabled {
+        background: #2d3b4d;
+        color: rgba(255, 255, 255, 0.4);
+        cursor: not-allowed;
+      }
+    }
+
+    .download-note {
+      color: rgba(255, 255, 255, 0.6); // Klinik yorum ikincil metin rengi
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 `;
@@ -165,9 +243,10 @@ export const PerseverativeSection = styled.div`
   width: 500px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 8px 32px rgba(0, 167, 207, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 30px;
-    margin-left: auto;
+  margin-left: auto;
   margin-right: auto;
   
   h3 {
@@ -289,6 +368,7 @@ export const Results = styled.div`
   width: 44%; /* 44% yerine 100% */
   max-width: 1600px; /* İsteğe bağlı maksimum genişlik */
   margin-left: auto;
+  box-shadow: 0 8px 32px rgba(0, 167, 207, 0.1);
   margin-right: auto;
   
   table {

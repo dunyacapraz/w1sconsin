@@ -14,8 +14,8 @@ function WcstPage() {
       </p>
 
       <p>
-        WCST, yönetici/yürütücü işlevleri (Executive Functions) ölçmeye
-        yönelik bir testtir. Yönetici işlevler, belirli bir amacı/görevi
+        WCST, yönetici/yürütücü işlevleri (Executive Functions) ölçmeye yönelik
+        bir testtir. Yönetici işlevler, belirli bir amacı/görevi
         gerçekleştirmeye yönelik bilişsel beceriler olarak tanımlanabilir. Bu
         beceriler: Dikkati odaklama, görevin çalışma belleğinde kodlanması,
         bozucu etkiye (Interference) direnç, art arda gelen durumlarda bir
@@ -45,13 +45,7 @@ function WcstPage() {
         <S.RunLink to="/wcst-test-window">
           <S.Button>Başlamak İçin Tıklayınız</S.Button>
         </S.RunLink>
-        
-        {/* Yeni eklenen debug butonu */}
-        <S.RunLink to="/wcst-debug-results" style={{marginTop: '10px'}}>
-          <S.Button style={{backgroundColor: '#6a5acd'}}>
-            Detaylı Hata Ayıklama Modu
-          </S.Button>
-        </S.RunLink>
+		
       </S.RunBox>
     </S.Div>
   );

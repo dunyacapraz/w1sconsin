@@ -1,0 +1,1308 @@
+[
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 0
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "yellow",
+      "resFigure": "cross"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 1
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "yellow",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 2
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 3
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 4
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "red",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 5
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 6
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "red",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 7
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "red",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 8
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "yellow",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": null,
+    "cardIndex": 9
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "red",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 10
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "green",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 11
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "yellow",
+      "resFigure": "cross"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 12
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 13
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 14
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 15
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "yellow",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 16
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 17
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 18
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 19
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "red",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 20
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 21
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 22
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "cross"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 23
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 24
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "yellow",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 25
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 26
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 27
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 28
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "red",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 29
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 30
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "red",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 31
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 32
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 33
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "red",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 34
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 35
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 36
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 37
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 38
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 39
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "red",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 40
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "blue",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 41
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "yellow",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 42
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 43
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "yellow",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 44
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 45
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "red",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 46
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 47
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 48
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "yellow",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 49
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 50
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": false,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 51
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "blue",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 52
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 53
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "yellow",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 54
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 55
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 56
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "green",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 57
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 58
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "yellow",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 1,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "color",
+    "prevCategory": "count",
+    "cardIndex": 59
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "yellow",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "color"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 60
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "blue",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 61
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "green",
+      "resFigure": "cross"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 62
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 63
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 64
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "red",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 65
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "red",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 66
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "color",
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 67
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 68
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 69
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "yellow",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 70
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "yellow",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 2,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "figure",
+    "prevCategory": "color",
+    "cardIndex": 71
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "red",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "figure"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 72
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "red",
+      "resFigure": "cross"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "figure"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 73
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "red",
+      "resFigure": "star"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 74
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "blue",
+      "resFigure": "cross"
+    },
+    "categoryComplete": false,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 75
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "yellow",
+      "resFigure": "circle"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 76
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "red",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "color",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 77
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "green",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 78
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "red",
+      "resFigure": "triangle"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 79
+  },
+  {
+    "response": {
+      "resCount": 4,
+      "resColor": "green",
+      "resFigure": "cross"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 80
+  },
+  {
+    "response": {
+      "resCount": 1,
+      "resColor": "green",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 81
+  },
+  {
+    "response": {
+      "resCount": 2,
+      "resColor": "red",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "figure",
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 82
+  },
+  {
+    "response": {
+      "resCount": 3,
+      "resColor": "blue",
+      "resFigure": "star"
+    },
+    "categoryComplete": true,
+    "category": 3,
+    "responseCategories": [
+      "count"
+    ],
+    "currentCategory": "count",
+    "prevCategory": "figure",
+    "cardIndex": 83
+  }
+]

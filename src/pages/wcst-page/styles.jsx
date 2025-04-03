@@ -42,19 +42,78 @@ export const RunLink = styled(NavLink)`
 `;
 
 export const Button = styled.button`
-  font-size: var(--font-m);
-  color: var(--text-color);
-  margin-top: 2%;
-  padding: 5px;
-  border-radius: var(--border-radius);
-  border: solid 1px;
-  width: 100%; /* Buton genişliği */
-  cursor: pointer;
-  transition: var(--transition);
+  background: linear-gradient(135deg, #7b68ee 0%, #6a5acd 100%);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(255, 255, 255, 0.15),
+      transparent
+    );
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+  }
 
   &:hover {
-    background-color: var(--text-color);
-    color: var(--sidebar-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(123, 104, 238, 0.25);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(123, 104, 238, 0.25);
+  }
+
+  &:disabled {
+    background: #4a4866;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: scale(1.1);
+  }
+
+  @media screen and (max-width: 700px) {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    
+    svg {
+      width: 18px;
+      height: 18px;
+    }
   }
 `;
 

@@ -93,7 +93,6 @@ function WcstWindow() {
   const currentCard = randomizedCards[cardIndex] || {};
   const { resCount, resColor, resFigure } = currentCard;
 
-
   const testCompleted =
     completedCategories === 6 ||
     cardIndex >= 128 ||
@@ -146,15 +145,16 @@ function WcstWindow() {
         <div
           key={index}
           onClick={() => {
-            if (!open) { // Sadece 'open' false ise tıklamayı işle
+            if (!open) {
+              // Sadece 'open' false ise tıklamayı işle
               clickHandle({ target });
             }
           }}
           style={{
             opacity: open ? 0.5 : 1, // 'open' true ise opacity'i düşür
-            pointerEvents: open ? 'none' : 'auto', // 'open' true ise tıklamayı engelle
-            transition: 'opacity 0.3s ease-in-out', // İsteğe bağlı: Yumuşak geçiş için
-            cursor: open ? 'default' : 'pointer', // İsteğe bağlı: İmleci de değiştir
+            pointerEvents: open ? "none" : "auto", // 'open' true ise tıklamayı engelle
+            transition: "opacity 0.3s ease-in-out", // İsteğe bağlı: Yumuşak geçiş için
+            cursor: open ? "default" : "pointer", // İsteğe bağlı: İmleci de değiştir
           }}
         >
           <Card
@@ -488,42 +488,8 @@ function WcstWindow() {
     setCardIndex(0);
   };
 
-  const downloadResultsAsJson = () => {
-    if (!result || result.length === 0) {
-      console.warn("İndirilecek sonuç bulunamadı");
-      return;
-    }
 
-    // Sadece istenen alanları içeren yeni bir dizi oluştur
-    const simplifiedResults = result.map(item => ({
-      response: item.response,
-      categoryComplete: item.categoryComplete,
-      category: item.category,
-      responseCategories: item.responseCategories,
-      currentCategory: item.currentCategory,
-      prevCategory: item.prevCategory,
-      cardIndex: item.cardIndex
-    }));
-
-    try {
-      const blob = new Blob([JSON.stringify(simplifiedResults, null, 2)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `wcst-results-${new Date().toISOString()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("JSON indirme hatası:", error);
-    }
-  };
-
-  const handleShowAndDownload = () => {
-    downloadResultsAsJson();
+  const handleShowResults = () => {
     navigate("/wcst-test-result");
   };
 
@@ -532,11 +498,12 @@ function WcstWindow() {
       {testInfo ? (
         testCompleted ? (
           <S.CompletedOptions>
-            {/* Removed the S.NavLinkButton and modified the S.Button */}
-            <S.Button onClick={handleShowAndDownload}>
-              Sonuçları Göster ve İndir
-            </S.Button>
-          </S.CompletedOptions>
+  <div>
+    <S.Button onClick={handleShowResults}>
+      Sonuçları Göster
+    </S.Button>
+  </div>
+</S.CompletedOptions>
         ) : (
           <>
             <S.TargetCards>{targetCardsList}</S.TargetCards>
