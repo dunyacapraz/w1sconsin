@@ -2,12 +2,12 @@ import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import NotFound from "../pages/not-found-page";
 import HomePage from "../pages/home-page";
-import AboutPage from "../pages/about-page";
 import WcstWindow from "../pages/wcst-test-page";
 import ResultPage from "../pages/result-page";
 import D2PuanHesaplama from "../pages/D2-puan-hesaplama";
-import DebugResults from "../pages/debugresults"; //
+import DebugResults from "../pages/debugresults"; 
 import App from "../App";
+import IowaGamblingTask from "../pages/Iowa-kumar-test"; 
 
 export const router = createBrowserRouter([
   {
@@ -16,10 +16,6 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-      },
-      {
-        path: "/about",
-        element: <AboutPage />,
       },
       {
         path: "/*",
@@ -40,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: "/wcst-debug-results",
         element: <DebugResults />,
+      },
+      {
+        path: "/Iowa-kumar-test",
+        element: <IowaGamblingTask />,
       },
     ],
   },

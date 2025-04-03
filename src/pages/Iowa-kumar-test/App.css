@@ -1,0 +1,244 @@
+/* App.css - styled-components benzeri karanlık tema */
+
+/* Genel Sayfa Ayarları */
+body {
+  background-color: #0A0E14; /* Ana arka plan rengi */
+  color: #E6EDF3; /* Ana metin rengi */
+  font-family: 'Arial', sans-serif; /* Fontu koruyabilir veya değiştirebilirsiniz */
+  margin: 0;
+  padding: 0;
+  justify-content: center; /* İçeriği ortalamak için (opsiyonel) */
+  min-height: 100vh; /* Tüm ekranı kaplaması için (opsiyonel) */
+  align-items: center; /* İçeriği dikeyde ortalamak için (opsiyonel) */
+}
+
+.game-container {
+  text-align: center;
+  margin: 30px auto; /* Ortalamayı korur */
+  width: 90%; /* Genişliği ayarlar */
+  max-width: 900px; /* Maksimum genişlik */
+  padding: 40px 20px; /* styled-components'ten esinlenilmiş padding */
+  background-color: #161B22; /* İç konteyner arka planı */
+  border-radius: 12px; /* Köşe yuvarlaklığı */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Hafif bir gölge (isteğe bağlı) */
+}
+
+/* Başlık Alanı (Opsiyonel, eğer varsa) */
+.title-container { /* styled-components'teki gibi bir başlık alanı varsayımı */
+  text-align: center;
+  margin-bottom: 30px; /* Başlık ile içerik arasına mesafe */
+}
+
+.title-container h1, 
+.title-container h2 {
+  color: #E6EDF3; /* Başlık rengi */
+  margin-top: 0;
+}
+
+
+/* Desteler */
+.decks {
+  display: flex;
+  justify-content: space-around;
+  margin: 30px auto;
+  width: 100%;
+  max-width: 800px; /* Maksimum genişliği koru */
+}
+
+.deck {
+  cursor: pointer;
+  text-align: center;
+  width: 22%; 
+  margin: 0 5px;
+  padding: 10px; /* İçerik için biraz boşluk */
+  border-radius: 8px; /* Hafif köşe yuvarlaklığı */
+  transition: background-color 0.2s ease;
+}
+
+.deck:hover {
+    background-color: #21262d; /* Hafif hover efekti */
+}
+
+.deck-image {
+  width: 120px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px; /* Daha yumuşak köşeler */
+  border: 1px solid #30363d; /* Karanlık temaya uygun border */
+  transition: all 0.2s ease;
+  display: block;
+  margin: 0 auto 10px auto; /* Resimle yazı arasına boşluk */
+}
+
+.deck p {
+  margin-top: 0; /* Üstteki margin'i sıfırla, resimden sonraki boşluk yeterli */
+  font-weight: 500; /* Biraz daha ince bold */
+  color: #c9d1d9; /* Biraz daha soluk metin */
+  font-size: 0.9rem;
+}
+
+.deck:hover .deck-image {
+  transform: scale(1.05);
+  border-color: #58A6FF; /* Vurgu rengi */
+  box-shadow: 0 0 8px rgba(88, 166, 255, 0.3); /* Vurgu rengiyle gölge */
+}
+
+.deck.active .deck-image {
+  border-color: #58A6FF; /* Vurgu rengi */
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.5); /* Vurgu rengiyle dış çerçeve */
+}
+
+/* Buton Stilleri (styled-components'e benzer genel stil) */
+button {
+  background-color: #00C1FF; /* Ana buton rengi */
+  color: #0A0E14; /* Buton yazı rengi */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px; /* Köşe yuvarlaklığı */
+  font-weight: bold; /* Kalın yazı */
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  display: inline-block; /* Varsayılan davranış */
+  margin: 10px 5px; /* Butonlar arası boşluk */
+}
+
+button:hover {
+  background-color: #0099CC; /* Hover rengi */
+  transform: translateY(-1px); /* Hafif yukarı kalkma efekti */
+  opacity: 1; /* Eski opacity'yi kaldır */
+}
+
+button:active {
+    transform: translateY(0); /* Tıklama anı efekti */
+}
+
+
+
+/* Başlat butonu biraz daha belirgin olabilir VE ORTALANMIŞ */
+.participant-form button[type="submit"] {
+  background-color: #238636; /* Yeşil tonu (GitHub gibi) */
+  color: white;
+  padding: 12px 25px; /* Biraz daha büyük */
+  
+  /* --- Ortalamak için eklenen/güncellenenler --- */
+  display: block;       /* Butonu blok seviyesine getirir */
+  margin-left: auto;    /* Sol boşluğu otomatik ayarla */
+  margin-right: auto;   /* Sağ boşluğu otomatik ayarla */
+  /* İsteğe bağlı: Üst/alt boşluğu ayarlayabilirsiniz, örneğin: */
+  margin-top: 25px;    
+  margin-bottom: 10px; 
+  /* --- Bitiş: Ortalamak için eklenen/güncellenenler --- */
+
+  /* İsteğe bağlı: Butonun içeriğe göre daralması için */
+  width: fit-content; /* Ya da sabit bir genişlik verebilirsiniz: width: 150px; */
+}
+
+.participant-form button[type="submit"]:hover {
+  background-color: #2b9a40;
+  /* display, margin, width gibi özellikler hover'da genellikle değişmez */
+}
+
+
+.feedback button {
+  background-color: #1f6feb; /* Mavi tonu (GitHub gibi) - Yorum kaldırıldı */
+  color: white;             /* Yorum kaldırıldı */
+  /* Gerekirse başka stiller de ekleyebilirsiniz */
+} 
+
+
+.game-over button {
+  background-color: #8957e5; /* Mor tonu (GitHub gibi) */
+  color: white;
+  padding: 12px 25px; /* Biraz daha büyük */
+}
+.game-over button:hover {
+    background-color: #9768ec;
+}
+
+
+/* Feedback alanı */
+.feedback {
+  background-color: #161B22; /* Konteyner rengi */
+  padding: 20px;
+  border-radius: 12px; /* Köşe yuvarlaklığı */
+  margin: 20px auto;
+  max-width: 450px; /* Biraz daha geniş */
+  border: 1px solid #30363d; /* Hafif border */
+}
+
+/* Katılımcı formu */
+.participant-form {
+  max-width: 450px; /* Biraz daha geniş */
+  margin: 50px auto;
+  padding: 30px; /* Daha fazla iç boşluk */
+  background: #161B22; /* Konteyner rengi */
+  border-radius: 12px; /* Köşe yuvarlaklığı */
+  border: 1px solid #30363d; /* Hafif border */
+  /* box-shadow: 0 2px 10px rgba(0,0,0,0.1); kaldırıldı, karanlık temada daha sade */
+}
+
+.participant-form h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #E6EDF3;
+}
+
+.participant-form label { /* Etiketler için stil (isteğe bağlı) */
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #c9d1d9;
+    text-align: left; /* Sola hizalı etiket */
+}
+
+.participant-form input,
+.participant-form select {
+  width: 100%; /* Tam genişlik */
+  padding: 12px; /* Daha rahat padding */
+  margin-bottom: 15px; /* Alanlar arası daha fazla boşluk */
+  background-color: #0d1117; /* Biraz daha koyu input arka planı */
+  border: 1px solid #30363d; /* Kenarlık rengi */
+  border-radius: 8px; /* Köşe yuvarlaklığı */
+  color: #E6EDF3; /* Yazı rengi */
+  box-sizing: border-box; /* Padding ve border'ı genişliğe dahil et */
+}
+
+.participant-form input:focus,
+.participant-form select:focus {
+    border-color: #58A6FF; /* Odaklanıldığında vurgu rengi */
+    outline: none; /* Tarayıcı varsayılan outline'ı kaldır */
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3); /* Odaklanma efekti */
+}
+
+/* Responsive ayarlar */
+@media (max-width: 768px) {
+  .game-container {
+      padding: 20px 15px;
+  }
+
+  .decks {
+    flex-wrap: wrap;
+    justify-content: center; /* Ortalamak için */
+  }
+  
+  .deck {
+    width: 45%; /* İki sütunlu yapı */
+    margin-bottom: 25px;
+  }
+  
+  .deck-image {
+    width: 100px;
+    height: 150px;
+  }
+
+  .participant-form {
+      max-width: 90%;
+      padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+    .deck {
+        width: 80%; /* Tek sütunlu yapı */
+    }
+}
