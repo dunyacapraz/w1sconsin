@@ -8,7 +8,6 @@ import {
   Input,
   Button,
   ResultContainer,
-  ResultText,
 } from "./styles";
 
 // Norm tablosu verileri
@@ -45,6 +44,7 @@ const TN_NORM = [
   { min: 582, max: 589, percentile: 99.7 }, { min: 590, max: 596, percentile: 99.8 },
   { min: 597, max: 603, percentile: 99.9 }
 ];
+
 const TN_E_NORM = [
   { min: 155, max: 161, percentile: 0.1 }, { min: 162, max: 168, percentile: 0.2 },
   { min: 169, max: 175, percentile: 0.3 }, { min: 176, max: 181, percentile: 0.4 },
@@ -79,12 +79,12 @@ const TN_E_NORM = [
   { min: 563, max: 569, percentile: 99.9 }
 ];
 
-
 const HATA_YUZDESI_NORM = [
   { value: 13.5, percentile: 10 }, { value: 7.1, percentile: 25 },
   { value: 4.4, percentile: 50 }, { value: 2.6, percentile: 75 },
   { value: 1.4, percentile: 90 }
 ];
+
 const FR_NORM = [
   { value: 21, percentile: 10 },
   { value: 16, percentile: 25 },
@@ -102,16 +102,20 @@ const D2PuanHesaplama = () => {
   const [son4, setSon4] = useState("");
   const [maxTM, setMaxTM] = useState("");
   const [minTM, setMinTM] = useState("");
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState(null);
+  const [age, setAge] = useState("");
+  const [education, setEducation] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const getPercentile = (value, type) => { 
     if (type === 'TN') {
       const entry = TN_NORM.find(e => value >= e.min && value <= e.max);
-      return entry ? entry.percentile : 0;
+      return entry ? entry.percentile * 100 : 0;
     }
-	if (type === 'TN-E') {
+    if (type === 'TN-E') {
       const entry = TN_E_NORM.find(e => value >= e.min && value <= e.max);
-      return entry ? entry.percentile : 0;
+      return entry ? entry.percentile * 100 : 0;
     }
     if (type === 'HataYuzdesi') {
       const entry = HATA_YUZDESI_NORM.find(e => value >= e.value);
@@ -121,149 +125,159 @@ const D2PuanHesaplama = () => {
       const entry = FR_NORM.find(e => value >= e.value);
       return entry ? entry.percentile : 100;
     }
-    // TN-E, E1, E2 gibi diğer parametreler için getPercentile kullanılmayabilir.
     return 0;
   };
 
-  const yorumla = (deger, tip) => {
-    const percentile = getPercentile(deger, tip);
-    let yorum = "";
-    let aciklama = "";
+  const getInterpretation = (percentile, type) => {
+    let interpretation = "";
+    let color = "";
+    let explanation = "";
 
-    if (tip === 'TN') {
-    // TN: Psikomotor hızı (Algıladığını harekete dökme, kavrama hızı) hakkında bilgi verir.
-    if (percentile < 10) {
-        yorum = "🔴 Kritik Sorun";
-        aciklama = "Çok düşük psikomotor hız! Algı-kavrama ve harekete dökmede ciddi sorunlar var.";
-    } else if (percentile <= 25) {
-        yorum = "🟠 Sınırda";
-        aciklama = "Psikomotor hız idealin altında; algılama ve tepki süresinde tutarlılık eksik.";
-    } else if (percentile <= 75) {
-        yorum = "🟡 Normal";
-        aciklama = "Beklenen düzeyde psikomotor hız. Algı ve eylem arasında dengeli bir performans.";
-    } else if (percentile <= 90) {
-        yorum = "🟢 İyi";
-        aciklama = "Hızlı psikomotor tepki; algıladığını hızla harekete dökme becerisi gelişmiş.";
-    } else if (percentile <= 97.1) {
-        yorum = "🔵 Yüksek";
-        aciklama = "Üst düzey psikomotor hız! Sonuçlar seçkin performans seviyesini gösteriyor.";
-    } else {
-        yorum = "🟣 Çok Yüksek";
-        aciklama = "Olağanüstü psikomotor hız! Algıdan harekete geçişte mükemmel bir yetenek.";
-    }
-    aciklama += "\n(TN: Psikomotor hızı; algılama, kavrama ve harekete dökme becerilerini niceliksel olarak ölçer.)";
-} else if (tip === 'TN-E') {
-    // TN-E: Test Performansı; psikomotor hız ile seçici dikkat arasındaki dengeyi gösterir
-    if (percentile < 10) {
-        yorum = "🔴 Kritik Sorun";
-        aciklama = "Test performansı çok düşük! Psikomotor-dikkat dengesinde ciddi bozulma mevcut.";
-    } else if (percentile <= 25) {
-        yorum = "🟠 Sınırda";
-        aciklama = "Performans risk sınırında; motor hız ve dikkat dağılması kombinasyonu zayıf.";
-    } else if (percentile <= 75) {
-        yorum = "🟡 Normal";
-        aciklama = "Beklenen performans seviyesi; temel test kriterleri karşılanmış durumda.";
-    } else if (percentile <= 90) {
-        yorum = "🟢 İyi";
-        aciklama = "Test performansı ideal aralıkta; hız-dikkat dengesi optimum seviyede.";
-    } else if (percentile <= 97.1) {
-        yorum = "🔵 Yüksek";
-        aciklama = "Üstün performans; zorlu koşullarda bile tutarlılık gösteriyor.";
-    } else {
-        yorum = "🟣 Çok Yüksek";
-        aciklama = "Olağanüstü performans! Motor beceri ve odaklanma mükemmel uyumlu.";
-    }
-    aciklama += "\n(TN-E: Test Performansı; ideal olarak %75 üzeri olmalıdır. Bu, genel dikkat ve motor becerilerin kalitesini yansıtır.)";
-} else if (tip === 'E1') {
-      // E1: Seçici Dikkat; hata sayısı arttıkça dikkat düşüklüğü söz konusu.
-      // 15-20 hata hafif, 20-30 hata orta, 30+ hata ciddi.
-      if (deger >= 30) {
-        yorum = "🔴 Ciddi Seçici Dikkat Sorunu";
-        aciklama = "30 ve üzeri hata: Seçici dikkat ciddi düzeyde düşük, müdahale gerekiyor.";
-      } else if (deger >= 20) {
-        yorum = "🟠 Orta Derecede Seçici Dikkat Problemi";
-        aciklama = "20-29 hata: Dikkat düzeyinde orta derecede eksiklikler mevcut.";
-      } else if (deger >= 15) {
-        yorum = "🟡 Hafif Seçici Dikkat Problemi";
-        aciklama = "15-19 hata: Hafif eksiklikler var, ancak genel durum kabul edilebilir.";
+    if (type === 'TN') {
+      if (percentile < 10) {
+        interpretation = "Kritik Sorun";
+        color = "#e74c3c";
+        explanation = "Psikomotor hızda ciddi düşüklük! Algı-kavrama ve motor tepki arasındaki uyum bozulmuş. Zihinsel işlemleme ve fiziksel yanıt arasında belirgin kopukluk.";
+      } else if (percentile <= 25) {
+        interpretation = "Sınırda";
+        color = "#f39c12";
+        explanation = "Psikomotor hız beklenenin altında: Algı-hareket koordinasyonunda tutarsızlık mevcut. Tepki sürelerinde dalgalanmalar gözleniyor.";
+      } else if (percentile <= 75) {
+        interpretation = "Normal";
+        color = "#3498db";
+        explanation = "Normal psikomotor hız: Algıladığını harekete dökme becerisi beklentilerle uyumlu. Zihinsel işlemleme ve motor yanıt dengeli.";
+      } else if (percentile <= 90) {
+        interpretation = "İyi";
+        color = "#2ecc71";
+        explanation = "Yüksek psikomotor performans: Hızlı kavrama ve etkin motor yanıt kombinasyonu mevcut.";
+      } else if (percentile <= 97.1) {
+        interpretation = "Yüksek";
+        color = "#2980b9";
+        explanation = "Üstün bilişsel-motor entegrasyon: Algı-hareket döngüsünde olağanüstü hız ve doğruluk.";
       } else {
-        yorum = "🟢 İdeal Seçici Dikkat";
-        aciklama = "15'ten az hata: Seçici dikkat düzeyi iyi.";
+        interpretation = "Çok Yüksek";
+        color = "#9b59b6";
+        explanation = "Mükemmel psikomotor senkronizasyon: Görsel algı ile motor tepki arasında minimal gecikme.";
       }
-      aciklama += "\n(E1: Seçici Dikkat; hata sayısı arttıkça dikkat seviyesi düşer.)";
-      return `${deger} => ${yorum}\n   ${aciklama}`;
-    } else if (tip === 'E2') {
-      // E2: Öğrenme Güçlüğü; hata artışı, öğrenmede ve yönergeye uyumda sorunlara işaret edebilir.
-      // E1 gibi eşik değerler kullanılabilir.
-      if (deger >= 30) {
-        yorum = "🔴 Ciddi Öğrenme Güçlüğü";
-        aciklama = "30 ve üzeri hata: Öğrenme ve görsel ayrımda ciddi güçlükler mevcut.";
-      } else if (deger >= 20) {
-        yorum = "🟠 Orta Derecede Öğrenme Güçlüğü";
-        aciklama = "20-29 hata: Öğrenme sürecinde bazı aksaklıklar var.";
-      } else if (deger >= 15) {
-        yorum = "🟡 Hafif Öğrenme Güçlüğü";
-        aciklama = "15-19 hata: Öğrenme sürecinde hafif zorluklar gözleniyor.";
+    } else if (type === 'TN-E') {
+      if (percentile < 10) {
+        interpretation = "Kritik Sorun";
+        color = "#e74c3c";
+        explanation = "Test performansı çok düşük: Psikomotor hız ile dikkat arasındaki denge bozulmuş. Dikkat eksikliği belirgin.";
+      } else if (percentile <= 25) {
+        interpretation = "Sınırda";
+        color = "#f39c12";
+        explanation = "Dengesiz performans: Motor hızda dalgalanmalar ve seçici dikkatte zayıflık kombinasyonu.";
+      } else if (percentile <= 75) {
+        interpretation = "Normal";
+        color = "#3498db";
+        explanation = "Optimal denge: Psikomotor hız ile seçici dikkat arasında beklenen uyum mevcut. Temel performans kriterleri karşılanıyor.";
+      } else if (percentile <= 90) {
+        interpretation = "İyi";
+        color = "#2ecc71";
+        explanation = "Kaliteli performans: Hız-dikkat dengesi ideal seviyede. Zorlu koşullarda bile tutarlılık gösteriyor.";
+      } else if (percentile <= 97.1) {
+        interpretation = "Yüksek";
+        color = "#2980b9";
+        explanation = "Üstün bütünleşik performans: Motor beceri ve odaklanma kapasitesi mükemmel uyumlu.";
       } else {
-        yorum = "🟢 Normal Öğrenme Kapasitesi";
-        aciklama = "15'ten az hata: Öğrenme ve yönergeye uyum sorunsuz.";
+        interpretation = "Çok Yüksek";
+        color = "#9b59b6";
+        explanation = "Sıra dışı performans: Uzun süreli dikkat ve yüksek hız kombinasyonuyla maksimum verimlilik.";
       }
-      aciklama += "\n(E2: Öğrenme Güçlüğü; yüksek hata sayısı, görsel ayrım ve yönergeye uyumda problem olduğunu gösterir.)";
-      return `${deger} => ${yorum}\n   ${aciklama}`;
-    } else if (tip === 'HataYuzdesi') {
-      // Hata Yüzdesi: Odaklanma düzeyi ve dikkat problemini ölçer.
-     if (percentile < 10) {
-    yorum = "🔴 Sorun";
-    aciklama = "Performans kritik düzeyde düşük: Acil müdahale önerilir.";
-} else if (percentile <= 25) {
-    yorum = "🟠 Sınırda";
-    aciklama = "Performans idealin altında: Takip ve geliştirme önerilir.";
-} else if (percentile <= 75) {
-    yorum = "🟡 Normal";
-    aciklama = "Beklenen düzeyde performans: Rutin takip yeterli.";
-} else if (percentile <= 90) {
-    yorum = "🟢 İyi";
-    aciklama = "İdeal üstü performans: Sürdürülebilir başarı seviyesi.";
-} else if (percentile <= 97.1) {
-    yorum = "🔵 Yüksek";
-    aciklama = "Üstün performans: Kayda değer bir başarı seviyesi.";
-} else {
-    yorum = "🟣 Çok Yüksek";
-    aciklama = "Olağanüstü performans: En üst düzeyde başarı gösterilmiştir.";
-}
-    } else if (tip === 'FR') {
-    // FR: TN puanları arasındaki maksimum fark (dikkat istikrarı ve motivasyon göstergesi)
-    if (percentile < 10) {
-        yorum = "🔴 Kritik İstikrarsızlık";
-        aciklama = "Aşırı yüksek fark! (%" + percentile + ") Ciddi dikkat dalgalanmaları ve motivasyon sorunları gözleniyor.";
-    } else if (percentile <= 25) {
-        yorum = "🟠 Riskli Dağılım";
-        aciklama = "Büyük performans farkı (%" + percentile + "). Dikkatte belirgin salınımlar ve odaklanma zorlukları mevcut.";
-    } else if (percentile <= 75) {
-        yorum = "🟡 Normal Varyasyon";
-        aciklama = "Kabul edilebilir seviyede fark (%" + percentile + "). Zaman zaman küçük konsantrasyon dalgalanmaları görülüyor.";
-    } else if (percentile <= 90) {
-        yorum = "🟢 İstikrarlı Performans";
-        aciklama = "Düşük fark (%" + percentile + "). Tutarlı dikkat yönetimi ve sağlam motivasyon seviyesi.";
-    } else if (percentile <= 97.1) {
-        yorum = "🔵 Üstün Tutarlılık";
-        aciklama = "Minimum performans farkı (%" + percentile + "). Yüksek seviyede odaklanma becerisi ve sürekli motivasyon.";
-    } else {
-        yorum = "🎉 Olağanüstü Denge";
-        aciklama = "Neredeyse sıfır fark (%" + percentile + ")! Mükemmel düzeyde istikrar ve kontrol.";
-    }
-    aciklama += "\n(FR: En yüksek ve en düşük TN puanları arası farkı gösterir. Düşük değerler istikrarlı performansı, yüksek değerler dikkat dalgalanmalarını işaret eder.)";
-} else {
-      // Diğer parametreler için genel yorum
-      if (percentile <= 10) yorum = "🔴 Kritik Sorun";
-      else if (percentile <= 25) yorum = "🟠 Düşük Performans";
-      else if (percentile <= 50) yorum = "🟡 Orta Düzey";
-      else if (percentile <= 75) yorum = "🟢 İyi";
-      else if (percentile <= 90) yorum = "🔵 Çok İyi";
-      else yorum = "🎉 Üstün Performans";
+    } else if (type === 'HataYuzdesi') {
+      if (percentile < 10) {
+        interpretation = "Sorun";
+        color = "#e74c3c";
+        explanation = "Yüksek hata oranı: Dikkat dağınıklığı ve odaklanma sorunları belirgin. Çalışma kalitesi düşük.";
+      } else if (percentile <= 25) {
+        interpretation = "Sınırda";
+        color = "#f39c12";
+        explanation = "Sınırda hata yüzdesi: Dikkatte hafif dalgalanmalar ve konsantrasyon zorlukları mevcut.";
+      } else if (percentile <= 75) {
+        interpretation = "Normal";
+        color = "#3498db";
+        explanation = "Kabul edilebilir hata aralığı: Beklenen düzeyde odaklanma ve dikkat sürekliliği.";
+      } else if (percentile <= 90) {
+        interpretation = "İyi";
+        color = "#2ecc71";
+        explanation = "Düşük hata oranı: İstikrarlı dikkat performansı ve yüksek çalışma kalitesi.";
+      } else if (percentile <= 97.1) {
+        interpretation = "Yüksek";
+        color = "#2980b9";
+        explanation = "Minimum hata: Üstün odaklanma becerisi ve olağanüstü detay algısı.";
+      } else {
+        interpretation = "Çok Yüksek";
+        color = "#9b59b6";
+        explanation = "Neredeyse kusursuz performans: Maksimum dikkat kontrolü ve hatasız işlemleme.";
+      }
+    } else if (type === 'FR') {
+      if (percentile < 10) {
+        interpretation = "Kritik İstikrarsızlık";
+        color = "#e74c3c";
+        explanation = "Aşırı performans farkı: Motivasyon kaybı ve dikkat sürekliliğinde ciddi sorunlar. İşlevsel bozulma mevcut.";
+      } else if (percentile <= 25) {
+        interpretation = "Riskli Dağılım";
+        color = "#f39c12";
+        explanation = "Belirgin performans dalgalanmaları: Dikkat yönetiminde zorluklar ve istikrarsız motivasyon.";
+      } else if (percentile <= 75) {
+        interpretation = "Normal Varyasyon";
+        color = "#3498db";
+        explanation = "Beklenen performans değişkenliği: Doğal konsantrasyon dalgalanmalarıyla uyumlu.";
+      } else if (percentile <= 90) {
+        interpretation = "İstikrarlı Performans";
+        color = "#2ecc71";
+        explanation = "Düşük performans farkı: Tutarlı dikkat sürekliliği ve sağlam motivasyon düzeyi.";
+      } else if (percentile <= 97.1) {
+        interpretation = "Üstün Tutarlılık";
+        color = "#2980b9";
+        explanation = "Minimum performans değişkenliği: Yüksek seviyede zihinsel dayanıklılık ve odaklanma becerisi.";
+      } else {
+        interpretation = "Çok iyi";
+        color = "#9b59b6";
+        explanation = "Maksimum istikrar: Tepki sürelerinde neredeyse hiç değişkenlik yok. Sürekli optimal performans.";
+      }
+    } else if (type === 'E1') {
+      const deger = parseInt(H1);
+      if (deger >= 30) {
+        interpretation = "Ciddi Seçici Dikkat Sorunu";
+        color = "#e74c3c";
+        explanation = "İleri düzey dikkat eksikliği: Hedef uyaranları ayırt etmede belirgin güçlük. Görsel tarama ve odaklanma yeteneği bozulmuş.";
+      } else if (deger >= 20) {
+        interpretation = "Orta Derecede Dikkat Eksikliği";
+        color = "#f39c12";
+        explanation = "Seçici dikkatte bozulma: Görsel dikkat dağıtıcıları filtrelemede zorlanma. Yanıt inhibisyonu zayıf.";
+      } else if (deger >= 15) {
+        interpretation = "Hafif Seçici Dikkat Problemi";
+        color = "#3498db";
+        explanation = "Sınırda dikkat performansı: Zaman zaman hedef dışı uyaranlara yanıt verme eğilimi mevcut.";
+      } else {
+        interpretation = "İdeal Seçici Dikkat";
+        color = "#2ecc71";
+        explanation = "Hedef odaklı performans: Görsel dikkat dağıtıcıları etkin şekilde filtreleme becerisi gelişmiş.";
+      }
+    } else if (type === 'E2') {
+      const deger = parseInt(H2);
+      if (deger >= 30) {
+        interpretation = "Ciddi Öğrenme Güçlüğü";
+        color = "#e74c3c";
+        explanation = "Nörobilişsel fonksiyonlarda bozulma: Görsel ayrımlaştırma ve yönerge takibinde ciddi eksiklikler. Özgül öğrenme güçlüğü işaretleri mevcut.";
+      } else if (deger >= 20) {
+        interpretation = "Orta Derecede Öğrenme Zorluğu";
+        color = "#f39c12";
+        explanation = "Bilişsel işlemleme sorunları: Görsel-motor entegrasyon ve kural uygulamada tutarsızlıklar.";
+      } else if (deger >= 15) {
+        interpretation = "Hafif Öğrenme Güçlüğü";
+        color = "#3498db";
+        explanation = "Sınırda performans: Yeni beceri edinme ve görsel desenleri öğrenmede hafif gecikmeler.";
+      } else {
+        interpretation = "Normal Öğrenme Kapasitesi";
+        color = "#2ecc71";
+        explanation = "Etkin öğrenme becerisi: Görsel ayrımlaştırma ve kural internalizasyonu başarılı.";
+      }
     }
 
-    return `${deger} (${percentile}%) => ${yorum}\n   ${aciklama}`;
+    return { interpretation, color, explanation };
   };
 
   const handleCalculate = () => {
@@ -277,34 +291,255 @@ const D2PuanHesaplama = () => {
     const orta6Sonuc = parseInt(orta6) / 6;
     const son4Sonuc = parseInt(son4) / 4;
     
-    const resultText = `
-    
-📊 Toplam Madde (TN)       : ${TM} 
-   ${yorumla(TM, 'TN').padEnd(45)}
+    setResult({
+      TM,
+      TM_percentile: getPercentile(TM, 'TN'),
+      H,
+      hataYuzdesi,
+      hataYuzdesi_percentile: getPercentile(hataYuzdesi, 'HataYuzdesi'),
+      TM_H,
+      TM_H_percentile: getPercentile(TM_H, 'TN-E'),
+      H1,
+      H2,
+      DO,
+      DO_percentile: getPercentile(DO, 'FR'),
+      KP,
+      ilk4Sonuc,
+      orta6Sonuc,
+      son4Sonuc
+    });
+  };
 
-❌ Toplam Hata (E)          : ${H} 
+  const generateClinicalComment = () => {
+    if (!result) return null;
+  
+    const comparisons = {
+      Dikkat: [
+        { 
+          label: "Toplam Hata (E)", 
+          value: result.H,
+          ...getInterpretation(result.H, 'E1') 
+        },
+        { 
+          label: "Hata Yüzdesi (%E)", 
+          value: result.hataYuzdesi.toFixed(2),
+          ...getInterpretation(result.hataYuzdesi_percentile, 'HataYuzdesi') 
+        },
+      ],
+      motor: [
+        { 
+          label: "Toplam Madde (TN)", 
+          value: result.TM,
+          ...getInterpretation(result.TM_percentile, 'TN') 
+        },
+        { 
+          label: "TN-E Değeri", 
+          value: result.TM_H,
+          ...getInterpretation(result.TM_H_percentile, 'TN-E') 
+        },
+      ],
+      istikrar: [
+        { 
+          label: "FR (Performans Farkı)", 
+          value: result.DO,
+          ...getInterpretation(result.DO_percentile, 'FR') 
+        },
+      ],
+      öğrenme: [
+        { 
+          label: "E1 (Seçici Dikkat)", 
+          value: result.H1,
+          ...getInterpretation(result.H1, 'E1') 
+        },
+        { 
+          label: "E2 (Öğrenme Güçlüğü)", 
+          value: result.H2,
+          ...getInterpretation(result.H2, 'E2') 
+        },
+      ]
+    };
+  
+    const specialLabels = [
+      "Hata Yüzdesi (%E)", 
+      "TN-E Değeri", 
+      "FR (Performans Farkı)",
+      "Toplam Hata (E)",
+      "Toplam Madde (TN)",
+      "E1 (Seçici Dikkat)",
+      "E2 (Öğrenme Güçlüğü)"
+    ];
+  
+    return (
+      <div style={{ maxWidth: '100%', overflow: 'hidden' }}>
+        {/* Dikey Sıralı Kart Düzeni */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '25px',
+          padding: '15px 0'
+        }}>
+          {Object.entries(comparisons).map(([category, metrics]) => (
+            <div key={category} style={{
+              background: 'rgba(16, 32, 45, 0.95)',
+              borderRadius: '12px',
+              padding: '20px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+              width: '100%',
+              boxSizing: 'border-box'
+            }}>
+              {/* Kategori Başlığı */}
+              <div style={{
+                borderLeft: '4px solid #00c7ff',
+                paddingLeft: '12px',
+                marginBottom: '20px'
+              }}>
+                <h3 style={{
+                  margin: 0,
+                  color: '#00c7ff',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  textTransform: 'uppercase'
+                }}>
+                  {category.replace(/([A-Z])/g, ' $1').trim()}
+                </h3>
+              </div>
+  
+              {/* Metric Items */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                {metrics.map((metric, index) => (
+                  <div key={index} style={{
+                    background: 'rgba(0, 167, 207, 0.05)',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}>
+                    {/* Sol Kenar Çizgisi */}
+                    <div style={{
+                      position: 'absolute',
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: '4px',
+                      background: metric.color
+                    }} />
+  
+                    {/* İçerik */}
+                    <div style={{ marginLeft: '12px' }}>
+                      {/* Üst Satır */}
+                      <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: '10px',
+                        marginBottom: '8px'
+                      }}>
+                        <span style={{
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          color: '#e6edf3',
+                          maxWidth: '100%',
+                          wordBreak: 'break-word',
+                          flex: '1 1 200px'
+                        }}>
+                          {metric.label}
+                        </span>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          flexWrap: 'wrap'
+                        }}>
+                          <span style={{
+                            color: metric.color,
+                            fontWeight: 600,
+                            fontSize: '13px',
+                            whiteSpace: 'nowrap'
+                          }}>
+                            {metric.interpretation}
+                          </span>
+                          <span style={{
+                            background: 'rgba(0, 167, 207, 0.2)',
+                            color: '#00c7ff',
+                            padding: '4px 10px',
+                            borderRadius: '20px',
+                            fontSize: '12px',
+                            fontWeight: 500,
+                            minWidth: '50px',
+                            textAlign: 'center'
+                          }}>
+                            {metric.value}
+                          </span>
+                        </div>
+                      </div>
+  
+                      {/* Açıklama */}
+                      <div style={{
+                        color: '#8a9ba8',
+                        fontSize: '12px',
+                        lineHeight: '1.5',
+                        wordBreak: 'break-word',
+                        hyphens: 'auto',
+                        borderTop: '1px dashed rgba(138, 155, 168, 0.2)',
+                        paddingTop: '8px',
+                        marginTop: '8px'
+                      }}>
+                        {metric.explanation}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+ 
 
-📈 Hata Yüzdesi (%E)       : ${yorumla(hataYuzdesi.toFixed(2), 'HataYuzdesi').padEnd(45)}
 
-🎯 TN-E Değeri             : ${TM_H}
-   ${yorumla(TM_H, 'TN-E').padEnd(45)}
-
-⚠️ E1 (Seçici Dikkat)      : ${yorumla(H1, 'E1').padEnd(45)}
-   (15-20: Hafif, 20-30: Orta, 30+: Ciddi)
-
-🔍 E2 (Öğrenme Güçlüğü)     : ${yorumla(H2, 'E2').padEnd(45)}
-   (Düşük: Normal, 15-20: Hafif, 20-30: Orta, 30+: Ciddi)
-
-🌀 FR                     : ${yorumla(DO, 'FR').padEnd(45)}
-
-🧠 Konsantrasyon Puanı     : ${KP.toFixed(2)}/5 
-🧠 İlk 4 Satır  : %${ilk4Sonuc.toFixed(2)} 
-🧠 Orta 6 Satır : %${orta6Sonuc.toFixed(2)} 
-🧠 Son 4 Satır  : %${son4Sonuc.toFixed(2)} 
-    
-    `;
-    
-    setResult(resultText);
+        {/* Konsantrasyon Puanı */}
+        <div style={{
+        marginTop: 20,
+        padding: 20,
+        backgroundColor: "rgba(9, 82, 100, 0.2)",
+        borderRadius: 10,
+        border: "1px solid rgba(0, 0, 0, 0.1)",
+      }}>
+          <h4 style={{
+            margin: "0 0 15px 0",
+            color: "#00a7cf",
+            fontSize: "16px",
+            fontWeight: 600,
+          }}>
+            Konsantrasyon Analizi
+          </h4>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 15 }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 14, color: "#666" }}>İlk 4 Satır</div>
+              <div style={{ fontSize: 18, fontWeight: 600, color: "#00a7cf" }}>
+                %{result.ilk4Sonuc.toFixed(2)}
+              </div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 14, color: "#666" }}>Orta 6 Satır</div>
+              <div style={{ fontSize: 18, fontWeight: 600, color: "#00a7cf" }}>
+                %{result.orta6Sonuc.toFixed(2)}
+              </div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 14, color: "#666" }}>Son 4 Satır</div>
+              <div style={{ fontSize: 18, fontWeight: 600, color: "#00a7cf" }}>
+                %{result.son4Sonuc.toFixed(2)}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 15, fontSize: 13, color: "#666", textAlign: "center" }}>
+            {result.KP >= 4 ? "Yüksek konsantrasyon seviyesi" : 
+             result.KP >= 3 ? "Orta düzey konsantrasyon" : "Düşük konsantrasyon seviyesi"}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -314,6 +549,8 @@ const D2PuanHesaplama = () => {
       </TitleContainer>
     
       <InputContainer>
+       
+        
         <InputRow>
           <Label>TN:</Label>
           <Input
@@ -390,7 +627,7 @@ const D2PuanHesaplama = () => {
       </InputContainer>
     
       <ResultContainer>
-        <ResultText>{result}</ResultText>
+        {result && generateClinicalComment()}
       </ResultContainer>
     </AppContainer>
   );

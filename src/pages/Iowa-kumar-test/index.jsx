@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'; 
+import React, { useRef, useState, useEffect } from 'react';
 import './App.css'; //
 function App() {
     return (
@@ -7,7 +7,7 @@ function App() {
       </div>
     );
 }
-  
+
 function IowaGamblingTask() {
     // Temel state'ler
     const [currentTotal, setCurrentTotal] = useState(2000);
@@ -18,8 +18,8 @@ function IowaGamblingTask() {
     const [showFeedback, setShowFeedback] = useState(false);
     const [gameOver, setGameOver] = useState(false);
     const [summaryData, setSummaryData] = useState(null);
-    
-    
+
+
     // Detaylı veri toplama state'leri
     const [rawData, setRawData] = useState([]);
     const [systemInfo, setSystemInfo] = useState({});
@@ -30,18 +30,47 @@ function IowaGamblingTask() {
       age: '',
       gender: ''
     });
-    
+
     // Zamanlama ve loss mekanizmaları
     const startTimeRef = useRef(Date.now());
     const trialStartTimeRef = useRef(0);
-    const [usedLosses, setUsedLosses] = useState({
-      deck1: [], deck2: [], deck3: [], deck4: []
+    // const [usedLosses, setUsedLosses] = useState({ // Eski loss mekanizması
+    //   deck1: [], deck2: [], deck3: [], deck4: []
+    // });
+
+    // Yeni loss state'leri
+    const [lossQueues, setLossQueues] = useState({
+        deck1: [],
+        deck2: [],
+        deck3: [],
+        deck4: []
     });
-  
+
+    // Fisher-Yates shuffle algoritması
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
+    // Deck'leri ilk yüklemede hazırla
+    useEffect(() => {
+        const initialLossQueues = {
+            deck1: shuffleArray([0, 0, 0, 0, 0, 150, 200, 250, 300, 350]),
+            deck2: shuffleArray([0, 0, 0, 0, 0, 0, 0, 0, 0, 1250]),
+            deck3: shuffleArray([0, 0, 0, 0, 0, 50, 50, 50, 50, 50]),
+            deck4: shuffleArray([0, 0, 0, 0, 0, 0, 0, 0, 0, 250])
+        };
+        setLossQueues(initialLossQueues);
+    }, []);
+
+
     // Inquisit'teki 4 grup düzeni
     const deckGroups = [
-      { 
-        id: 1, 
+      {
+        id: 1,
         description: "deck1(D), deck2(D), deck3(A), deck4(A)",
         mapping: {
           deck1: { actual: 'deck1', category: 'disadvantageous' },
@@ -50,8 +79,8 @@ function IowaGamblingTask() {
           deck4: { actual: 'deck4', category: 'advantageous' }
         }
       },
-      { 
-        id: 2, 
+      {
+        id: 2,
         description: "deck3(A), deck1(D), deck4(A), deck2(D)",
         mapping: {
           deck1: { actual: 'deck3', category: 'advantageous' },
@@ -60,8 +89,8 @@ function IowaGamblingTask() {
           deck4: { actual: 'deck2', category: 'disadvantageous' }
         }
       },
-      { 
-        id: 3, 
+      {
+        id: 3,
         description: "deck4(A), deck3(A), deck2(D), deck1(D)",
         mapping: {
           deck1: { actual: 'deck4', category: 'advantageous' },
@@ -70,8 +99,8 @@ function IowaGamblingTask() {
           deck4: { actual: 'deck1', category: 'disadvantageous' }
         }
       },
-      { 
-        id: 4, 
+      {
+        id: 4,
         description: "deck2(D), deck4(A), deck1(D), deck3(A)",
         mapping: {
           deck1: { actual: 'deck2', category: 'disadvantageous' },
@@ -81,55 +110,59 @@ function IowaGamblingTask() {
         }
       }
     ];
-  
+
     // Destelerin özellikleri (Inquisit'le birebir aynı)
     const decks = {
-      deck1: { 
-        gain: 100, 
+      deck1: {
+        gain: 100,
         possibleLosses: [0, 0, 0, 0, 0, 150, 200, 250, 300, 350],
         image: '/images/deck.jpg',
         imageActive: '/images/decon.jpg'
       },
-      deck2: { 
-        gain: 100, 
+      deck2: {
+        gain: 100,
         possibleLosses: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1250],
         image: '/images/deck.jpg',
         imageActive: '/images/decon.jpg'
       },
-      deck3: { 
-        gain: 50, 
+      deck3: {
+        gain: 50,
         possibleLosses: [0, 0, 0, 0, 0, 50, 50, 50, 50, 50],
         image: '/images/deck.jpg',
         imageActive: '/images/decon.jpg'
       },
-      deck4: { 
-        gain: 50, 
+      deck4: {
+        gain: 50,
         possibleLosses: [0, 0, 0, 0, 0, 0, 0, 0, 0, 250],
         image: '/images/deck.jpg',
         imageActive: '/images/decon.jpg'
       }
     };
-  
-    // Inquisit'teki noreplace özelliğini taklit eden loss seçimi
-    const getLoss = (deck) => {
-      const availableLosses = decks[deck].possibleLosses.filter(
-        loss => !usedLosses[deck].includes(loss)
-      );
-      
-      if (availableLosses.length === 0) {
-        setUsedLosses(prev => ({...prev, [deck]: []}));
-        return getLoss(deck);
-      }
-      
-      const selected = availableLosses[Math.floor(Math.random() * availableLosses.length)];
-      setUsedLosses(prev => ({
-        ...prev,
-        [deck]: [...prev[deck], selected]
-      }));
-      
-      return selected;
+
+    // Güncellenmiş loss seçim mekanizması
+    const getLoss = (actualDeck) => {
+        const currentQueue = [...lossQueues[actualDeck]];
+        if (currentQueue.length === 0) {
+            // Eğer queue boşsa yeniden shuffle et
+            const reshuffled = shuffleArray(decks[actualDeck].possibleLosses);
+            setLossQueues(prev => ({
+                ...prev,
+                [actualDeck]: reshuffled
+            }));
+            return reshuffled[0];
+        }
+
+        const loss = currentQueue[0];
+        const newQueue = currentQueue.slice(1);
+
+        setLossQueues(prev => ({
+            ...prev,
+            [actualDeck]: newQueue
+        }));
+
+        return loss;
     };
-  
+
     // Sistem bilgilerini topla
     useEffect(() => {
       setSystemInfo({
@@ -142,7 +175,7 @@ function IowaGamblingTask() {
         browser: detectBrowser()
       });
     }, []);
-  
+
     const detectBrowser = () => {
       const ua = navigator.userAgent;
       if (ua.includes("Firefox")) return "Firefox";
@@ -151,7 +184,7 @@ function IowaGamblingTask() {
       if (ua.includes("Edg")) return "Edge";
       return "Unknown";
     };
-  
+
     // Katılımcıyı rastgele bir gruba ata
     useEffect(() => {
       if (participantInfo.id && !participantInfo.group) {
@@ -162,7 +195,7 @@ function IowaGamblingTask() {
         }));
       }
     }, [participantInfo]);
-  
+
     // Oyun bitiş kontrolü
     useEffect(() => {
       if (cardsSelected === 100) {
@@ -172,50 +205,50 @@ function IowaGamblingTask() {
         setGameOver(true);
       }
     }, [cardsSelected]);
-  
+
     // Deste seçim işlemi
     const handleDeckClick = (displayedDeck) => {
       if (gameOver || showFeedback || !participantInfo.group) return;
-      
+
       trialStartTimeRef.current = Date.now();
-      
+
       const groupConfig = deckGroups.find(g => g.id === participantInfo.group);
       const actualDeck = groupConfig.mapping[displayedDeck].actual;
       const category = groupConfig.mapping[displayedDeck].category;
       const deck = decks[actualDeck];
-      
-      const lossAmount = getLoss(actualDeck);
+
+      const lossAmount = getLoss(actualDeck); // Değişen kısım
       const latency = Date.now() - trialStartTimeRef.current;
       const block = Math.ceil((cardsSelected + 1) / 20);
-      
+
       const trialData = {
         // Inquisit standart verileri
         trialNumber: cardsSelected + 1,
         trialCode: `trial_${cardsSelected + 1}`,
         blockNumber: 1,
         blockCode: 'igt_block',
-        
+
         // Katılımcı bilgileri
         subjectId: participantInfo.id,
         groupId: participantInfo.group,
         sessionId: participantInfo.session,
-        
+
         // Deste bilgileri
         displayedDeck: displayedDeck,
         actualDeck: actualDeck,
         deckPosition: parseInt(displayedDeck.replace('deck', '')),
         responseCategory: category,
-        
+
         // Performans verileri
         responseLatency: latency,
         gain: deck.gain,
         loss: lossAmount,
         net: deck.gain - lossAmount,
         currentTotal: currentTotal + deck.gain - lossAmount,
-        
-       
+
+
       };
-  
+
       setRawData(prev => [...prev, trialData]);
       setSelectedDeck(displayedDeck);
       setGain(deck.gain);
@@ -224,11 +257,11 @@ function IowaGamblingTask() {
       setCardsSelected(prev => prev + 1);
       setShowFeedback(true);
     };
-  
+
     // Inquisit'teki gibi özet hesaplama
     const calculateSummary = () => {
       const elapsedTime = Date.now() - startTimeRef.current;
-      
+
       return {
         metadata: {
           task: "Iowa Gambling Task",
@@ -258,19 +291,19 @@ function IowaGamblingTask() {
         blockAnalyses: calculateBlockAnalyses()
       };
     };
-  
+
     // 20'li blok analizleri
     const calculateBlockAnalyses = () => {
       const results = {};
-      
+
       for (let block = 1; block <= 5; block++) {
         const startTrial = (block - 1) * 20 + 1;
         const endTrial = block * 20;
-        
+
         const blockData = rawData.filter(
           trial => trial.trialNumber >= startTrial && trial.trialNumber <= endTrial
         );
-        
+
         results[`block${block}`] = {
           countAdvantage: blockData.filter(t => t.responseCategory === 'advantageous').length,
           countDisadvantage: blockData.filter(t => t.responseCategory === 'disadvantageous').length,
@@ -284,22 +317,22 @@ function IowaGamblingTask() {
           }
         };
       }
-      
+
       return results;
     };
-  
+
     // Verileri Inquisit formatında indirme
     const downloadData = () => {
       const summaryData = calculateSummary();
-      
+
       // Ham veri (Inquisit'teki .iqdat karşılığı)
-      const rawBlob = new Blob([JSON.stringify(rawData, null, 2)], 
+      const rawBlob = new Blob([JSON.stringify(rawData, null, 2)],
         { type: 'application/json' });
-      
+
       // Özet veri (Inquisit'teki _summary karşılığı)
-      const summaryBlob = new Blob([JSON.stringify(summaryData, null, 2)], 
+      const summaryBlob = new Blob([JSON.stringify(summaryData, null, 2)],
         { type: 'application/json' });
-      
+
       // İki ayrı dosya olarak indirme
       const downloadFile = (blob, filename) => {
         const link = document.createElement('a');
@@ -307,11 +340,11 @@ function IowaGamblingTask() {
         link.download = `igt_${participantInfo.id}_${filename}_${Date.now()}.json`;
         link.click();
       };
-      
+
       downloadFile(rawBlob, 'raw');
       downloadFile(summaryBlob, 'summary');
     };
-  
+
 
     // Katılımcı bilgi formu
 const [formSubmitted, setFormSubmitted] = useState(false);
@@ -326,7 +359,7 @@ if (!formSubmitted) {
           alert('Lütfen katılımcı ID giriniz');
           return;
         }
-        
+
         const randomGroup = deckGroups[Math.floor(Math.random() * deckGroups.length)];
         setParticipantInfo(prev => ({
           ...prev,
@@ -334,15 +367,15 @@ if (!formSubmitted) {
         }));
         setFormSubmitted(true);
       }}>
-        <input 
-          type="text" 
-          placeholder="Hasta Adı Soyadı *" 
+        <input
+          type="text"
+          placeholder="Hasta Adı Soyadı *"
           required
           value={participantInfo.id}
           onChange={(e) => setParticipantInfo({...participantInfo, id: e.target.value})}
         />
-        <input 
-          type="number" 
+        <input
+          type="number"
           placeholder="Yaş"
           value={participantInfo.age}
           onChange={(e) => setParticipantInfo({...participantInfo, age: e.target.value})}
@@ -371,18 +404,18 @@ if (!formSubmitted) {
           <p>Seçilen Kart: {cardsSelected}/100</p>
           <p>Katılımcı ID: {participantInfo.id}</p>
         </div>
-  
+
         <div className="decks">
           {['deck1', 'deck2', 'deck3', 'deck4'].map((deck) => (
-            <div 
+            <div
               key={deck}
               className={`deck ${selectedDeck === deck ? 'active' : ''}`}
               onClick={() => handleDeckClick(deck)}
               style={{ left: `${(parseInt(deck.replace('deck', '')) * 20)}%` }}
 
             >
-              <img 
-                src={selectedDeck === deck ? decks[deck].imageActive : decks[deck].image} 
+              <img
+                src={selectedDeck === deck ? decks[deck].imageActive : decks[deck].image}
                 alt={deck}
                 className="deck-image"
               />
@@ -390,7 +423,7 @@ if (!formSubmitted) {
             </div>
           ))}
         </div>
-  
+
         {showFeedback && (
           <div className="feedback">
             <p style={{ color: 'green' }}>${gain} kazandınız!</p>
@@ -399,7 +432,7 @@ if (!formSubmitted) {
             <button onClick={() => setShowFeedback(false)}>Devam Et</button>
           </div>
         )}
-  
+
         {gameOver && (
           <div className="game-over">
             <h2>Oyun Bitti!</h2>
