@@ -272,7 +272,7 @@ function IowaGamblingTask() {
           endTime: new Date().toLocaleTimeString(),
           elapsedTime: elapsedTime,
           completed: cardsSelected >= 3 ? 1 : 0,
-          platform: systemInfo.platform,
+          
           screenResolution: systemInfo.screenResolution,
           deckOrderGroup: participantInfo.group,
           groupDescription: deckGroups.find(g => g.id === participantInfo.group)?.description || ""
@@ -352,45 +352,75 @@ const [formSubmitted, setFormSubmitted] = useState(false);
 if (!formSubmitted) {
   return (
     <div className="participant-form">
-      <h2>Hasta Adı</h2>
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        if (!participantInfo.id.trim()) {
-          alert('Lütfen katılımcı ID giriniz');
-          return;
-        }
+      {/* 1. Bölüm: Bilgilendirme */}
+      <div className="info-container">
+        <h2>Iowa Kumar Testi (IGT) Hakkında</h2>
+        <p>
+          Iowa Kumar Testi, karar verme becerilerini ölçen psikolojik bir değerlendirme aracıdır. 
+          Bu testte 4 farklı desteden kartlar seçerek sanal para kazanacaksınız. 
+          Amacınız 100 seçim sonunda mümkün olduğunca fazla para biriktirmek.
+        </p>
 
-        const randomGroup = deckGroups[Math.floor(Math.random() * deckGroups.length)];
-        setParticipantInfo(prev => ({
-          ...prev,
-          group: randomGroup.id
-        }));
-        setFormSubmitted(true);
-      }}>
-        <input
-          type="text"
-          placeholder="Hasta Adı Soyadı *"
-          required
-          value={participantInfo.id}
-          onChange={(e) => setParticipantInfo({...participantInfo, id: e.target.value})}
-        />
-        <input
-          type="number"
-          placeholder="Yaş"
-          value={participantInfo.age}
-          onChange={(e) => setParticipantInfo({...participantInfo, age: e.target.value})}
-        />
-        <select
-          value={participantInfo.gender}
-          onChange={(e) => setParticipantInfo({...participantInfo, gender: e.target.value})}
-        >
-          <option value="">Cinsiyet seçin</option>
-          <option value="male">Erkek</option>
-          <option value="female">Kadın</option>
-          <option value="other">Diğer</option>
-        </select>
-        <button type="submit">Başlat</button>
-      </form>
+         <h3>Test Nasıl Yapılır?</h3>
+  <ul className="modern-list">
+    <li>Ekranda göreceğiniz 4 desteden birini tıklayarak seçim yapacaksınız.</li>
+    <li>Her seçimde belirli miktarda para kazanacaksınız.</li>
+    <li>Bazı seçimlerde ek olarak para kaybı yaşayabilirsiniz.</li>
+    <li>Toplamda 100 seçim yapılacaktır.</li>
+    <li>Destelerin kazanç/kayıp dengesi birbirinden farklıdır.</li>
+  </ul>
+</div>
+
+      {/* 2. Bölüm: Hasta Formu */}
+      <div className="form-container">
+        <h2>Hasta Bilgileri</h2>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          if (!participantInfo.id.trim()) {
+            alert('Lütfen hasta adı soyadı giriniz');
+            return;
+          }
+          setFormSubmitted(true);
+        }}>
+          {/* Form içeriği aynı kalacak */}
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="Hasta Adı Soyadı *"
+              required
+              value={participantInfo.id}
+              onChange={(e) => setParticipantInfo({...participantInfo, id: e.target.value})}
+            />
+          </div>
+          
+          <div className="form-group">
+            <input
+              type="number"
+              placeholder="Yaş"
+              min="18"
+              max="99"
+              value={participantInfo.age}
+              onChange={(e) => setParticipantInfo({...participantInfo, age: e.target.value})}
+            />
+          </div>
+          
+          <div className="form-group">
+            <select
+              value={participantInfo.gender}
+              onChange={(e) => setParticipantInfo({...participantInfo, gender: e.target.value})}
+            >
+              <option value="">Cinsiyet seçiniz</option>
+              <option value="male">Erkek</option>
+              <option value="female">Kadın</option>
+              <option value="other">Diğer</option>
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <button type="submit">Testi Başlat</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
@@ -402,7 +432,7 @@ if (!formSubmitted) {
         <div className="info-panel">
           <p>Toplam: ${currentTotal}</p>
           <p>Seçilen Kart: {cardsSelected}/100</p>
-          <p>Katılımcı ID: {participantInfo.id}</p>
+          <p>Hasta İsmi: {participantInfo.id}</p>
         </div>
 
         <div className="decks">
