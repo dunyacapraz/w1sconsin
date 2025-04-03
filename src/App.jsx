@@ -7,7 +7,7 @@ const operationalMode = (
   <WcstProvider>
     <HelmetProvider>
       <Helmet>
-        <title>Wisconsin Kart Eşleme Testi</title>
+        <title>Cognitive Check</title>
         <meta name="description" content="Wisconsin Kart Eşleme Testi (WCST) ile bilişsel esnekliğinizi değerlendirin. Kural değişimlerine nasıl uyum sağladığınızı ölçün." />
         <meta property="og:title" content="Wisconsin Kart Eşleme Testi (WCST)" />
         <meta property="og:description" content="Wisconsin Kart Eşleme Testi ile zihinsel esnekliğinizi test edin ve bilişsel yeteneklerinizi keşfedin." />
