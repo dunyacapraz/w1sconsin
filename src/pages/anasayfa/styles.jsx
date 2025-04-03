@@ -46,6 +46,11 @@ export const Header = styled.header`
     background: rgba(0, 0, 0, 0.2); /* Daha şeffaf bir overlay */
     z-index: 1;
   }
+      /* Mobil optimizasyon */
+  @media (max-width: 768px) {
+    min-height: 90vh;
+    background-attachment: scroll !important;
+  }
 `;
 
 
