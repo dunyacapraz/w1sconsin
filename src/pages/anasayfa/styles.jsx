@@ -32,9 +32,6 @@ export const Header = styled.header`
   background: url('/images/header-bg.jpg') center/cover no-repeat;
   background-color: var(--primary);
   
-  /* Opaklık için gradienti daha şeffaf yapıyoruz */
-  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2)),
-   url('/images/header-bg.jpg') center/cover no-repeat;
 
   /* Fallback gradient (resim yüklenmezse) */
   background-color: var(--primary);
