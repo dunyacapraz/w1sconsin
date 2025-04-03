@@ -42,7 +42,7 @@ function WcstPage() {
       <S.Image src="../../../images/2.png" alt="" />
 
       <S.RunBox>
-        <S.RunLink to="/wcst-test-window">
+        <S.RunLink to="/wcst-test-page">
           <S.Button>Başlamak İçin Tıklayınız</S.Button>
         </S.RunLink>
 		

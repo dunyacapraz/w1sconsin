@@ -1,10 +1,10 @@
 import React from "react";
-import WcstPage from "../wcst-page";
+import Anasayfa from "../anasayfa";
 
 function HomePage() {
   return (
     <div>
-      <WcstPage />
+      <Anasayfa />
     </div>
   );
 }

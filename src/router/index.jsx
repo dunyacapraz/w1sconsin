@@ -8,6 +8,8 @@ import D2PuanHesaplama from "../pages/D2-puan-hesaplama";
 import DebugResults from "../pages/debugresults"; 
 import App from "../App";
 import IowaGamblingTask from "../pages/Iowa-kumar-test"; 
+import WcstPage from "../pages/wcst-page";
+import Anasayfa from "../pages/anasayfa"; // Eğer dosya ismi büyük harfle başlıyorsa bu doğru
 
 export const router = createBrowserRouter([
   {
@@ -22,10 +24,6 @@ export const router = createBrowserRouter([
         element: <NotFound />,
       },
       {
-        path: "/wcst-test-window",
-        element: <WcstWindow />,
-      },
-      {
         path: "/wcst-test-result",
         element: <ResultPage />,
       },
@@ -34,8 +32,20 @@ export const router = createBrowserRouter([
         element: <D2PuanHesaplama />,
       },
       {
+        path: "/wcst-test",
+        element: <WcstPage />,
+      },
+      {
+        path: "/wcst-test-page",
+        element: <WcstWindow />,
+      },
+      {
         path: "/wcst-debug-results",
         element: <DebugResults />,
+      },
+      {
+        path: "/anasayfa", // Küçük harfle yazılmalı
+        element: <Anasayfa />,
       },
       {
         path: "/Iowa-kumar-test",

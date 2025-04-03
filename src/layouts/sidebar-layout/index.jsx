@@ -8,7 +8,7 @@ function Sidebar() {
         <img src="../../../images/logo.png" alt="logo" />
       </S.Logo>
 
-      <S.Menu to="/">Wisconsin Test</S.Menu>
+      <S.Menu to="/wcst-test">Wisconsin Test</S.Menu>
       <S.Menu to="/Iowa-kumar-test">Iowa Kumar Testi</S.Menu> 
       <S.Menu to="/d2-test-result">D2 Puan Hesaplaması</S.Menu> 
       
