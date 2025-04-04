@@ -23,7 +23,7 @@ export const Header = styled.header`
   text-align: center;
   padding: 10rem 0; /* Yüksek padding ile genişletildi */
   border-radius: 1rem;
-  margin-bottom: 6rem; /* Alt boşluk artırıldı */
+  margin-bottom: 2rem; /* Alt boşluk artırıldı */
   position: relative;
   overflow: hidden;
   color: white;
@@ -32,20 +32,8 @@ export const Header = styled.header`
   background: url('/images/header-bg.jpg') center/cover no-repeat;
   background-color: var(--primary);
   
-
   /* Fallback gradient (resim yüklenmezse) */
   background-color: var(--primary);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -3rem; /* Yukarı doğru uzatıldı */
-    left: 0;
-    width: 100%;
-    height: calc(100% + 6rem); /* Yükseklik artırıldı */
-    background: rgba(0, 0, 0, 0.2); /* Daha şeffaf bir overlay */
-    z-index: 1;
-  }
 
 `;
 
