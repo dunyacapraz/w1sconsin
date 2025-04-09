@@ -6,11 +6,21 @@ export const Div = styled.div`
   max-width: 1000px;
   margin: auto;
   margin-bottom: 3rem;
+   font-size: 0.85rem; /* Küçültülmüş yazı boyutu */
+
+  h1 {
+    font-size: 2rem; /* Normalde ~2rem olur, bu daha küçüktür */
+  }
 
   @media screen and (max-width: 700px) {
-    font-size: var(--font-s);
+    font-size: 0.75rem;
+
+    h1 {
+      font-size: 1.2rem; /* Küçük ekran için daha da küçült */
+    }
   }
 `;
+
 
 export const RunBox = styled.div`
   display: flex;
