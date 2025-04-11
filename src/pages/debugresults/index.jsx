@@ -232,67 +232,98 @@ export default function DebugResults() {
         consecutivePureIncorrectCategory = null; // Ardışık değilse sıfırla
       }
 
-      // --- YENİ İLKE TETİKLEME VE İŞARETLEME MANTIĞI (DEĞİŞTİRİLDİ) ---
-      if (consecutiveRuleTriggerCount >= 2) {
-        const principleCat = responseCategories[0]; // İlkeyi belirleyen kategori (mevcut saf yanıttan)
-
-        // Yeni ilke kategorisini ayarla (eğer değişmişse)
-        if (newPrincipleCategory !== principleCat) {
-          newPrincipleCategory = principleCat;
-          details_pass1[i] = details_pass1[i] || {}; // Debug info için obje oluştur
-          details_pass1[
-            i
-          ].debugInfo = `(Aşama 1) Yeni İlke '${newPrincipleCategory}' olarak ayarlandı (indeks ${i}). ${
-            details_pass1[i].debugInfo || ""
-          }`;
-        }
-
-        // Sadece MEVCUT yanıtı (i) "Tetikleyici" olarak işaretle.
-        // Açıklamayı, sayacın 2 mi yoksa daha fazla mı olduğuna göre ayarla.
-        const explanation =
-          consecutiveRuleTriggerCount === 2
-            ? "Yeni İlke (Tetikleyici)" // Bu İLK tetikleyici yanıt (yani 2. ardışık)
-            : "Yeni İlke (Tetikleyici Devam)"; // Bu 3. veya daha sonraki ardışık tetikleyici
-
-        // updatePerseverationPass1'i sadece 'i' indeksi için çağır.
-        updatePerseverationPass1(i, newPrincipleCategory, explanation, true); // 'true' ile tetikleyici olduğunu belirt
-
-        // --- ÖNEMLİ: i-1 İÇİN İŞARETLEME YAPILMIYOR ---
-        // Eski kod: updatePerseverationPass1(i - 1, newPrincipleCategory, "Yeni İlke (Tetikleyici - Önceki)", true); BU SATIR SİLİNDİ!
-      } else {
-        // Henüz yeni ilke tetiklenmedi VEYA tetikleme serisi bozuldu.
-        // Mevcut yanıt, HALİHAZIRDA AKTİF olan bir 'newPrincipleCategory'ye uyuyor mu VEYA 'Önceki Kategori İlkesi'ne mi uyuyor?
-        // (Aşama 1'de başka bir kuraldan zaten işaretlenmediyse kontrol et)
-        if (!isPerseverative_pass1[i]) {
-          if (newPrincipleCategory !== null) {
-            // Eğer AKTİF bir yeni ilke varsa
-            if (isPure && responseCategories[0] === newPrincipleCategory) {
-              // Bu yanıt saf ve aktif yeni ilkeye uyuyor (ama tetikleyici değil)
-              updatePerseverationPass1(
-                i,
-                newPrincipleCategory,
-                "Yeni İlke (Devam)"
-              );
-            }
+      
+         // --- YENİ İLKE TETİKLEME VE İŞARETLEME MANTIĞI (GÜNCELLENDİ: 3 Ardışık Gerekli, 2.den İtibaren İşaretle) ---
+         if (consecutiveRuleTriggerCount >= 3) { // Koşul 2'den 3'e değiştirildi
+          const principleCat = responseCategories[0]; // İlkeyi belirleyen kategori (mevcut saf yanıttan)
+  
+          // Yeni ilke kategorisini ayarla (eğer değişmişse veya ilk kez 3'e ulaşıldıysa)
+          if (newPrincipleCategory !== principleCat) {
+               // Eğer ilk kez 3'e ulaşıldıysa VEYA kategori değiştiyse yeni ilkeyi ayarla
+              newPrincipleCategory = principleCat;
+              details_pass1[i] = details_pass1[i] || {};
+               details_pass1[i].debugInfo = `(Aşama 1) Yeni İlke '${newPrincipleCategory}' olarak ayarlandı (indeks ${i}, sayaç ${consecutiveRuleTriggerCount}). ${details_pass1[i].debugInfo || ""}`;
+           }
+  
+  
+          if (consecutiveRuleTriggerCount === 3) {
+            // --- İLK KEZ 3'e ULAŞILDI ---
+            // Hem 2. yanıtı (i-1) hem de 3. yanıtı (i) işaretle
+  
+            // 2. yanıtı işaretle (İlkenin başlangıcı)
+            // ÖNEMLİ: updatePerseverationPass1'in i-1'i doğru şekilde işlediğinden emin olunmalı
+            // (Özellikle daha önceden başka bir kuraldan işaretlenmediyse veya tetikleyici önceliği varsa)
+            details_pass1[i-1] = details_pass1[i-1] || {}; // Önceki index için obje oluştur (varsa üzerine yazılır)
+            details_pass1[i-1].debugInfo = `(Aşama 1) Yeni ilkenin başlangıcı olarak işaretleniyor (indeks ${i-1}). ${details_pass1[i-1].debugInfo || ""}`;
+            updatePerseverationPass1(
+              i - 1, // Bir önceki indeksi işaretle
+              newPrincipleCategory,
+              "Yeni İlke (Başlangıç)", // Açıklama: Bu, serinin 2. elemanı
+              true // Tetikleyici olarak işaretle (önemli)
+            );
+  
+            // 3. yanıtı işaretle (Asıl tetikleyici)
+             details_pass1[i] = details_pass1[i] || {}; // Mevcut index için debug bilgisini koru/oluştur
+             details_pass1[i].debugInfo = `(Aşama 1) Yeni ilkeyi tetikleyen 3. yanıt (indeks ${i}). ${details_pass1[i].debugInfo || ""}`;
+             updatePerseverationPass1(
+              i, // Mevcut indeksi işaretle
+              newPrincipleCategory,
+              "Yeni İlke (Tetikleyici)", // Açıklama: Bu, serinin 3. elemanı ve tetikleyici
+              true // Tetikleyici olarak işaretle
+            );
+  
           } else {
-            // Aktif yeni ilke YOKSA, fallback kuralını kontrol et
-            if (
-              firstCategoryDone &&
-              matchesPreviousCategory &&
-              isPure &&
-              isIncorrect
-            ) {
-              // İlk kategori bitti, yanıt saf, yanlış ve önceki kategoriyle eşleşiyor
-              updatePerseverationPass1(
-                i,
-                actualPreviousCategory,
-                "Önceki Kategori İlkesi"
-              );
+             // --- 3'ten FAZLA ARDIŞIK YANIT (4., 5., vb.) ---
+             // Sadece mevcut yanıtı (i) işaretle
+             details_pass1[i] = details_pass1[i] || {};
+             details_pass1[i].debugInfo = `(Aşama 1) Yeni ilke tetikleyici devam ediyor (indeks ${i}, sayaç ${consecutiveRuleTriggerCount}). ${details_pass1[i].debugInfo || ""}`;
+             updatePerseverationPass1(
+               i,
+               newPrincipleCategory,
+               "Yeni İlke (Tetikleyici Devam)", // Açıklama: 4+ yanıt
+               true // Tetikleyici olarak işaretle
+             );
+          }
+  
+        } else {
+          // Henüz yeni ilke tetiklenmedi (sayaç < 3) VEYA tetikleme serisi bozuldu.
+          // Mevcut yanıt, HALİHAZIRDA AKTİF olan bir 'newPrincipleCategory'ye uyuyor mu VEYA 'Önceki Kategori İlkesi'ne mi uyuyor?
+          // (Aşama 1'de başka bir kuraldan zaten işaretlenmediyse kontrol et)
+          if (!isPerseverative_pass1[i]) {
+            if (newPrincipleCategory !== null) {
+              // Eğer AKTİF bir yeni ilke varsa (önceki adımlarda 3+ ile ayarlanmış)
+              if (isPure && responseCategories[0] === newPrincipleCategory) {
+                // Bu yanıt saf ve aktif yeni ilkeye uyuyor (ama tetikleyici seride değil)
+                 details_pass1[i] = details_pass1[i] || {};
+                 details_pass1[i].debugInfo = `(Aşama 1) Aktif yeni ilkeye (${newPrincipleCategory}) devam ediyor (indeks ${i}). ${details_pass1[i].debugInfo || ""}`;
+                 updatePerseverationPass1(
+                  i,
+                  newPrincipleCategory,
+                  "Yeni İlke (Devam)" // Tetikleyici olmayan devam yanıtı
+                  // 'isTrigger' parametresi false (varsayılan)
+                );
+              }
+            } else {
+              // Aktif yeni ilke YOKSA, fallback kuralını kontrol et ("Önceki Kategori İlkesi")
+              // Bu kısım değişmedi
+              if (
+                firstCategoryDone &&
+                matchesPreviousCategory &&
+                isPure &&
+                isIncorrect
+              ) {
+                 details_pass1[i] = details_pass1[i] || {};
+                 details_pass1[i].debugInfo = `(Aşama 1) Önceki Kategori İlkesi uygulandı (${actualPreviousCategory}) (indeks ${i}). ${details_pass1[i].debugInfo || ""}`;
+                 updatePerseverationPass1(
+                  i,
+                  actualPreviousCategory,
+                  "Önceki Kategori İlkesi"
+                );
+              }
             }
           }
         }
-      }
-      // --- Yeni İlke Mantığı Sonu ---
+        // --- Yeni İlke Mantığı Sonu ---
 
       prevIterationCategory = currentCategory;
     } // Aşama 1 Döngü Sonu
