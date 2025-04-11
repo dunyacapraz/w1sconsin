@@ -4,7 +4,7 @@ import { targetCards } from "../../services/target-cards";
 import { responseCards } from "../../services/response-cards";
 import * as S from "./styles";
 import { WcstContext } from "../../components/context";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 function WcstWindow() {
   const {
@@ -16,7 +16,7 @@ function WcstWindow() {
     setCompletedCategories,
   } = useContext(WcstContext);
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const [cardIndex, setCardIndex] = useState(0);
   const [open, setOpen] = useState(false);
@@ -29,7 +29,7 @@ function WcstWindow() {
   const [correctStreak, setCorrectStreak] = useState(0);
   const [categoryCorrect, setCategoryCorrect] = useState(0);
 
-  const [lastPureIncorrectCategory, setLastPureIncorrectCategory] =
+  const [lastPureIncorrectCategory, setLastPureIncorrectCategory] = 
     useState(null);
   const [consecutivePureIncorrect, setConsecutivePureIncorrect] = useState(0);
   const [perseverativeCategory, setPerseverativeCategory] = useState(null);
@@ -41,30 +41,21 @@ function WcstWindow() {
   const [lastPerseverativeResponse, setLastPerseverativeResponse] =
     useState(null);
 
-  // Güncellenmiş Sandviç Kuralı Kontrolü
   const checkSandwichRule = (responseChain, perseverativeCategory) => {
-    // Zincir en az 3 eleman içermeli
     if (responseChain.length < 3) return false;
-    // Zincirin başı ve sonunun saf perseveratif cevap olup olmadığını kontrol et
     const firstResponse = responseChain[0];
     const lastResponse = responseChain[responseChain.length - 1];
-    // Başlangıç ve bitiş saf perseveratif cevap mı kontrolü
     const isFirstPurePerseverative =
       firstResponse.length === 1 &&
       firstResponse.includes(perseverativeCategory);
-
     const isLastPurePerseverative =
       lastResponse.length === 1 && lastResponse.includes(perseverativeCategory);
-    // Eğer başlangıç ve bitiş saf perseveratif değilse, kural geçerli değil
     if (!isFirstPurePerseverative || !isLastPurePerseverative) {
       return false;
     }
-    // Ara kartların kontrol edilmesi
     const middleResponses = responseChain.slice(1, -1);
-
-    // 2 saf perseveratif cevap arasındaki DOĞRU eşleşmeleri say
     const correctMiddleResponses = middleResponses.filter(
-      (response) => response.length > 1 // Birden fazla kategoride eşleşme
+      (response) => response.length > 1
     );
     return {
       isSandwichRule: true,
@@ -72,24 +63,13 @@ function WcstWindow() {
     };
   };
 
-  // Kartları karıştırmak için Fisher-Yates shuffle algoritması
-  const shuffleCards = (array) => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
-  // Başlangıçta kartları karıştır
+  // Değişiklik 1: Kart karıştırma kaldırıldı
   useEffect(() => {
     if (testInfo && randomizedCards.length === 0) {
-      setRandomizedCards(shuffleCards(responseCards));
+      setRandomizedCards([...responseCards]); // Direkt orijinal diziyi kullan
     }
   }, [testInfo]);
 
-  // Kart bilgisi - karıştırılmış kartlardan al
   const currentCard = randomizedCards[cardIndex] || {};
   const { resCount, resColor, resFigure } = currentCard;
 
@@ -98,14 +78,10 @@ function WcstWindow() {
     cardIndex >= 128 ||
     cardIndex >= randomizedCards.length;
 
-  // Kategori değişimi için useEffect
   useEffect(() => {
     if (pendingCategoryChange) {
-      // Eski kategoriyi kaydet
       setPrevCategory(category);
       setCategoryChanged(true);
-
-      // Yeni kategoriye geç
       if (category === "color") {
         setCategory("figure");
       } else if (category === "figure") {
@@ -113,32 +89,18 @@ function WcstWindow() {
       } else if (category === "count") {
         setCategory("color");
       }
-
-      // Değişimleri yap
       setCategoryCorrect(0);
       setCompletedCategories((prevCompleted) => prevCompleted + 1);
       setConsecutivePureIncorrect(0);
       setLastPureIncorrectCategory(null);
       setPendingCategoryChange(false);
-
       setCorrectStreak(0);
-
       setResponseChain([]);
       setChainBroken(false);
       setLastPerseverativeResponse(null);
-
-      // console.log(
-      //  "Kategori değişimi tamamlandı. Yeni kategoris:",
-      //  category === "color"
-      //    ? "figure"
-      //    : category === "figure"
-      //    ? "count"
-      //    : "color"
-      // );
     }
   }, [pendingCategoryChange, category, completedCategories]);
 
-  // Target kartlar listesi
   const targetCardsList = (
     <>
       {targetCards.map((target, index) => (
@@ -146,15 +108,14 @@ function WcstWindow() {
           key={index}
           onClick={() => {
             if (!open) {
-              // Sadece 'open' false ise tıklamayı işle
               clickHandle({ target });
             }
           }}
           style={{
-            opacity: open ? 0.5 : 1, // 'open' true ise opacity'i düşür
-            pointerEvents: open ? "none" : "auto", // 'open' true ise tıklamayı engelle
-            transition: "opacity 0.3s ease-in-out", // İsteğe bağlı: Yumuşak geçiş için
-            cursor: open ? "default" : "pointer", // İsteğe bağlı: İmleci de değiştir
+            opacity: open ? 0.5 : 1,
+            pointerEvents: open ? "none" : "auto",
+            transition: "opacity 0.3s ease-in-out",
+            cursor: open ? "default" : "pointer",
           }}
         >
           <Card
@@ -167,7 +128,6 @@ function WcstWindow() {
     </>
   );
 
-  // Response kartlar listesi
   const responseCardsList = (
     <>
       {resCount && resColor && resFigure ? (
@@ -181,7 +141,6 @@ function WcstWindow() {
     </>
   );
 
-  // Yanıtın hangi kategorileri içerdiğini belirleyen yardımcı fonksiyon
   const getResponseCategories = (colorMatch, figureMatch, countMatch) => {
     const categories = [];
     if (colorMatch) categories.push("color");
@@ -191,12 +150,10 @@ function WcstWindow() {
   };
 
   const switchCondition = (target) => {
-    // Eşleşme kontrolü
     const colorMatch = resColor === target.targColor;
     const figureMatch = resFigure === target.targFigure;
     const countMatch = resCount === target.targCount;
 
-    // Seçilen kategoriye göre doğruluğu belirle
     let isCorrect = false;
     if (category === "color") {
       isCorrect = colorMatch;
@@ -206,55 +163,39 @@ function WcstWindow() {
       isCorrect = countMatch;
     }
 
-    // Hiçbir kategori ile eşleşmeme durumu
     const isOther = !colorMatch && !figureMatch && !countMatch;
-
-    // Belirsiz cevap kontrolü (birden fazla kategoride eşleşme var)
     const isAmbiguousAnswer =
       (colorMatch && figureMatch) ||
       (colorMatch && countMatch) ||
       (figureMatch && countMatch);
 
-    // Yanıtın içerdiği kategorileri belirle
     const responseCategories = getResponseCategories(
       colorMatch,
       figureMatch,
       countMatch
     );
 
-    // Doğru cevap sayılarını güncelle
     if (isCorrect) {
       const newCorrectStreak = correctStreak + 1;
       setCorrectStreak(newCorrectStreak);
-
       const newCategoryCorrect = categoryCorrect + 1;
       setCategoryCorrect(newCategoryCorrect);
-
-      // Kategori değişimi kontrolü - 3 ardışık doğru cevap
       if (newCategoryCorrect >= 10) {
-        // console.log("3 doğru cevap tamamlandı, kategori değişimi başlatılıyor");
         setPendingCategoryChange(true);
       }
-
-      // Doğru cevap gelince ardışık saf yanlış sayısını sıfırla
       setConsecutivePureIncorrect(0);
       setLastPureIncorrectCategory(null);
     } else {
-      // Yanlış cevap geldiğinde hem correctStreak hem de categoryCorrect sıfırlanıyor
       setCorrectStreak(0);
       setCategoryCorrect(0);
     }
 
-    // Saf cevap kontrolü - sadece tek bir kategoride eşleşme var
     const isPureColorMatch = colorMatch && !figureMatch && !countMatch;
     const isPureFigureMatch = figureMatch && !colorMatch && !countMatch;
     const isPureCountMatch = countMatch && !colorMatch && !figureMatch;
-
-    // Genel saf cevap
     const isPureAnswer =
       isPureColorMatch || isPureFigureMatch || isPureCountMatch;
 
-    // Seçilen saf yanlış cevabın kategorisini belirle
     let currentResponseCategory = null;
     if (isPureAnswer) {
       if (isPureColorMatch) currentResponseCategory = "color";
@@ -262,96 +203,58 @@ function WcstWindow() {
       else if (isPureCountMatch) currentResponseCategory = "count";
     }
 
-    // Belirsiz cevap veya saf olmayan cevap geldiğinde ardışık saf yanlış sayacını sıfırla
     if (isAmbiguousAnswer || !isPureAnswer || isOther) {
-      // console.log(
-      //  "Belirsiz veya saf olmayan cevap - Ardışık saf yanlış sayacı sıfırlandı"
-      // );
       setConsecutivePureIncorrect(0);
     }
 
-    // Perseveratif hesaplama logic'i - SADECE YANLIŞ CEVAPLAR İÇİN
     let isPerseverative = false;
     let isPerseverativeError = false;
 
-    // PERSEVERASYON İLKESİ KONTROLÜ - SADECE YANLIŞ CEVAPLAR İÇİN
     if (!isCorrect) {
-      // 1. Belirsiz olmayan saf yanlış cevaplar için (tek kategoride eşleşen)
       if (isPureAnswer && !isAmbiguousAnswer) {
-        // Son saf yanlış kategori ile aynı mı kontrol et
         if (lastPureIncorrectCategory === currentResponseCategory) {
-          // Ardışık sayısını arttır
           const newConsecutiveCount = consecutivePureIncorrect + 1;
           setConsecutivePureIncorrect(newConsecutiveCount);
-
-          // Minimum 2 ardışık saf yanlış olması şartını ekle
           if (newConsecutiveCount >= 2) {
-            // console.log(
-            //  `Gerçek ardışık saf yanlış cevap (${newConsecutiveCount}) - Perseveratif ilke belirlendi:`,
-            //  currentResponseCategory
-            // );
             setPerseverativeCategory(currentResponseCategory);
             isPerseverative = true;
             isPerseverativeError = true;
             setLastPerseverativeResponse(currentResponseCategory);
-
             setCategoryChanged(false);
             setPrevCategory(null);
           }
-        }
-        // Farklı bir saf yanlış kategoriyse
-        else {
+        } else {
           setLastPureIncorrectCategory(currentResponseCategory);
           setConsecutivePureIncorrect(1);
-          // console.log(
-          //  "Yeni saf yanlış cevap kategorisi:",
-          //  currentResponseCategory
-          // );
-        }
-
-        // Perseveratif ilke belirlenmiş ve cevap o ilkeye uyuyorsa
-        if (
-          perseverativeCategory &&
-          perseverativeCategory === currentResponseCategory
-        ) {
-          isPerseverative = true;
-          isPerseverativeError = true;
-          // console.log(
-          //  "Perseveratif hata - İlkeye göre:",
-          //  currentResponseCategory
-          // );
-          setLastPerseverativeResponse(currentResponseCategory);
         }
       }
 
-      // Kategori değişiminden sonraki kontrol
+      if (
+        perseverativeCategory &&
+        perseverativeCategory === currentResponseCategory
+      ) {
+        isPerseverative = true;
+        isPerseverativeError = true;
+        setLastPerseverativeResponse(currentResponseCategory);
+      }
+
       if (
         categoryChanged &&
         prevCategory &&
         isPureAnswer &&
         !perseverativeCategory
       ) {
-        // Yeni bir perseveratif ilke belirlenmemişse önceki kategoriye göre kontrol yap
         if (prevCategory === "color" && colorMatch) {
-          // console.log(
-          //  "Kategori değişimi sonrası önceki kategoriye (color) göre perseveratif hata. Yeni perseveratif ilke: color"
-          // );
           setPerseverativeCategory("color");
           isPerseverative = true;
           isPerseverativeError = true;
           setLastPerseverativeResponse("color");
         } else if (prevCategory === "figure" && figureMatch) {
-          // console.log(
-          //  "Kategori değişimi sonrası önceki kategoriye (figure) göre perseveratif hata. Yeni perseveratif ilke: figure"
-          // );
           setPerseverativeCategory("figure");
           isPerseverative = true;
           isPerseverativeError = true;
           setLastPerseverativeResponse("figure");
         } else if (prevCategory === "count" && countMatch) {
-          // console.log(
-          //  "Kategori değişimi sonrası önceki kategoriye (count) göre perseveratif hata. Yeni perseveratif ilke: count"
-          // );
           setPerseverativeCategory("count");
           isPerseverative = true;
           isPerseverativeError = true;
@@ -360,74 +263,32 @@ function WcstWindow() {
       }
     }
 
-    // Güncellenmiş Sandviç Kuralı Kontrolü Kullanımı
     const sandwichResult = checkSandwichRule(
       responseChain,
       perseverativeCategory
     );
     if (sandwichResult && sandwichResult.isSandwichRule) {
-      // console.log("Sandviç Kuralı Uygulandı!");
       const middleResponseCount = sandwichResult.correctMiddleResponseCount;
-
       if (isCorrect) {
-        // Doğru yanıtta: Perseveratif işaretleme yapılmaz,
-        // doğru tepkiyi güçlendirmek için counter'dan middleResponseCount çıkarılır.
         setConsecutivePureIncorrect((prev) =>
           Math.max(prev - middleResponseCount, 0)
         );
         isPerseverative = false;
         isPerseverativeError = false;
       } else {
-        // Yanlış yanıtta: doğrudan perseveratif tepki eklenir.
         setConsecutivePureIncorrect((prev) => prev + middleResponseCount);
         isPerseverative = true;
         isPerseverativeError = true;
-
-        // Eğer perseveratif hata yapıldıysa, hata sayısını 1 azalt
-        // setPerseverativeErrorCount((prev) => Math.max(prev - 1, 0));
       }
     }
 
-    // Yanıt zincirini güncelle (sadece saf ve belirsiz cevaplar için)
     if (isPureAnswer || isAmbiguousAnswer) {
       const newChain = [...responseChain, responseCategories];
       setResponseChain(newChain);
     }
 
-    // Non-perseveratif hata kontrolü (Yanlış ve perseveratif olmayan)
     const isNonPerseverativeError = !isCorrect && !isPerseverativeError;
 
-    // console.log("Sonuç:", {
-    //  cardIndex,
-    //  response: currentCard,
-    //  currentCategory: category,
-    //  prevCategory,
-    //  currentResponseCategory,
-    //  responseCategories,
-    //  color: colorMatch,
-    //  figure: figureMatch,
-    //  count: countMatch,
-    //  isCorrect,
-    //  perseverativeCategory,
-    //  isPerseverative,
-    //  isPerseverativeError,
-    //  isNonPerseverativeError,
-    //  categoryChanged,
-    //  isAmbiguousAnswer,
-    //  chainBroken,
-    //  responseChain: responseChain.length,
-    //  lastPerseverativeResponse,
-    //  consecutivePureIncorrect:
-    //    isPureAnswer && !isCorrect
-    //      ? lastPureIncorrectCategory === currentResponseCategory
-    //        ? consecutivePureIncorrect + 1
-    //        : 1
-    //      : 0,
-    //  lastPureIncorrectCategory,
-    //  categoryCorrect,
-    // });
-
-    // Sonucu kaydet
     setResult([
       ...result,
       {
@@ -461,10 +322,10 @@ function WcstWindow() {
       setOpen(false);
       setCardIndex(cardIndex + 1);
     }, 1200);
-
     switchCondition(target);
   };
 
+  // Değişiklik 2: HandleStart fonksiyonu güncellendi
   const handleStart = () => {
     setCounter(0);
     setTestInfo(true);
@@ -479,15 +340,12 @@ function WcstWindow() {
     setCategoryChanged(false);
     setPendingCategoryChange(false);
     setCategory("color");
-
     setResponseChain([]);
     setChainBroken(false);
     setLastPerseverativeResponse(null);
-
-    setRandomizedCards(shuffleCards(responseCards));
+    setRandomizedCards([...responseCards]); // Shuffle yerine direkt atama
     setCardIndex(0);
   };
-
 
   const handleShowResults = () => {
     navigate("/wcst-test-result");
@@ -498,12 +356,12 @@ function WcstWindow() {
       {testInfo ? (
         testCompleted ? (
           <S.CompletedOptions>
-  <div>
-    <S.Button onClick={handleShowResults}>
-      Sonuçları Göster
-    </S.Button>
-  </div>
-</S.CompletedOptions>
+            <div>
+              <S.Button onClick={handleShowResults}>
+                Sonuçları Göster
+              </S.Button>
+            </div>
+          </S.CompletedOptions>
         ) : (
           <>
             <S.TargetCards>{targetCardsList}</S.TargetCards>
