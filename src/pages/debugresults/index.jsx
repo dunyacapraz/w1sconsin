@@ -11,68 +11,68 @@ const MAX_CORRECT_CONSECUTIVE = 10;
 const NORMS = {
   "5-11": {
     "20-54": {
-      totalResponses: { X: 121.7, Ss: 13.27 },
-      totalErrors: { X: 55.38, Ss: 20.84 },
-      totalCorrect: { X: 66.28, Ss: 13.29 },
-      completedCategories: { X: 3.45, Ss: 1.78 },
-      perseverativeResponses: { X: 34.44, Ss: 16.94 },
-      perseverativeErrors: { X: 29.85, Ss: 13.55 },
-      nonPerseverativeErrors: { X: 25.25, Ss: 11.62 },
-      perseverativeErrorPercentage: { X: 23.88, Ss: 9.87 },
-      firstCategoryTrials: { X: 19.22, Ss: 13.17 },
-      conceptualResponses: { X: 50.25, Ss: 18.15 },
-      conceptualResponsePercentage: { X: 42.85, Ss: 19.07 },
-      failureToMaintainSet: { X: 0.8, Ss: 0.95 },
-      learningToLearn: { X: -0.02, Ss: 0.08 },
+      totalResponses: { X: 121.7 },
+      totalErrors: { X: 55.38 },
+      totalCorrect: { X: 66.28 },
+      completedCategories: { X: 3.45 },
+      perseverativeResponses: { X: 34.44 },
+      perseverativeErrors: { X: 29.85 },
+      nonPerseverativeErrors: { X: 25.25 },
+      perseverativeErrorPercentage: { X: 23.88, Ss: 9.87 }, // Ss korundu
+      firstCategoryTrials: { X: 19.22 },
+      conceptualResponses: { X: 50.25 },
+      conceptualResponsePercentage: { X: 42.85, Ss: 19.07 }, // Ss korundu
+      failureToMaintainSet: { X: 0.8 },
+      learningToLearn: { X: -0.02 }
     },
     "55-72": {
-      totalResponses: { X: 122.04, Ss: 13.43 },
-      totalErrors: { X: 55.71, Ss: 19.11 },
-      totalCorrect: { X: 66.32, Ss: 9.65 },
-      completedCategories: { X: 3.18, Ss: 1.63 },
-      perseverativeResponses: { X: 38.36, Ss: 17.77 },
-      perseverativeErrors: { X: 32.71, Ss: 13.78 },
-      nonPerseverativeErrors: { X: 22.79, Ss: 10.16 },
-      perseverativeErrorPercentage: { X: 26.09, Ss: 9.95 },
-      firstCategoryTrials: { X: 22.36, Ss: 14.93 },
-      conceptualResponses: { X: 49.29, Ss: 14.96 },
-      conceptualResponsePercentage: { X: 42.0, Ss: 17.74 },
-      failureToMaintainSet: { X: 1.0, Ss: 0.9 },
-      learningToLearn: { X: -0.03, Ss: 0.07 },
-    },
+      totalResponses: { X: 122.04 },
+      totalErrors: { X: 55.71 },
+      totalCorrect: { X: 66.32 },
+      completedCategories: { X: 3.18 },
+      perseverativeResponses: { X: 38.36 },
+      perseverativeErrors: { X: 32.71 },
+      nonPerseverativeErrors: { X: 22.79 },
+      perseverativeErrorPercentage: { X: 26.09, Ss: 9.95 }, // Ss korundu
+      firstCategoryTrials: { X: 22.36 },
+      conceptualResponses: { X: 49.29 },
+      conceptualResponsePercentage: { X: 42.0, Ss: 17.74 }, // Ss korundu
+      failureToMaintainSet: { X: 1.0 },
+      learningToLearn: { X: -0.03 }
+    }
   },
   "12+": {
     "20-54": {
-      totalResponses: { X: 106.25, Ss: 21.12 },
-      totalErrors: { X: 34.61, Ss: 21.37 },
-      totalCorrect: { X: 71.4, Ss: 10.03 },
-      completedCategories: { X: 4.98, Ss: 1.59 },
-      perseverativeResponses: { X: 19.39, Ss: 13.57 },
-      perseverativeErrors: { X: 17.69, Ss: 11.11 },
-      nonPerseverativeErrors: { X: 16.72, Ss: 12.17 },
-      perseverativeErrorPercentage: { X: 15.48, Ss: 7.65 },
-      firstCategoryTrials: { X: 15.72, Ss: 8.34 },
-      conceptualResponses: { X: 62.23, Ss: 13.93 },
-      conceptualResponsePercentage: { X: 61.99, Ss: 20.11 },
-      failureToMaintainSet: { X: 0.75, Ss: 0.91 },
-      learningToLearn: { X: -0.01, Ss: 0.07 },
+      totalResponses: { X: 106.25 },
+      totalErrors: { X: 34.61 },
+      totalCorrect: { X: 71.4 },
+      completedCategories: { X: 4.98 },
+      perseverativeResponses: { X: 19.39 },
+      perseverativeErrors: { X: 17.69 },
+      nonPerseverativeErrors: { X: 16.72 },
+      perseverativeErrorPercentage: { X: 15.48, Ss: 1 }, // Ss korundu
+      firstCategoryTrials: { X: 15.72 },
+      conceptualResponses: { X: 62.23 },
+      conceptualResponsePercentage: { X: 61.99, Ss: 1 }, // Ss korundu
+      failureToMaintainSet: { X: 0.75 },
+      learningToLearn: { X: -0.01 }
     },
     "55-78": {
-      totalResponses: { X: 104.68, Ss: 20.49 },
-      totalErrors: { X: 34.23, Ss: 22.19 },
-      totalCorrect: { X: 70.45, Ss: 8.86 },
-      completedCategories: { X: 4.77, Ss: 1.95 },
-      perseverativeResponses: { X: 19.5, Ss: 12.7 },
-      perseverativeErrors: { X: 16.77, Ss: 10.34 },
-      nonPerseverativeErrors: { X: 17.41, Ss: 13.68 },
-      perseverativeErrorPercentage: { X: 14.96, Ss: 7.08 },
-      firstCategoryTrials: { X: 18.14, Ss: 12.3 },
-      conceptualResponses: { X: 58.14, Ss: 14.64 },
-      conceptualResponsePercentage: { X: 59.16, Ss: 21.24 },
-      failureToMaintainSet: { X: 0.41, Ss: 0.59 },
-      learningToLearn: { X: -0.01, Ss: 0.03 },
-    },
-  },
+      totalResponses: { X: 104.68 },
+      totalErrors: { X: 34.23 },
+      totalCorrect: { X: 70.45 },
+      completedCategories: { X: 4.77 },
+      perseverativeResponses: { X: 19.5 },
+      perseverativeErrors: { X: 16.77 },
+      nonPerseverativeErrors: { X: 17.41 },
+      perseverativeErrorPercentage: { X: 14.96, Ss: 1 }, // Ss korundu
+      firstCategoryTrials: { X: 18.14 },
+      conceptualResponses: { X: 58.14 },
+      conceptualResponsePercentage: { X: 59.16, Ss: 1 }, // Ss korundu
+      failureToMaintainSet: { X: 0.41 },
+      learningToLearn: { X: -0.01 }
+    }
+  }
 };
 
 // İlk kategorinin tamamlanıp tamamlanmadığını kontrol eder
@@ -435,7 +435,7 @@ export default function DebugResults() {
     });
     setPerseverativeResponses(finalIsPerseverative);
     setPerseverativeDetails(finalDetails);
-  }, []); // Bağımlılık dizisi boş
+    }, [result]); // Bağımlılık dizisi boş
 
   // --- Geri Kalan Kod (useMemo, JSX return) ---
   // ... (Değişiklik yok) ...
@@ -589,57 +589,72 @@ export default function DebugResults() {
 
   const compareWithNorm = (scoreKey) => {
     const normGroup = getNormGroup();
-    if (!normGroup || !scores || typeof scores[scoreKey] !== "number")
+    if (!normGroup || !scores || typeof scores[scoreKey] !== "number") 
       return null;
-
+  
     const userValue = scores[scoreKey];
     const normMean = normGroup[scoreKey]?.X;
     const normSD = normGroup[scoreKey]?.Ss;
-
-    if (!normMean || !normSD) return null;
-
-    // Norm aralığını hesapla (Ortalama ± Standart Sapma)
-    const lowerBound = normMean - normSD;
-    const upperBound = normMean + normSD;
-
-    // Metriklerin yönünü belirle (1: Yüksek iyi, -1: Yüksek kötü)
-    const metricDirection =
-      {
-        totalResponses: -1,
-        totalErrors: -1,
-        totalCorrect: 1,
-        completedCategories: 1,
-        perseverativeResponses: -1,
-        perseverativeErrors: -1,
-        nonPerseverativeErrors: -1,
-        perseverativeErrorPercentage: -1,
-        conceptualResponsePercentage: 1,
-        failureToMaintainSet: -1,
-        learningToLearn: 1,
-      }[scoreKey] || 0;
-
-    // Yorum ve renk belirle
+  
+    // Sadece bu iki metrik için standart sapma kullan (diğerlerinde normSD null olacak)
+    const allowedMetrics = [
+      "perseverativeErrorPercentage",
+      "conceptualResponsePercentage"
+    ];
+  
+    if (!normMean || (allowedMetrics.includes(scoreKey) && !normSD)) 
+      return null;
+  
+    // Metrik yönü (1: Yüksek iyi, -1: Yüksek kötü)
+    const metricDirection = {
+      totalResponses: -1,
+      totalErrors: -1,
+      totalCorrect: 1,
+      completedCategories: 1,
+      perseverativeResponses: -1,
+      perseverativeErrors: -1,
+      nonPerseverativeErrors: -1,
+      perseverativeErrorPercentage: -1,
+      conceptualResponsePercentage: 1,
+      failureToMaintainSet: -1,
+      learningToLearn: 1,
+    }[scoreKey] || 0;
+  
+    // Yorum ve renk belirleme
     let interpretation = "Normal";
     let color = "#3498db"; // Mavi (Normal)
-
-    if (userValue < lowerBound) {
-      interpretation = metricDirection === 1 ? "Zayıf" : "İyi";
-      color = metricDirection === 1 ? "#e74c3c" : "#2ecc71";
-    } else if (userValue > upperBound) {
-      interpretation = metricDirection === 1 ? "İyi" : "Zayıf";
-      color = metricDirection === 1 ? "#2ecc71" : "#e74c3c";
+  
+    if (allowedMetrics.includes(scoreKey)) {
+      // Sadece üst sınıra göre karşılaştırma
+      const upperBound = normMean + normSD;
+      
+      if (userValue > upperBound) {
+        interpretation = metricDirection === 1 ? "İyi" : "Zayıf";
+        color = metricDirection === 1 ? "#2ecc71" : "#e74c3c";
+      }
+    } else {
+      // Diğer metriklerde sadece ortalamaya göre basit karşılaştırma
+      if (userValue > normMean) {
+        interpretation = metricDirection === 1 ? "İyi" : "Zayıf";
+        color = metricDirection === 1 ? "#2ecc71" : "#e74c3c";
+      } else {
+        interpretation = metricDirection === 1 ? "Zayıf" : "İyi";
+        color = metricDirection === 1 ? "#e74c3c" : "#2ecc71";
+      }
     }
-
+  
     return {
       userValue,
       normMean,
-      normSD,
-      lowerBound: parseFloat(lowerBound.toFixed(2)), // İki ondalık basamak
-      upperBound: parseFloat(upperBound.toFixed(2)),
+      normSD: allowedMetrics.includes(scoreKey) ? normSD : null,
+      upperBound: allowedMetrics.includes(scoreKey) 
+        ? parseFloat((normMean + normSD).toFixed(2)) 
+        : null,
       interpretation,
-      color,
+      color
     };
   };
+  
   const generateClinicalComment = () => {
     const isEmpty = !age || !education;
     if (!age || !education)
@@ -894,42 +909,41 @@ export default function DebugResults() {
   const downloadResults = () => {
     if (!result || result.length === 0) {
       console.warn("İndirilecek sonuç bulunamadı");
+      alert("İndirilecek sonuç verisi bulunamadı."); // Kullanıcıya bilgi ver
       return;
     }
 
-    const data = {
-      patientInfo: {
-        firstName,
-        lastName,
-        age,
-        education,
-      },
-      testResults: {
-        ...scores,
-        detailedResults: result.map(item => ({
-          response: item.response,
-          categories: item.responseCategories,
-          currentCategory: item.currentCategory,
-          isCorrect: item.responseCategories?.includes(item.currentCategory),
-          isPerseverative: perseverativeDetails[item.cardIndex]?.isPerseverative
-        }))
-      }
-    };
+    // 1. Adım: Sadece istenen alanları içeren yeni bir dizi oluştur (Bu kısım kalmalı)
+    const filteredDetailedResults = result.map(item => ({
+      response: item.response,
+      categoryComplete: item.categoryComplete,
+      category: item.category,
+      responseCategories: item.responseCategories,
+      currentCategory: item.currentCategory,
+      prevCategory: item.prevCategory,
+      cardIndex: item.cardIndex
+    }));
 
+    // 2. Adım: İndirilecek veri artık doğrudan filtrelenmiş dizi olacak
+    const dataToDownload = filteredDetailedResults; // <- Değişiklik burada!
+
+    // 3. Adım: JSON'a çevirip indirme işlemi
     try {
-      const blob = new Blob([JSON.stringify(data, null, 2)], {
+      const blob = new Blob([JSON.stringify(dataToDownload, null, 2)], { // dataToDownload kullanılıyor
         type: "application/json",
       });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${firstName}_${lastName}_wcst_results.json`;
+      const filename = `${firstName || 'Hasta'}_${lastName || 'Adi'}_WCST_Sonuclari_${new Date().toISOString().slice(0, 10)}.json`;
+      a.download = filename.replace(/[^a-zA-Z0-9_.-]/g, '_');
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error("JSON indirme hatası:", error);
+      alert("Sonuçları indirirken bir hata oluştu.");
     }
   };
 
