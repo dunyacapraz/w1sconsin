@@ -156,8 +156,8 @@ export const Button = styled.button`
   /* Hover efekti */
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(99, 102, 241, 0.25);
-    
+     box-shadow: 0 7px 14px rgba(106, 90, 205, 0.3);
+    background: linear-gradient(135deg, #6a5acd 0%, #5a4aae 100%);
     &::after {
       content: '';
       position: absolute;

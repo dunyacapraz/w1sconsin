@@ -67,6 +67,7 @@ export const Button = styled.button`
   gap: 8px;
   position: relative;
   overflow: hidden;
+  cursor: pointer; // Buton olduğunu belirtmek için eklendi
 
   &::before {
     content: '';
@@ -78,32 +79,51 @@ export const Button = styled.button`
     background: linear-gradient(
       45deg,
       transparent,
-      rgba(255, 255, 255, 0.15),
+      rgba(255, 255, 255, 0.15), // Işık efekti
       transparent
     );
     transform: rotate(45deg);
     transition: all 0.5s ease;
+    z-index: 0; // Metnin arkasında kalması için
+  }
+
+  // Metin ve SVG'nin animasyonun üzerinde kalması için
+  span, svg {
+    position: relative;
+    z-index: 1;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(123, 104, 238, 0.25);
-    
+    transform: translateY(-2px); // Hafif yukarı kalkma
+    box-shadow: 0 7px 14px rgba(106, 90, 205, 0.3); // Gölge belirginleşir (biraz daha koyu)
+
+    // --- YENİ EKLENEN SATIR ---
+    background: linear-gradient(135deg, #6a5acd 0%, #5a4aae 100%); // Gradyanın hafif koyu hali
+    // --- YENİ EKLENEN SATIR SONU ---
+
     &::before {
-      left: 100%;
+      left: 100%; // Işık efekti animasyonu
     }
   }
 
   &:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(123, 104, 238, 0.25);
+    transform: translateY(0px); // Tıklama anında hafifçe aşağı
+    box-shadow: 0 4px 8px rgba(106, 90, 205, 0.2); // Gölge azalır
+    // İsteğe bağlı: Tıklama anında gradyanı biraz daha koyulaştırabiliriz
+    // background: linear-gradient(135deg, #5a4aae 0%, #483d8b 100%);
   }
 
   &:disabled {
-    background: #4a4866;
+    background: #4a4866; // Pasif durum rengi
     color: rgba(255, 255, 255, 0.6);
     cursor: not-allowed;
     opacity: 0.8;
+    box-shadow: none; // Pasif durumda gölge olmaz
+    transform: none; // Pasif durumda transform olmaz
+
+    &::before {
+        background: none; // Pasif durumda animasyon olmaz
+    }
   }
 
   svg {
@@ -113,13 +133,13 @@ export const Button = styled.button`
   }
 
   &:hover svg {
-    transform: scale(1.1);
+    transform: scale(1.1); // İkon hafif büyür
   }
 
   @media screen and (max-width: 700px) {
     padding: 10px 20px;
     font-size: 0.9rem;
-    
+
     svg {
       width: 18px;
       height: 18px;

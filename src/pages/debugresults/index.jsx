@@ -18,7 +18,7 @@ const NORMS = {
           perseverativeResponses: { X: 34.44 },
           perseverativeErrors: { X: 29.85 },
           nonPerseverativeErrors: { X: 25.25 },
-          perseverativeErrorPercentage: { X: 23.88, Ss: 1 }, // Ss korundu
+          perseverativeResponsePercentage: { X: 23.88, Ss: 1 }, // Ss korundu
           firstCategoryTrials: { X: 19.22 },
           conceptualResponses: { X: 50.25 },
           conceptualResponsePercentage: { X: 42.85, Ss: 1 }, // Ss korundu
@@ -33,7 +33,7 @@ const NORMS = {
           perseverativeResponses: { X: 38.36 },
           perseverativeErrors: { X: 32.71 },
           nonPerseverativeErrors: { X: 22.79 },
-          perseverativeErrorPercentage: { X: 26.09, Ss: 1 }, // Ss korundu
+          perseverativeResponsePercentage: { X: 26.09, Ss: 1 }, // Ss korundu
           firstCategoryTrials: { X: 22.36 },
           conceptualResponses: { X: 49.29 },
           conceptualResponsePercentage: { X: 42.0, Ss: 1 }, // Ss korundu
@@ -50,7 +50,7 @@ const NORMS = {
           perseverativeResponses: { X: 19.39 },
           perseverativeErrors: { X: 17.69 },
           nonPerseverativeErrors: { X: 16.72 },
-          perseverativeErrorPercentage: { X: 15.48, Ss: 1 }, // Ss korundu
+          perseverativeResponsePercentage: { X: 15.48, Ss: 1 }, // Ss korundu
           firstCategoryTrials: { X: 15.72 },
           conceptualResponses: { X: 62.23 },
           conceptualResponsePercentage: { X: 61.99, Ss: 1 }, // Ss korundu
@@ -65,7 +65,7 @@ const NORMS = {
           perseverativeResponses: { X: 19.5 },
           perseverativeErrors: { X: 16.77 },
           nonPerseverativeErrors: { X: 17.41 },
-          perseverativeErrorPercentage: { X: 14.96, Ss: 1 }, // Ss korundu
+          perseverativeResponsePercentage: { X: 14.96, Ss: 1 }, // Ss korundu
           firstCategoryTrials: { X: 18.14 },
           conceptualResponses: { X: 58.14 },
           conceptualResponsePercentage: { X: 59.16, Ss: 1 }, // Ss korundu
@@ -292,15 +292,16 @@ export default function DebugResults() {
               `(Aşama 1) Önceden kesinleşmiş Yeni İlkeye ('${establishedPrincipleCategory}') uyan saf devam yanıtı.`
           );
       }
-      else if (!isPerseverative_pass1[i] && matchesPreviousCategory) {
-         updatePerseverationPass1(
-             i,
-             actualPreviousCategory,
-             "Önceki Kategori İlkesi",
-             false,
-             `(Aşama 1) Önceki Kategori İlkesi uygulandı ('${actualPreviousCategory}')`
-         );
-      }
+      else if (establishedPrincipleCategory === null && !isPerseverative_pass1[i] && matchesPreviousCategory) {
+        updatePerseverationPass1(
+            i,
+            actualPreviousCategory,
+            "Önceki Kategori İlkesi",
+            false,
+            // Debug mesajını da durumu yansıtacak şekilde güncelleyebiliriz:
+            `(Aşama 1) Aktif 'Yeni İlke' olmadığında Önceki Kategori İlkesi ('${actualPreviousCategory}') uygulandı.`
+        );
+     }
 
       prevIterationCategory = currentCategory;
     } // Aşama 1 Döngü Sonu
@@ -449,6 +450,8 @@ export default function DebugResults() {
 
   }, [result]); // useEffect sonu
 
+
+  
   // useMemo içindeki skor hesaplamaları (Kavramsal dahil)
   const scores = useMemo(() => {
     // GÜVENLİK KONTROLÜ: result dizisinin her elemanının geçerli olduğunu varsayalım
@@ -513,10 +516,10 @@ export default function DebugResults() {
 
     const nonPerseverativeErrors = totalErrors - perseverativeErrorsCount;
 
-    const perseverativeErrorPercentage =
+    const perseverativeResponsePercentage =
       totalResponses > 0
         ? parseFloat(
-            ((perseverativeErrorsCount / totalResponses) * 100).toFixed(2)
+            ((perseverativeResponsesCount/ totalResponses) * 100).toFixed(2)
           )
         : 0;
 
@@ -597,18 +600,23 @@ export default function DebugResults() {
     // Kurulumu sürdürmede başarısızlık (Mantık aynı: >=5 doğru sonrası hata)
     let failureToMaintainSet = 0;
     let consecutiveCorrectFMS = 0;
+    
     result.forEach((response) => {
-        // if(!response) return;
         if (response.responseCategories?.includes(response.currentCategory)) {
-            consecutiveCorrectFMS++;
+            consecutiveCorrectFMS++; // Doğru yanıtlarda sayaç artar
         } else {
-            // Hata yapıldığında, ÖNCEKİ doğru serisi 5 veya daha fazlaysa sayılır
-            if (consecutiveCorrectFMS >= 5) {
-                failureToMaintainSet++;
+            // Hata durumunda: 5-9 aralığı kontrolü
+            if (consecutiveCorrectFMS >= 5 && consecutiveCorrectFMS <= 9) {
+                failureToMaintainSet++; // Sadece 5-9 aralığındaki doğrular sonrası hatalar sayılır
             }
-            consecutiveCorrectFMS = 0; // Hata sonrası seriyi sıfırla
+            consecutiveCorrectFMS = 0; // Hata sonrası sayaç sıfırlanır
         }
     });
+    
+    // Döngü sonunda kalan seri kontrolü (test erken biterse)
+    if (consecutiveCorrectFMS >= 5 && consecutiveCorrectFMS <= 9) {
+        failureToMaintainSet++;
+    }
 
     // --- ÖĞRENMEYİ ÖĞRENME (LTL) - YENİ HESAPLAMA ---
 
@@ -696,7 +704,7 @@ export default function DebugResults() {
       perseverativeResponses: perseverativeResponsesCount,
       perseverativeErrors: perseverativeErrorsCount,
       nonPerseverativeErrors,
-      perseverativeErrorPercentage,
+      perseverativeResponsePercentage,
       firstCategoryTrials: finalFirstCategoryTrials,
       //---->> YENİ EKLENEN/DÜZENLENENLER <<----
       conceptualResponses: conceptualResponsesCount, // Kavramsal tepki SAYISI
@@ -798,7 +806,7 @@ export default function DebugResults() {
     perseverativeResponses: -1,
     perseverativeErrors: -1,
     nonPerseverativeErrors: -1,
-    perseverativeErrorPercentage: -1,
+    perseverativeResponsePercentage: -1,
     firstCategoryTrials: -1, // Düşük daha iyi (eğer sayıysa)
     conceptualResponses: 1,
     conceptualResponsePercentage: 1,
@@ -897,7 +905,7 @@ export default function DebugResults() {
             { label: "Perseveratif Tepki", scoreKey: "perseverativeResponses" },
             { label: "Perseveratif Hata", scoreKey: "perseverativeErrors" },
             { label: "Perseveratif Olmayan Hata", scoreKey: "nonPerseverativeErrors" },
-            { label: "Perseveratif Hata %", scoreKey: "perseverativeErrorPercentage" },
+            { label: "Perseveratif Hata %", scoreKey: "perseverativeResponsePercentage" },
             { label: "Kavramsal Tepki %", scoreKey: "conceptualResponsePercentage" }, // İstek üzerine buraya eklendi
           ],
           Kavramsal: [
@@ -1089,99 +1097,96 @@ export default function DebugResults() {
 
 
   // Tablo görünümü için sütunlara bölme (ilk koddan aynen alındı)
-  const rowsPerColumn = 22;
-  const columns = Array.from(
-    { length: Math.ceil((result?.length || 0) / rowsPerColumn) },
-    (_, i) => result?.slice(i * rowsPerColumn, (i + 1) * rowsPerColumn) || []
-  );
-
+  const columnRowCounts = [22, 22, 20, 22, 22, 20]; // Her sütunda istenen satır sayıları
+  const columns = []; // Sütunları tutacak boş dizi
+  let startIndex = 0; // Dilimlemeye başlanacak indeks
+  const totalResponses = result?.length || 0; // Toplam yanıt sayısı (varsa)
+  
+  // İstenen her satır sayısı için döngü
+  for (const count of columnRowCounts) {
+    // Eğer hala işlenecek yanıt varsa (başlangıç indeksi toplamı geçmediyse)
+    if (startIndex < totalResponses) {
+      // Bu sütunun biteceği indeksi hesapla (toplam yanıt sayısını geçmemeli)
+      const endIndex = Math.min(startIndex + count, totalResponses);
+      // result dizisinden ilgili bölümü dilimle
+      const columnData = result?.slice(startIndex, endIndex) || [];
+      // Dilimlenen bölümü columns dizisine ekle
+      columns.push(columnData);
+      // Bir sonraki dilimleme için başlangıç indeksini güncelle
+      startIndex = endIndex;
+    } else {
+      // Eğer tüm yanıtlar zaten önceki sütunlara dağıtıldıysa döngüden çık
+      break;
+    }
+  }
   // downloadResults fonksiyonu ilk koddan aynen alındı (detaylı JSON içeriyor)
   const downloadResults = () => {
-      // ... (Fonksiyon içeriği değişmedi, önceki yanıttaki gibi) ...
-        if (!result || result.length === 0) {
-          console.warn("İndirilecek sonuç bulunamadı");
-          alert("İndirilecek sonuç verisi bulunamadı.");
-          return;
-        }
-        if (!firstName || !lastName || !age || !education) {
-            alert("Lütfen indirmeden önce tüm demografik bilgileri doldurun.");
-            return;
-        }
+    // Gerekli kontroller (result var mı, demografik bilgiler girilmiş mi?)
+    if (!result || result.length === 0) {
+      console.warn("İndirilecek sonuç bulunamadı");
+      alert("İndirilecek sonuç verisi bulunamadı.");
+      return;
+    }
+    if (!firstName || !lastName || !age || !education) {
+        alert("Lütfen indirmeden önce tüm demografik bilgileri doldurun (dosya adı için gereklidir).");
+        return;
+    }
 
-        const filteredDetailedResults = result.map((item, index) => {
-             if (!item) return null; // Güvenlik kontrolü
-             const detail = perseverativeDetails?.[index];
-             const isCorrect = item.responseCategories?.includes(item.currentCategory);
-             return {
-                  responseNumber: index + 1, // Tepki sırası
-                  stimulusCard: item.response, // Sunulan kart (detayları olabilir)
-                  selectedCardKey: item.category, // Seçilen anahtar kart (1, 2, 3, 4) - Bu bilgi eksik olabilir?
-                  responseCategories: item.responseCategories, // Eşleşen kategoriler
-                  currentCategoryRule: item.currentCategory, // Geçerli kural
-                  isCorrectResponse: isCorrect, // Yanıt doğru mu?
-                  // Hesaplanan perseverasyon bilgisi
-                  isPerseverative: !!detail?.isPerseverative,
-                  perseverationType: detail?.isPerseverative ? (detail.isCorrectPerseverative ? 'PH' : 'P') : null,
-                  perseverationExplanation: detail?.explanation || null,
-                  perseverativeCategory: detail?.perseverativeCategory || null,
-                  // Debug bilgisi (isteğe bağlı)
-                  // debugInfo: detail?.debugInfo || null
-            };
-        }).filter(item => item !== null); // Null olanları filtrele
+    // Detaylı yanıtları sizin istediğiniz JSON formatına dönüştür
+    const formattedDetailedResults = result.map((item, index) => {
+         if (!item) return null; // Güvenlik kontrolü
 
+         // item.response objesinin beklenen yapıda olduğunu varsayıyoruz
+         const responseData = item.response || {};
 
-        const summaryScoresData = scores ? { ...scores } : {};
-         // Sayısal olmayan değerleri string'e çevir (Zaten string olanlar korunur)
-         Object.keys(summaryScoresData).forEach(key => {
-            if (summaryScoresData[key] === null || summaryScoresData[key] === "Hesaplama Hatası" ) { // Hesaplama Hatası eklendi
-                 summaryScoresData[key] = "Yetersiz Veri";
-            } else if (typeof summaryScoresData[key] === 'number' && !Number.isInteger(summaryScoresData[key])) {
-                // Ondalıklı sayıları 2 basamağa yuvarla (toFixed string yapar)
-                summaryScoresData[key] = parseFloat(summaryScoresData[key].toFixed(2));
-            }
-         });
+         return {
+              // Sizin örnek JSON'unuzdaki alan adları ve yapı kullanılıyor:
+              response: {
+                resCount: responseData.resCount !== undefined ? responseData.resCount : null,
+                resColor: responseData.resColor !== undefined ? responseData.resColor : null,
+                resFigure: responseData.resFigure !== undefined ? responseData.resFigure : null,
+              },
+              categoryComplete: item.categoryComplete !== undefined ? item.categoryComplete : null, // Orijinal item'dan alınır (varsa)
+              category: item.category !== undefined ? item.category : null, // Alan adı 'category' olarak değiştirildi
+              responseCategories: item.responseCategories || [], // Alan adı aynı
+              currentCategory: item.currentCategory !== undefined ? item.currentCategory : null, // Alan adı 'currentCategory' olarak değiştirildi
+              prevCategory: item.prevCategory !== undefined ? item.prevCategory : null, // Orijinal item'dan alınır (varsa)
+              cardIndex: index, // Alan adı 'cardIndex' olarak değiştirildi (0'dan başlar)
+        };
+    }).filter(item => item !== null); // Null olanları filtrele
 
+    // İndirilecek veri artık formatlanmış sonuçlar dizisi
+    const dataToDownload = formattedDetailedResults; // Sadece bu diziyi ata
 
-        const demographicInfo = {
+    // Demografik bilgiler sadece dosya adı için kullanılacak
+     const demographicInfo = {
             firstName,
             lastName,
-            age: parseInt(age),
-            educationLevel: education, // "5-11" veya "12+"
-            educationLevelDescription: education === "5-11" ? "5-11 Yıl" : "12+ Yıl", // Açıklama
-            testDate: new Date().toISOString().slice(0, 10), // Sadece tarih YYYY-MM-DD
-        };
+            testDate: new Date().toISOString().slice(0, 10),
+     };
 
-        const dataToDownload = {
-            patientInfo: demographicInfo,
-            summaryScores: summaryScoresData,
-            detailedResponses: filteredDetailedResults,
-            normInfo: { // Hangi norm grubunun kullanıldığı bilgisi
-                usedAge: age,
-                usedEducation: education,
-                normGroupKey: getNormGroup() ? `${education}_${Object.keys(NORMS[education]).find(key => NORMS[education][key] === getNormGroup())}` : "N/A"
-            }
-        };
-
-        try {
-          const blob = new Blob([JSON.stringify(dataToDownload, null, 2)], {
-            type: "application/json",
-          });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          const safeFirstName = firstName.replace(/[^a-zA-Z0-9]/g, '_') || 'Hasta';
-          const safeLastName = lastName.replace(/[^a-zA-Z0-9]/g, '_') || 'Adi';
-          const filename = `WCST_Sonuc_${safeLastName}_${safeFirstName}_${demographicInfo.testDate}.json`;
-          a.download = filename;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        } catch (error) {
-          console.error("JSON indirme hatası:", error);
-          alert("Sonuçları indirirken bir hata oluştu.");
-        }
-  };
+    try {
+      // JSON'a çevirirken doğrudan formatlanmış diziyi kullan
+      const blob = new Blob([JSON.stringify(dataToDownload, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      // Dosya adını oluştur (Demografik bilgilerden)
+      const safeFirstName = firstName.replace(/[^a-zA-Z0-9]/g, '_') || 'Hasta';
+      const safeLastName = lastName.replace(/[^a-zA-Z0-9]/g, '_') || 'Adi';
+      const filename = `WCST_DetayliSonuclar_${safeLastName}_${safeFirstName}_${demographicInfo.testDate}.json`;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("JSON indirme hatası:", error);
+      alert("Sonuçları indirirken bir hata oluştu.");
+    }
+ };
 
   // result null veya boşsa erken dönüş (ilk koddan alındı)
   if (!result || result.length === 0) {
@@ -1197,7 +1202,16 @@ export default function DebugResults() {
            <S.Column key={colIndex}>
              {column.map((item, index) => {
                if (!item) return null; // Güvenlik kontrolü eklendi
-               const globalIndex = colIndex * rowsPerColumn + index;
+               let columnStartIndex = 0;
+for (let prevColIndex = 0; prevColIndex < colIndex; prevColIndex++) {
+  // Önceki sütunun gerçek uzunluğunu ekle (daha sağlam bir yöntem)
+  columnStartIndex += columns[prevColIndex]?.length || 0;
+  // Alternatif (columnRowCounts dizisine güvenirsek):
+  // columnStartIndex += columnRowCounts[prevColIndex] || 0;
+}
+// Genel indeksi, sütun başlangıç indeksine mevcut öğenin sütun içindeki indeksini ekleyerek bul.
+const globalIndex = columnStartIndex + index;
+// --- YENİ HESAPLAMA SONU ---
                const detail = perseverativeDetails?.[globalIndex];
                const isCorrect = item.responseCategories?.includes(
                  item.currentCategory
@@ -1293,7 +1307,7 @@ export default function DebugResults() {
                     {label: "Perseveratif tepki (P+PH)", key: "perseverativeResponses"},
                     {label: "Perseveratif hata (P)", key: "perseverativeErrors"},
                     {label: "Perseveratif olmayan hata", key: "nonPerseverativeErrors"},
-                    {label: "Perseveratif hata yüzdesi (%)", key: "perseverativeErrorPercentage"},
+                    {label: "Perseveratif hata yüzdesi (%)", key: "perseverativeResponsePercentage"},
                     {label: "İlk kategori deneme sayısı", key: "firstCategoryTrials"},
                     // ---->> YENİ EKLENEN SATIR <<----
                     {label: "Kavramsal düzey tepki sayısı", key: "conceptualResponses"}, // Sayı eklendi
