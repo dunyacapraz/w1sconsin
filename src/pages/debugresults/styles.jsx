@@ -38,6 +38,7 @@ export const Box = styled.div`
   width: 30px;
   flex: 1;
   font-size: 1rem;
+  
 
   /* Kutuların köşelerini yuvarlamak için border-radius ekledik */
   border-radius: 5px;  /* 5px ile hafif yuvarlama */
@@ -59,6 +60,34 @@ export const Box = styled.div`
         : ``; // Boş ise varsayılan stil (arka plan rengi değişmez)
     }
   }}
+`;
+
+export const RightPanel = styled.div`
+  display: flex;            // İç öğeleri flex düzenine sokar
+  flex-direction: column;   // Öğeleri alt alta sıralar (Results, Demographic, Clinical, Perseverative)
+  width: 100%;             // Genişliği %100 yapar (Div stretch yaptığı için)
+  max-width: 550px;        // Sağ panel için maksimum genişlik (isteğe bağlı, ayarlayabilirsiniz)
+  padding: 0 20px 20px 20px; // İç boşluklar (üstte 0, diğer yanlarda 20px)
+  margin-left: auto;        // Ana Div içinde sağa yaslamak için (Table center olduğu için bu gerekli olmayabilir, duruma göre ayarlayın)
+  margin-right: auto;       // Ortalamak için
+  gap: 30px;               // Sağ panel içindeki bölümler (Results, Demographic vb.) arası boşluk
+  box-sizing: border-box;   // Padding ve border'ı genişliğe dahil eder
+
+  /* Eğer Div'in align-items: stretch; özelliği varsa ve RightPanel'in
+     Table ile aynı hizada olmasını istiyorsanız, DebugResults JSX yapısını
+     değiştirmeniz veya Div'e flex-direction: row vermeniz gerekebilir.
+     Mevcut JSX yapısı (<Div><Table/><RightPanel/></Div>) ve Div'in stili
+     ile RightPanel Table'ın ALTINDA yer alacaktır. */
+
+  @media (min-width: 1024px) { // Daha geniş ekranlarda yan yana görünüm için
+      /* Eğer ana S.Div'in flex-direction: row; olmasını isterseniz,
+         bu genişlik ayarı anlamlı olur. */
+      // width: 450px; // Sabit genişlik
+      // max-width: 450px;
+      // padding-left: 30px;
+      // margin-left: 0; // Sola yaslamak için
+      // margin-right: 0;
+  }
 `;
 
 export const ClinicalSection = styled.div`
@@ -365,7 +394,7 @@ export const PerseverativeSection = styled.div`
 
 export const Results = styled.div`
   margin-top: 30px;
-  width: 44%; /* 44% yerine 100% */
+  width: 100%; /* 44% yerine 100% */
   max-width: 1600px; /* İsteğe bağlı maksimum genişlik */
   margin-left: auto;
   box-shadow: 0 8px 32px rgba(0, 167, 207, 0.1);
