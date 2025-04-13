@@ -27,8 +27,8 @@ function IowaGamblingTask() {
   
   // YENİ EKLENEN VERİ KAYIT STATE'LERİ
   const [rawData, setRawData] = useState([]);
-  const [borrowAmount, setBorrowAmount] = useState(2000);
-  const startTimeRef = useRef(Date.now());
+  const [borrowAmount, setBorrowAmount] = useState(2000); // Başlangıçta 2000 borç/limit var gibi
+  const startTimeRef = useRef(null); // Başlangıç zamanını form gönderildiğinde ayarla
   const [lossQueues, setLossQueues] = useState({
     deck1: [], deck2: [], deck3: [], deck4: []
   });
@@ -38,64 +38,80 @@ function IowaGamblingTask() {
     deck1: { 
       gain: 100, 
       possibleLosses: [0,0,0,0,0,150,200,250,300,350],
-      image: '/images/deck.jpg',
-      imageActive: '/images/decon.jpg'
+      image: '/images/deck.jpg', // Gerçek resim yollarınızı kullanın
+      imageActive: '/images/decon.jpg' // Gerçek resim yollarınızı kullanın
     },
     deck2: { 
       gain: 100, 
       possibleLosses: [0,0,0,0,0,0,0,0,0,1250],
-      image: '/images/deck.jpg',
-      imageActive: '/images/decon.jpg'
+      image: '/images/deck.jpg', // Gerçek resim yollarınızı kullanın
+      imageActive: '/images/decon.jpg' // Gerçek resim yollarınızı kullanın
     },
     deck3: { 
       gain: 50, 
       possibleLosses: [0,0,0,0,0,50,50,50,50,50],
-      image: '/images/deck.jpg',
-      imageActive: '/images/decon.jpg'
+      image: '/images/deck.jpg', // Gerçek resim yollarınızı kullanın
+      imageActive: '/images/decon.jpg' // Gerçek resim yollarınızı kullanın
     },
     deck4: { 
       gain: 50, 
       possibleLosses: [0,0,0,0,0,0,0,0,0,250],
-      image: '/images/deck.jpg',
-      imageActive: '/images/decon.jpg'
+      image: '/images/deck.jpg', // Gerçek resim yollarınızı kullanın
+      imageActive: '/images/decon.jpg' // Gerçek resim yollarınızı kullanın
     }
   };
 
   // KARIŞTIRMA ALGORİTMASI
   const shuffleArray = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
+    let shuffledArray = [...array]; // Orijinal diziyi değiştirmemek için kopyala
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
-    return array;
+    return shuffledArray;
   };
 
-  // İLK KURULUM
+  // İLK KURULUM (Desteleri karıştır)
   useEffect(() => {
     setLossQueues({
-      deck1: shuffleArray([...decks.deck1.possibleLosses]),
-      deck2: shuffleArray([...decks.deck2.possibleLosses]),
-      deck3: shuffleArray([...decks.deck3.possibleLosses]),
-      deck4: shuffleArray([...decks.deck4.possibleLosses])
+      deck1: shuffleArray(decks.deck1.possibleLosses),
+      deck2: shuffleArray(decks.deck2.possibleLosses),
+      deck3: shuffleArray(decks.deck3.possibleLosses),
+      deck4: shuffleArray(decks.deck4.possibleLosses)
     });
-  }, []);
+  }, []); // Sadece component mount olduğunda çalışır
 
   // KAYIP DEĞERİ AL
   const getLoss = (deckId) => {
-    const queue = [...lossQueues[deckId]];
-    if (queue.length === 0) {
+    // Güncel kuyruğu state'ten al ve kopyasını oluştur
+    const currentQueue = [...lossQueues[deckId]]; 
+
+    if (currentQueue.length === 0) {
+      // Kuyruk boşsa, orijinal kayıp listesini tekrar karıştır
       const reshuffled = shuffleArray(decks[deckId].possibleLosses);
-      setLossQueues(prev => ({...prev, [deckId]: reshuffled}));
-      return reshuffled[0];
+      // Yeni karıştırılmış listeyi state'e kaydet
+      setLossQueues(prev => ({...prev, [deckId]: reshuffled.slice(1)})); // İlk elemanı hemen kullanacağımız için kalanını kaydet
+      // Yeni karıştırılmış listenin ilk elemanını döndür
+      return reshuffled[0]; 
+    } else {
+      // Kuyruk boş değilse, ilk elemanı al
+      const loss = currentQueue[0];
+      // Kuyruğun geri kalanını state'e kaydet
+      setLossQueues(prev => ({...prev, [deckId]: currentQueue.slice(1)}));
+      // Alınan kayıp değerini döndür
+      return loss;
     }
-    const loss = queue[0];
-    setLossQueues(prev => ({...prev, [deckId]: queue.slice(1)}));
-    return loss;
   };
 
   // DESTE SEÇİMİ
   const handleDeckClick = (deckId) => {
-    if (gameOver || showFeedback) return;
+    if (gameOver || showFeedback) return; // Oyun bittiyse veya geri bildirim gösteriliyorsa işlem yapma
+
+    // Başlangıç zamanı kaydedilmemişse kaydet (ilk tıklamada)
+    if (startTimeRef.current === null) {
+        startTimeRef.current = Date.now();
+    }
+    const clickTime = Date.now(); // Tıklama anı
 
     const deck = decks[deckId];
     const lossAmount = getLoss(deckId);
@@ -114,40 +130,88 @@ function IowaGamblingTask() {
       trial: cardsSelected + 1,
       deck: String.fromCharCode(64 + parseInt(deckId.replace('deck',''))) + "'",
       win: deck.gain,
-      lose: lossAmount > 0 ? lossAmount : 0,
-      score: currentTotal + net, // Borç öncesi skor
-      borrow: borrowAmount,
-      time: Date.now() - startTimeRef.current
+      lose: lossAmount > 0 ? lossAmount : 0, // Kayıp 0'dan büyükse göster, değilse 0 göster
+      score: newTotal, // Hesaplama sonrası güncel toplam
+      borrow: newBorrow, // Hesaplama sonrası güncel borç
+      time: clickTime - startTimeRef.current // Geçen süre
     };
 
-    setRawData([...rawData, trialData]);
+    setRawData(prevData => [...prevData, trialData]); // Önceki verilere ekle
     setCurrentTotal(newTotal);
     setBorrowAmount(newBorrow);
     setSelectedDeck(deckId);
     setGain(deck.gain);
     setLoss(lossAmount);
-    setCardsSelected(cardsSelected + 1);
+    setCardsSelected(prevSelected => prevSelected + 1); // Önceki değere göre artır
     setShowFeedback(true);
 
-    if (cardsSelected + 1 >= 3) setGameOver(true);
+    // Bir sonraki deneme için başlangıç zamanını güncelle (opsiyonel, her deneme için süre isterseniz)
+    // startTimeRef.current = Date.now(); 
+
+    if (cardsSelected + 1 >= 3) {
+      setGameOver(true);
+    }
   };
 
-  // VERİ İNDİRME
+  // VERİ İNDİRME (GÜNCELLENDİ)
   const downloadData = () => {
-    const header = "Trial   Deck   Win   Lose   Score    Borrow    Time(ms)\n";
-    const rows = rawData.map(item => 
-      `${item.trial.toString().padStart(3)}      ${item.deck.padStart(2)}     ` +
-      `${item.win.toString().padStart(5)}    ${item.lose.toString().padStart(5)}    ` +
-      `${item.score.toString().padStart(7)}    ${item.borrow.toString().padStart(6)}    ` +
-      `${item.time.toString().padStart(9)}`
-    ).join('\n');
+    // Sütun genişliklerini tanımla (ihtiyaca göre ayarlanabilir)
+    const colWidths = {
+        trial: 7,
+        deck: 6,
+        win: 7,
+        lose: 7,
+        score: 9,
+        borrow: 10,
+        time: 11 
+    };
+
+    // Başlığı genişliklere göre formatla
+    const header = 
+        "Trial".padEnd(colWidths.trial) + 
+        "Deck".padEnd(colWidths.deck) + 
+        "Win".padEnd(colWidths.win) + 
+        "Lose".padEnd(colWidths.lose) + 
+        "Score".padEnd(colWidths.score) + 
+        "Borrow".padEnd(colWidths.borrow) + 
+        "Time(ms)".padEnd(colWidths.time) + "\n";
+
+    // Satırları genişliklere göre formatla
+    const rows = rawData.map(item => {
+        const trialStr = item.trial.toString().padEnd(colWidths.trial);
+        const deckStr = item.deck.padEnd(colWidths.deck); 
+        const winStr = item.win.toString().padEnd(colWidths.win);
+        const loseStr = item.lose.toString().padEnd(colWidths.lose);
+        const scoreStr = item.score.toString().padEnd(colWidths.score);
+        const borrowStr = item.borrow.toString().padEnd(colWidths.borrow);
+        const timeStr = item.time.toString().padEnd(colWidths.time); 
+
+        return trialStr + deckStr + winStr + loseStr + scoreStr + borrowStr + timeStr;
+    }).join('\n');
     
-    const blob = new Blob([header + rows], {type: 'text/plain'});
+    // UTF-8 karakter kodlaması ile Blob oluştur (Türkçe karakterler için önemli olabilir)
+    const blob = new Blob([header + rows], { type: 'text/plain;charset=utf-8' }); 
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob); // URL oluştur
+    link.href = url;
     link.download = `IGT_${participantInfo.id}_${new Date().toISOString().slice(0,10)}.txt`;
+    document.body.appendChild(link); // Linki DOM'a ekle (Firefox için gerekli olabilir)
     link.click();
+    document.body.removeChild(link); // Linki DOM'dan kaldır
+    URL.revokeObjectURL(url); // Oluşturulan URL'yi temizle
   };
+
+  // Form gönderildiğinde test başlangıç zamanını kaydet
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (!participantInfo.id.trim()) {
+      alert('Lütfen hasta adı soyadı giriniz');
+      return;
+    }
+    startTimeRef.current = Date.now(); // Test başlangıç zamanı burada ayarlanır
+    setFormSubmitted(true);
+  };
+
 
   // HASTA BİLGİ FORMÜ
   if (!formSubmitted) {
@@ -179,17 +243,9 @@ function IowaGamblingTask() {
           </div>
         </div>
         <div className="form-container">
-
-
           <h2>Hasta Bilgileri</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            if (!participantInfo.id.trim()) {
-              alert('Lütfen hasta adı soyadı giriniz');
-              return;
-            }
-            setFormSubmitted(true);
-          }}>
+          {/* Form gönderildiğinde handleFormSubmit çağrılır */}
+          <form onSubmit={handleFormSubmit}> 
             <div className="form-group">
               <input
                 type="text"
@@ -239,18 +295,20 @@ function IowaGamblingTask() {
       </div>
 
       <div className="decks">
-        {['deck1', 'deck2', 'deck3', 'deck4'].map((deck) => (
+        {['deck1', 'deck2', 'deck3', 'deck4'].map((deckId) => ( // deckId olarak değiştirdim
           <div
-            key={deck}
-            className={`deck ${selectedDeck === deck ? 'active' : ''}`}
-            onClick={() => handleDeckClick(deck)}
+            key={deckId} // key olarak deckId kullandım
+            className={`deck ${selectedDeck === deckId ? 'active' : ''}`}
+            onClick={() => handleDeckClick(deckId)} // onClick'e deckId gönderdim
           >
             <img
-              src={selectedDeck === deck ? decks[deck].imageActive : decks[deck].image}
-              alt={deck}
+              // Resim yollarını doğru ayarladığınızdan emin olun
+              src={selectedDeck === deckId ? decks[deckId].imageActive : decks[deckId].image} 
+              alt={`Deste ${deckId.replace('deck','')}`} // Alt text daha açıklayıcı olabilir
               className="deck-image"
             />
-            <p>{deck.replace('deck', 'Deste ')}</p>
+            {/* Deste adını dinamik olarak göster */}
+            <p>{`Deste ${String.fromCharCode(64 + parseInt(deckId.replace('deck','')))}'`}</p> 
           </div>
         ))}
       </div>
@@ -260,7 +318,11 @@ function IowaGamblingTask() {
           <p style={{ color: 'green' }}>${gain} kazandınız!</p>
           {loss > 0 && <p style={{ color: 'red' }}>${loss} kaybettiniz.</p>}
           <p>Yeni Toplam: ${currentTotal}</p>
-          <button onClick={() => setShowFeedback(false)}>Devam Et</button>
+          <button onClick={() => {
+            setShowFeedback(false);
+            // İsteğe bağlı: Her devam edişte zamanı sıfırla/yeni başlangıç yap
+            // startTimeRef.current = Date.now(); 
+          }}>Devam Et</button>
         </div>
       )}
 
@@ -275,4 +337,4 @@ function IowaGamblingTask() {
   );
 }
 
-export default IowaGamblingTask;
+export default IowaGamblingTask; // App yerine IowaGamblingTask export edilebilir veya App içinde kalabilir
