@@ -1,6 +1,8 @@
 import styled, { keyframes } from "styled-components";
 import { NavLink } from "react-router-dom";
 
+
+
 // Aşağıdan yukarı animasyon
 const slideUp = keyframes`
   from {
@@ -20,10 +22,12 @@ export const WcstWindow = styled.div`
   color: white;
   border-radius: var(--border-radius);
   background: var(--test-zone);
+  position: relative;
 
   @media screen and (max-width: 700px) {
     font-size: var(--font-s);
   }
+    
 `;
 
 export const CompletedOptions = styled.div`
@@ -70,6 +74,7 @@ export const Warning = styled.div`
   margin-bottom: 1rem;
   font-size: var(--font-xl);
   text-align: center;
+  left: 16px;
   opacity: 0;
   animation: ${slideUp} 0.5s ease-out forwards;
 
@@ -292,4 +297,67 @@ export const StartText = styled.div`
   @media screen and (max-width: 700px) {
     font-size: var(--font-s);
   }
+`;
+
+
+export const CardCounter = styled.div`
+  /* Konumlandırma ve Boyut */
+  display: block;
+  max-width: 180px;
+  padding: 0.6rem 1rem;
+
+  /* Görünüm (aynı kalır) */
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+  font-size: 1em;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+
+  /* --- YENİ KONUMLANDIRMA (WcstWindow'a Göre) --- */
+  position: absolute; /* <-- Bu 'absolute' kalmalı */
+  top: 58%;      /* <-- Pencerenin üstünden % kaç aşağıda olacağı (ayarlayın) */
+  left: 68%;     /* <-- Pencerenin solundan % kaç içeride olacağı (ayarlayın) */
+  /* transform: translateX(-50%); */ /* <-- İsterseniz yatayda tam ortalamak için kullanabilirsiniz */
+
+  /* --- ESKİ KONUMLANDIRMA (Kaldırıldı) --- */
+  /* bottom: 1rem; */
+  /* left: 100%; */
+  /* margin-left: 2rem; */
+
+
+  /* Mobil uyumluluk (gerekirse ayarlanmalı) */
+  @media screen and (max-width: 700px) {
+    max-width: 150px;
+    font-size: 0.9em;
+    padding: 0.5rem 0.8rem;
+    /* Mobil için top/left değerlerini veya farklı bir konumlandırmayı ayarlayın */
+    /* Örneğin: */
+    /* top: 85%; */
+    /* left: 50%; */
+    /* transform: translateX(-50%); */ /* Mobilde ortalamak için */
+  }
+`;
+
+export const CategoryTracker = styled.div`
+  border: 3px solid red; /* Kırmızı çerçeve */
+  padding: 15px;
+  margin: 20px auto; /* Ortala */
+  background-color: yellow; /* Sarı arka plan */
+  width: fit-content;
+`;
+
+export const CategoryItem = styled.span`
+  border: 2px solid blue; /* Mavi çerçeve */
+  margin: 5px;
+  padding: 8px;
+  background-color: lightgreen; /* Yeşil arka plan */
+  color: black; /* Siyah yazı */
+  font-size: 1.2em;
+  font-weight: bold;
 `;
