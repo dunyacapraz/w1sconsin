@@ -395,45 +395,73 @@ export default function DebugResults() {
 
           if (isChainUnbroken) {
               // Sandviç kuralı ile işaretlenecek olanlar ÖZELLİKLE Aşama 1'de İŞARETLENMEMİŞ OLANLARDIR.
-              for (let j_sandwich = prevPerseverativeIndex + 1; j_sandwich < nextConfirmingPureIndex; j_sandwich++) {
-                  // Sadece Aşama 1'de işaretlenmemiş olanları işaretle
-                  if (!isPerseverative_pass1[j_sandwich]) {
-                      finalIsPerseverative[j_sandwich] = true; // Final listeyi güncelle
-                      const currentResponse = result[j_sandwich];
-                      if (!currentResponse) continue; // Güvenlik kontrolü
-                      const responseCategories = currentResponse.responseCategories || [];
-                      const isError = !responseCategories.includes(currentResponse.currentCategory);
-                      const isCorrect = !isError;
-                      const debugMsg = `(Aşama 2 Revize) Sandviç Kuralı (${prevPerseverativeIndex + 1} ile ${nextConfirmingPureIndex + 1} arası) uygulandı: Kategori: ${sandwichCategory}`;
-                      if (!finalDetails[j_sandwich]) finalDetails[j_sandwich] = {}; // Initialize if not exists
-                      finalDetails[j_sandwich] = {
-                        ...finalDetails[j_sandwich],
-                        isPerseverative: true,
-                        isError: isError,
-                        isCorrectPerseverative: isCorrect,
-                        explanation: `Sandviç Kuralı: ${sandwichCategory}`,
-                        perseverativeCategory: sandwichCategory,
-                        debugInfo: `${finalDetails[j_sandwich]?.debugInfo || ""} | ${debugMsg}`,
-                      };
-                  }
-              }
-          }
-        }
-      } // Aşama 2 Döngü Sonu
+              // Sandviç kuralı ile işaretlenecek olanlar ÖZELLİKLE Aşama 1'de İŞARETLENMEMİŞ OLANLARDIR.
+for (let j_sandwich = prevPerseverativeIndex + 1; j_sandwich < nextConfirmingPureIndex; j_sandwich++) {
+  // Sadece Aşama 1'de işaretlenmemiş olanları işaretle
+  if (!isPerseverative_pass1[j_sandwich]) {
+      finalIsPerseverative[j_sandwich] = true; // Final listeyi güncelle
+      const currentResponse = result[j_sandwich];
+      if (!currentResponse) continue; // Güvenlik kontrolü
+      const responseCategories = currentResponse.responseCategories || [];
 
+      // Yanıtın gerçek doğruluğunu ve müphemliğini kontrol et
+      const isError = !responseCategories.includes(currentResponse.currentCategory);
+      const isCorrect = !isError;
+      const isAmbiguous = responseCategories.length > 1; // Müphemlik kontrolü
 
-    // --- Final Hesaplamalar ve State Güncellemeleri ---
-    let finalPerseveratifTepki = 0;
-    let correctedPerseveratifHata = 0;
-    for (let i = 0; i < finalIsPerseverative.length; i++) {
-      if (finalIsPerseverative[i]) {
-        finalPerseveratifTepki++;
-        // Hata sayımı için finalDetails'e bakmak önemli. Çünkü sandviç ile eklenenler hata olabilir.
-        if (finalDetails[i]?.isPerseverative && finalDetails[i]?.isError) {
-          correctedPerseveratifHata++;
-        }
+      // Hata mesajı ve perseverasyon tipini belirle
+      let explanationText = `Sandviç Kuralı: ${sandwichCategory}`;
+      let perseverationType = 'SANDWICH'; // Varsayılan sandviç tipi
+
+      if (isAmbiguous && isError) {
+          // ----> İSTEDİĞİNİZ DURUM <----
+          explanationText = `Sandviç Kuralı (Müphem Hata): ${sandwichCategory}`;
+          perseverationType = 'SANDWICH_AMBIGUOUS_ERROR'; // Özel tip ata
+      } else if (isAmbiguous && isCorrect) {
+          // İsteğe bağlı: Müphem doğru sandviçler için de ayrı tip atanabilir
+           explanationText = `Sandviç Kuralı (Müphem Doğru): ${sandwichCategory}`;
+           perseverationType = 'SANDWICH_AMBIGUOUS_CORRECT';
+      } else if (!isAmbiguous && isError) {
+           explanationText = `Sandviç Kuralı (Saf Hata): ${sandwichCategory}`;
+           perseverationType = 'SANDWICH_PURE_ERROR';
+      } else { // !isAmbiguous && isCorrect
+           explanationText = `Sandviç Kuralı (Saf Doğru): ${sandwichCategory}`;
+           perseverationType = 'SANDWICH_PURE_CORRECT';
       }
+
+      const debugMsg = `(Aşama 2 Revize) Sandviç Kuralı (${prevPerseverativeIndex + 1} ile ${nextConfirmingPureIndex + 1} arası) uygulandı: Kategori: ${sandwichCategory}`;
+      if (!finalDetails[j_sandwich]) finalDetails[j_sandwich] = {}; // Initialize if not exists
+
+      finalDetails[j_sandwich] = {
+        ...finalDetails[j_sandwich],
+        isPerseverative: true,
+        isError: isError, // Gerçek hata durumunu koru
+        isCorrectPerseverative: isCorrect, // Gerçek doğruluğu koru (PH için önemli)
+        explanation: explanationText, // Detaylı açıklama
+        perseverativeCategory: sandwichCategory,
+        perseverationType: perseverationType, // <<<--- YENİ ALAN: Özel durumu belirtir
+        debugInfo: `${
+          finalDetails[j_sandwich]?.debugInfo || ""
+        } | ${debugMsg}`,
+      };
     }
+  } // End Loop 5
+} // <<<<<<------ BU PARANTEZİN OLDUĞUNDAN EMİN OLUN: End Block 4 (if isChainUnbroken)
+} // <<<<<<------ Bu parantez Block 1'i bitirir (if prevPerseverativeIndex)
+} // Aşama 2 döngü sonu
+
+// --- Final Hesaplamalar ve State Güncellemeleri ---
+let finalPerseveratifTepki = 0;
+let correctedPerseveratifHata = 0;
+for (let i = 0; i < finalIsPerseverative.length; i++) {
+if (finalIsPerseverative[i]) {
+finalPerseveratifTepki++;
+// Hata sayımı için finalDetails'e bakmak önemli. Çünkü sandviç ile eklenenler hata olabilir.
+if (finalDetails[i]?.isPerseverative && finalDetails[i]?.isError) {
+  correctedPerseveratifHata++;
+}
+}
+}
 
     // Konsola yazdırma - Debugging için
     //console.log("Final Perseverative Details:", finalDetails.map((d, i) => ({ index: i + 1, ...d })));
@@ -448,7 +476,7 @@ export default function DebugResults() {
     setPerseverativeDetails(finalDetails);
 
 
-  }, [result]); // useEffect sonu
+  }, [result]); 
 
 
   
@@ -456,9 +484,9 @@ export default function DebugResults() {
   const scores = useMemo(() => {
     // GÜVENLİK KONTROLÜ: result dizisinin her elemanının geçerli olduğunu varsayalım
     // Eğer result içinde null/undefined elemanlar olabiliyorsa, tüm döngülerde kontrol eklenmeli.
-    if (!result?.length || !result.every(r => r)) {
-         console.warn("useMemo: result verisi boş veya geçersiz eleman içeriyor.");
-         return null; // Geçersiz veri varsa hesaplama yapma
+    if (!result?.length || !result.every(r => r)) { // <--- BURADA FAZLA PARANTEZ VAR
+      console.warn("useMemo: result verisi boş veya geçersiz eleman içeriyor.");
+      return null;
     }
 
     // Temel sayımlar
@@ -1217,72 +1245,83 @@ const globalIndex = columnStartIndex + index;
                  item.currentCategory
                );
                 // PH: Perseveratif AMA doğru. P: Perseveratif VE yanlış.
-               const isPH = detail?.isPerseverative && detail?.isCorrectPerseverative;
-               const isP = detail?.isPerseverative && !detail?.isCorrectPerseverative; // Veya detail.isError
+                const isP_candidate = detail?.isPerseverative && !detail?.isCorrectPerseverative; // Yanlış perseveratif adayı
+                const isPH_candidate = detail?.isPerseverative && detail?.isCorrectPerseverative; // Doğru perseveratif adayı
+                const showPh = detail?.perseverationType === 'SANDWICH_AMBIGUOUS_ERROR';
 
-               return (
-                 <S.Line
-                   key={globalIndex}
-                   //onClick={() => setSelectedCards((prev) => [...prev, item])} // Tıklama işlevi kaldırıldı, gerekiyorsa eklenir
-                 >
-                   {/* Kutucuklar */}
-                   <S.Box isNumber isCorrect={isCorrect}>
-                     {globalIndex + 1}
-                   </S.Box>
-                   <S.Box isCorrect={item.responseCategories?.includes("color")}>
-                     R
-                   </S.Box>
-                   <S.Box
-                     isCorrect={item.responseCategories?.includes("figure")}
-                   >
-                     Ş
-                   </S.Box>
-                   <S.Box isCorrect={item.responseCategories?.includes("count")}>
-                     M
-                   </S.Box>
-                   <S.Box
-                     isCorrect={ // D: Hiçbirine uymuyorsa VE eşleşme varsa (yani başka bir kartla eşleşti?) Bu mantık WCST'ye uymuyor olabilir. Hata işareti olabilir.
-                       !["color", "figure", "count"].some((c) =>
-                         item.responseCategories?.includes(c)
-                       ) && (item.responseCategories?.length > 0)
-                     }
-                     // Belki de bu 'Diğer Hata' olmalı? Yanlış ve P değilse?
-                     // Şimdilik orijinal mantığı koruyalım.
-                   >
-                     D
-                   </S.Box>
-                   {/* Perseverasyon göstergeleri */}
-                    <S.Box
-                     isCorrect={false} // P sembolü için isCorrect=false
-                     style={{
-                       visibility: isP ? "visible" : "hidden",
-                       color: "#dcdcdc", // P Rengi (Kırmızı)
-                       fontWeight: "bold",
-                       backgroundColor: "transparent", // Arkaplan yok
-                       border: "none", // Çerçeve yok
-                       marginLeft: "5px", // Soldan boşluk
-                       minWidth: '15px', // Minimum genişlik
-                       textAlign: 'center' // Ortala
-                     }}
-                   >
-                     P
-                   </S.Box>
-                   <S.Box
-                     isCorrect={true} // PH sembolü için isCorrect=true (ama arka planı yine de şeffaf yapalım)
-                     style={{
-                       visibility: isPH ? "visible" : "hidden",
-                       color: "#e74c3c",
-                       fontWeight: "bold",
-                       backgroundColor: "transparent",
-                       border: "none",
-                       marginLeft: "0px", // P ile yan yana ise boşluksuz
-                       minWidth: '15px',
-                       textAlign: 'center'
-                     }}
-                   >
-                     PH
-                   </S.Box>
-                 </S.Line>
+                return (
+      <S.Line key={globalIndex}>
+      {/* Kutucuklar */}
+    <S.Box isNumber isCorrect={isCorrect}>
+      {globalIndex + 1}
+    </S.Box>
+    <S.Box isCorrect={item.responseCategories?.includes("color")}>
+      R
+    </S.Box>
+    <S.Box
+      isCorrect={item.responseCategories?.includes("figure")}
+    >
+      Ş
+    </S.Box>
+    <S.Box isCorrect={item.responseCategories?.includes("count")}>
+      M
+    </S.Box>
+    <S.Box
+      isCorrect={ // D: Hiçbirine uymuyorsa VE eşleşme varsa (yani başka bir kartla eşleşti?) Bu mantık WCST'ye uymuyor olabilir. Hata işareti olabilir.
+        !["color", "figure", "count"].some((c) =>
+          item.responseCategories?.includes(c)
+        ) && (item.responseCategories?.length > 0)
+      }
+      // Belki de bu 'Diğer Hata' olmalı? Yanlış ve P değilse?
+      // Şimdilik orijinal mantığı koruyalım.
+    >
+      D
+    </S.Box>
+    
+    {/* Perseverasyon göstergeleri için tutarlı bir konteyner */}
+    <div style={{ 
+      display: 'flex', 
+      marginLeft: '5px', 
+      width: '30px', 
+      justifyContent: 'center'
+    }}>
+      {/* P göstergesi */}
+      {(isP_candidate && !showPh) && (
+        <span style={{
+          color: "#dcdcdc", 
+          fontWeight: "bold",
+          minWidth: '20px',
+          textAlign: 'center'
+        }}>
+          P
+        </span>
+      )}
+
+      {/* PH göstergesi */}
+      {isPH_candidate && (
+        <span style={{
+          color: "#e74c3c", 
+          fontWeight: "bold", 
+          minWidth: '20px',
+          textAlign: 'center'
+        }}>
+          PH
+        </span>
+      )}
+
+      {/* Ph göstergesi */}
+      {showPh && (
+        <span style={{
+          color: "#dcdcdc", 
+          fontWeight: "bold",
+          minWidth: '20px',
+          textAlign: 'center'
+        }}>
+          Ph
+        </span>
+      )}
+    </div>
+  </S.Line>
                );
              })}
            </S.Column>
