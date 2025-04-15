@@ -848,13 +848,13 @@ if (finalDetails[i]?.isPerseverative && finalDetails[i]?.isError) {
   // --- YENİ BASİTLEŞTİRİLMİŞ KARŞILAŞTIRMA MANTIĞI ---
   if (metricDirection === 1) { // Yüksek skorun iyi olması gereken metrikler
       if (userValue < normMean) {
-          interpretation = "Kötü";
+          interpretation = "Ort. Altı";
           color = "#e74c3c"; // Kırmızı
       }
       // userValue >= normMean ise zaten "Normal" ve Mavi kalacak
   } else if (metricDirection === -1) { // Düşük skorun iyi olması gereken metrikler (Yani yüksek skor KÖTÜ)
       if (userValue > normMean) {
-          interpretation = "Kötü";
+          interpretation = "Ort. Altı";
           color = "#e74c3c"; // Kırmızı
       }
       // userValue <= normMean ise zaten "Normal" ve Mavi kalacak
@@ -1050,76 +1050,44 @@ if (finalDetails[i]?.isPerseverative && finalDetails[i]?.isError) {
 
                 {/* Metriklerin Dikey Listesi */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, flexGrow: 1 }}>
-                  {metrics.map((metric, index) => {
+                {metrics.map((metric, index) => {
                     if (!metric.comparisonResult) return null;
-                    const { userValue, normMean, normSD, interpretation, color } = metric.comparisonResult;
+                    // NORM DEĞERİNİ DE ALIYORUZ
+                    const { userValue, normMean, interpretation, color } = metric.comparisonResult;
                     const formattedValue = userValue;
+                    // Norm ortalamasını da formatlayalım
+                    const formattedNormMean = (normMean && normMean !== 'N/A') ? normMean : 'N/A';
 
                     return (
                       // ----- Metrik Satırı -----
-<div
-  key={index}
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "8px 0",
-    borderBottom: index < metrics.length - 1 ? '1px solid rgba(255, 255, 255, 0.08)' : 'none',
-    minHeight: '30px',
-    gap: '10px' // Etiket ve yorum arası boşluk
-  }}
->
-  {/* Metrik Etiketi ve Değer */}
-  <span
-    style={{
-      // Mevcut stiller
-      fontSize: 14,
-      color: "rgba(255, 255, 255, 0.85)",
-      fontWeight: 400,
-      flex: '1 1 auto', // Esneklik için önemli
-      lineHeight: '1.4',
+                      <div key={index} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: index < metrics.length - 1 ? '1px solid rgba(255, 255, 255, 0.08)' : 'none', minHeight: '30px', gap: '10px' }}>
+                        {/* Metrik Etiketi, Kullanıcı Değeri ve NORM DEĞERİ */}
+                        <span style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.85)", fontWeight: 400, flex: '1 1 auto', lineHeight: '1.4', backgroundColor: 'rgba(255, 255, 255, 0.05)', padding: '10px 10px', borderRadius: '12px' }}>
+                          {metric.label}: <span style={{ fontWeight: 500, color: 'white' }}>{formattedValue}</span>
+                          {/* <<< --- YENİ EKLENEN NORM GÖSTERİMİ --- >>> */}
+                          {formattedNormMean !== 'N/A' && (
+                              <span style={{ marginLeft: '10px', color: 'rgba(255, 255, 255, 0.6)', fontSize: '12px' }}>
+                                  (Norm: {formattedNormMean})
+                              </span>
+                          )}
+                          {/* <<< --- NORM GÖSTERİMİ SONU --- >>> */}
+                        </span>
 
-      // --- YENİ EKLENEN STİLLER ---
-      backgroundColor: 'rgba(255, 255, 255, 0.05)', // Açık renk arka plan (beyaz %5 opaklık)
-      padding: '10px 10px', // İç boşluk (yukarı/aşağı 4px, sağ/sol 10px)
-      borderRadius: '12px', // Köşeleri yuvarlatma
-      // --- YENİ EKLENEN STİLLER SONU ---
-     }}
-  >
-    {metric.label}: <span style={{ fontWeight: 500, color: 'white' }}>{formattedValue}</span>
-  </span>
-
-  {/* ----- >>> YORUM SPAN (Değişiklik Yok) <<< ----- */}
-  {interpretation && interpretation !== "Yorum Yok" && (
-      <span
-        style={{
-          color: color || "#bdc3c7",
-          fontWeight: 600,
-          fontSize: 12,
-          backgroundColor: `${color || "#bdc3c7"}25`,
-          padding: "8px 14px",
-          borderRadius: 12,
-          minWidth: '90px',
-          textAlign: 'center',
-          flexShrink: 0,
-          transition: 'all 0.2s ease',
-        }}
-        title={`Norm Ort: ${normMean || 'N/A'}${normSD ? ` (± ${normSD})` : ''}`}
-      >
-        {interpretation || "N/A"}
-      </span>
-   )}
-   {/* ----- >>> YORUM SPAN SONU <<< ----- */}
-
+                        {/* Yorum Span (Değişiklik Yok) */}
+                        {interpretation && interpretation !== "Yorum Yok" && (
+                            <span style={{ color: color || "#bdc3c7", fontWeight: 600, fontSize: 12, backgroundColor: `${color || "#bdc3c7"}25`, padding: "8px 14px", borderRadius: 12, minWidth: '90px', textAlign: 'center', flexShrink: 0, transition: 'all 0.2s ease' }} title={`Norm Ort: ${formattedNormMean}`}>
+                              {interpretation || "N/A"}
+                            </span>
+                         )}
                       </div>
                       // ----- Metrik Satırı Sonu -----
                     );
-                  })} {/* metrics.map sonu */}
-                </div> {/* Metrik listesi sonu */}
-              </div> // Kategori sütunu sonu
-            ))} {/* populatedComparisons.map sonu */}
-          </div> {/* Grid Container Sonu */}
-        </div> // Ana return div sonu
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       );
   }; // generateClinicalComment sonu
 

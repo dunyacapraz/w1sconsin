@@ -1,511 +1,397 @@
-import styled from "styled-components";
+import styled, { keyframes, createGlobalStyle } from "styled-components";
 import { NavLink } from "react-router-dom";
 
+// Global Stiller (Aynı kalıyor)
+export const GlobalStyle = createGlobalStyle`
+  /* @import url(...); */
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--body-bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    color: var(--text-heading);
+  }
+
+  a {
+    color: var(--accent); // Ana vurgu rengini kullanalım
+    text-decoration: none;
+    transition: color 0.3s ease;
+    &:hover {
+        color: var(--primary-light); // Hover'da biraz daha açık mor
+    }
+  }
+
+  ul, ol {
+    list-style: none;
+  }
+`;
+
+// --- Animasyonlar ---
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+// Glow animasyonu (Renkler ve yoğunluk güncellendi)
+const pulseGlow = keyframes`
+  0% { box-shadow: 0 0 4px var(--accent-glow-faded), 0 0 8px var(--accent-glow-faded); }
+  50% { box-shadow: 0 0 10px var(--accent-glow), 0 0 18px var(--accent-glow); } // Daha az yayılma
+  100% { box-shadow: 0 0 4px var(--accent-glow-faded), 0 0 8px var(--accent-glow-faded); }
+`;
+
+// Buton Hover Parlama Animasyonu (Artık kullanılmıyor, kaldırılabilir)
+// const shine = keyframes`
+//   0% { left: -50%; }
+//   100% { left: 150%; }
+// `;
+
+
+// --- Ana Stiller ---
 export const Wrapper = styled.div`
-  --body-bg: #101117;
-  --primary: #6c5ce7;
-  --primary-light: #8477e6;
-  --secondary: #a8a5e6;
-  --text: #e6e6fa;
-  --text-light: rgba(230, 230, 250, 0.7);
-  --card-bg: #1a1b26;
-  --card-border: rgba(108, 92, 231, 0.1);
-  --hover-effect: linear-gradient(145deg, #1f2029, #181920);
+  // --- Daha AZ NEON MOR ODAKLI Renk Paleti ---
+  --body-bg: #12101E; // Biraz daha derin arka plan
+  --primary-deep: #4A148C; // Daha Koyu Mor
+  --primary: #7B1FA2; // Ana Mor (Biraz daha koyu ve az doygun)
+  --primary-light: #9C27B0; // Açık Mor (Biraz daha koyu)
+  /* Yeni Vurgu Rengi: Daha sakin bir lavanta/mor */
+  --accent: #B39DDB; // ESKİ #DA70D6 YERİNE (Material Design Deep Purple 200)
+  --accent-glow: rgba(179, 157, 219, 0.6); // Daha az opak glow
+  --accent-glow-faded: rgba(179, 157, 219, 0.3); // Daha da az opak faded glow
 
-  background: var(--body-bg);
-  min-height: 100vh;
-  color: var(--text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  padding: 2rem;
-  line-height: 1.6;
+  --text: #DCD1F5; // Hafif leylak tonlu metin
+  --text-light: rgba(220, 209, 245, 0.7);
+  --text-heading: #F5F0FF; // Neredeyse beyaz başlık
+
+  --card-bg: linear-gradient(145deg, #1F1C2E, #1A1828); // Hafif güncellenmiş gradyan
+  --card-border: rgba(67, 18, 77, 0.2); // --primary-light tonlu border
+  --card-hover-border: var(--accent); // Hover'da yeni vurgu rengi border
+  --card-shadow: rgba(0, 0, 0, 0.45); // Biraz daha belirgin gölge
+  /* Yeni vurgu rengi ile daha hafif hover gölgesi */
+  --card-hover-shadow: rgba(179, 157, 219, 0.18);
+
+  min-height: 100vh;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+
+  // Arka Plan Gradyanları (Renkler ve yoğunluk güncellendi)
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(74, 20, 140, 0.08) 0%, transparent 70%); // --primary-deep tonu, daha az opak
+    filter: blur(110px); // Biraz daha fazla blur
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    right: -20%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, var(--accent-glow-faded) 0%, transparent 70%); // Yeni --accent tonu, faded
+    filter: blur(110px); // Biraz daha fazla blur
+    z-index: 0;
+    pointer-events: none;
+  }
 `;
+
+// Header (Yükseklik, padding ve margin azaltıldı)
 export const Header = styled.header`
-  text-align: center;
-  padding: 10rem 0; /* Yüksek padding ile genişletildi */
-  border-radius: 1rem;
-  margin-bottom: 2rem; /* Alt boşluk artırıldı */
-  position: relative;
-  overflow: hidden;
-  color: white;
-  
-  /* Resim daha net gözükmesi için opaklık azaltıldı */
-  background: url('/images/header-bg.jpg') center/cover no-repeat;
-  background-color: var(--primary);
-  
-  /* Fallback gradient (resim yüklenmezse) */
-  background-color: var(--primary);
-
+  min-height: 35vh; /* Önceki 60vh'den azaltıldı */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem; /* Üst/alt padding 4rem'den 2rem'e düşürüldü */
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem; /* Alt boşluk 4rem'den 2rem'e düşürüldü */
 `;
 
-
-
+// Başlık (Gradyan ve gölge güncellendi)
 export const Title = styled.h1`
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  background: linear-gradient(45deg, #fff 30%, var(--secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  position: relative;
-  z-index: 1;
+  font-size: clamp(3rem, 8vw, 5rem); /* Max boyutu biraz küçülttük */
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  /* Beyaz -> Yeni, daha sakin vurgu rengi gradyanı */
+  background: linear-gradient(90deg, var(--text-heading) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  animation: ${fadeIn} 1s ease-out;
+  /* Daha hafif gölge */
+  text-shadow: 0 0 12px var(--accent-glow-faded);
 `;
 
+// Altbaşlık (Renk aynı kalabilir)
 export const Subtitle = styled.h2`
-  font-size: 1.4rem;
-  font-weight: 300;
-  opacity: 0.9;
-  color: rgba(230, 230, 250, 0.8);
-  max-width: 700px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem); /* Max boyutu biraz küçülttük */
+  font-weight: 300;
+  color: var(--text-light);
+  max-width: 700px;
+  margin: 0 auto 1.5rem auto; /* Alt boşluk biraz azaltıldı */
+  animation: ${fadeInUp} 0.8s 0.3s ease-out backwards;
 `;
 
-export const Content = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
+// Content (Aynı)
+export const Content = styled.main`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem 2rem;
+  position: relative;
+  z-index: 1;
 `;
 
-export const HeroSection = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-  margin-bottom: 5rem;
-  padding: 3rem;
-  background: var(--card-bg);
-  border-radius: 1.5rem;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--card-border);
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -30%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(108, 92, 231, 0.15) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  h2 {
-    font-size: 2.8rem;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(45deg, var(--text) 30%, var(--secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  p {
-    font-size: 1.2rem;
-    color: var(--text-light);
-    line-height: 1.6;
-  }
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-`;
-
-export const InfoGraphic = styled.div`
-  width: 100%;
-  height: 300px;
-  background: linear-gradient(145deg, rgba(108, 92, 231, 0.2) 0%, rgba(26, 27, 38, 0.5) 100%);
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px dashed var(--primary);
-
-  &::before {
-    content: '📊';
-    font-size: 4rem;
-    opacity: 0.5;
-  }
-`;
-
-export const DescriptionBox = styled.div`
-  background: var(--card-bg);
-  padding: 3rem;
-  border-radius: 1.5rem;
-  margin-bottom: 3rem;
-  border: 1px solid var(--card-border);
-
-  h3 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    color: var(--text);
-  }
-
-  p {
-    color: var(--text-light);
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-  }
-`;
-
-export const FeatureGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin: 3rem 0;
-`;
-
-export const FeatureCard = styled.div`
-  padding: 2rem;
-  background: var(--card-bg);
-  border-radius: 1rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  border: 1px solid var(--card-border);
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  }
-
-  svg {
-    color: var(--primary);
-    margin-bottom: 1rem;
-    font-size: 2.5rem;
-  }
-
-  h4 {
-    color: var(--text);
-    margin: 1rem 0;
-    font-size: 1.3rem;
-  }
-
-  p {
-    color: var(--text-light);
-    line-height: 1.6;
-    font-size: 1rem;
-  }
-`;
-
-export const ProcedureSection = styled.div`
-  margin-top: 3rem;
-  padding: 2rem;
-  background: rgba(108, 92, 231, 0.05);
-  border-radius: 1rem;
-  border: 1px solid var(--card-border);
-
-  h4 {
-    color: var(--text);
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-  }
-
-  ol {
-    padding-left: 1.5rem;
-    
-    li {
-      color: var(--text-light);
-      margin-bottom: 1rem;
-      padding-left: 0.5rem;
-      font-size: 1.1rem;
-      
-      &::marker {
-        color: var(--primary);
-        font-weight: bold;
-      }
-    }
-  }
-`;
-
+// Test Bölümü (Aynı)
 export const TestSection = styled.section`
-  margin: 4rem 0;
-  
-  h3 {
-    color: var(--text);
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    text-align: center;
-  }
+  margin-bottom: 5rem;
+
+  h3 {
+    color: var(--text-heading);
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    margin-bottom: 3rem;
+    text-align: center;
+    font-weight: 600;
+    animation: ${fadeInUp} 0.8s 0.5s ease-out backwards;
+  }
 `;
 
+// TestGrid (Aynı)
 export const TestGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+  align-items: stretch; /* Grid öğelerinin dikeyde esnemesini sağlar (genelde varsayılan) */
 `;
 
+// Kart (Flexbox eklendi)
 export const TestCard = styled.div`
-  background: var(--card-bg);
-  padding: 2rem;
-  border-radius: 1rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--card-border);
+  /* ====> YENİ: Flexbox Ayarları <==== */
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Grid'in stretch özelliğinden tam faydalanmak için */
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    
-    &::before {
-      opacity: 1;
-    }
-  }
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 30px var(--card-shadow);
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+              box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+              border-color 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  /* Kartların animasyon gecikmesi index.jsx'te veriliyor */
+  animation: ${fadeInUp} 0.6s ease-out forwards;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(120deg, rgba(108, 92, 231, 0.1) 0%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
+  // Glow efekti (Renk ve opaklık güncellendi)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(145deg, var(--accent-glow), transparent 70%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  &:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 40px var(--card-hover-shadow);
+    border-color: var(--card-hover-border);
+
+    &::before {
+      opacity: 0.8;
+    }
+  }
+
+  h4 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-heading);
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    min-height: 4.8em;
+    /* flex-grow: 1; */
+  }
 `;
 
+// İkon (Aynı)
 export const TestIcon = styled.div`
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  color: var(--primary);
+  margin-bottom: 1.5rem;
+  color: var(--accent); // Yeni vurgu rengi
+  svg {
+      width: 40px;
+      height: 40px;
+      /* Daha hafif glow */
+      filter: drop-shadow(0 0 8px var(--accent-glow-faded));
+  }
 `;
 
+// Detay Listesi (Aynı)
 export const DetailList = styled.ul`
-  padding-left: 1.5rem;
-  margin: 1.5rem 0;
-  
-  li {
-    color: var(--text-light);
-    margin-bottom: 0.8rem;
-    font-size: 1rem;
-    position: relative;
-    padding-left: 1.5rem;
-    
-    &::before {
-      content: '✓';
-      color: var(--primary);
-      position: absolute;
-      left: 0;
-      font-weight: bold;
-    }
-  }
+  margin: 1.5rem 0;
+
+  li {
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    position: relative;
+    padding-left: 1.8rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent); // Yeni vurgu rengi
+      border-radius: 50%;
+      /* Daha hafif glow */
+      box-shadow: 0 0 6px var(--accent-glow-faded);
+    }
+  }
 `;
 
+// Buton (margin-top: auto eklendi)
 export const StartButton = styled(NavLink)`
-  display: inline-block;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-  color: white !important;
-  padding: 0.8rem 1.8rem;
-  border-radius: 0.7rem;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
+  display: block;
   position: relative;
+  padding: 1rem 2.5rem;
+  font-size: 0.79rem;
+  font-weight: 300;
+  color: rgb(255, 255, 255) !important;
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  margin-top: auto;
+  margin-bottom: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
-  font-size: 1rem;
-  margin-top: 1rem;
-  width: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 1) 0%,
+    rgba(79, 70, 229, 1) 100%
+  );
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.08);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   text-align: center;
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    transition: 0.5s;
-  }
-
-  &:hover::after {
-    left: 100%;
-  }
-
+  /* Hover efekti */
   &:hover {
-    box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
     transform: translateY(-2px);
+    background: linear-gradient(
+      135deg,
+      rgba(129, 132, 251, 1) 0%,
+      rgba(99, 90, 239, 1) 100%
+    );
+    border-color: rgba(79, 70, 229, 0.5);
+    box-shadow: 0 5px 10px rgba(106, 90, 205, 0.15);
+  }
+
+  /* Aktif durum */
+  &:active {
+    transform: translateY(0);
+    background: linear-gradient(
+      135deg,
+      rgba(79, 70, 229, 1) 0%,
+      rgba(59, 50, 209, 1) 100%
+    );
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.15);
   }
 `;
+// İletişim Bölümü (Animasyon eklendi)
+export const ContactSection = styled.section`
+  margin: 6rem auto 4rem auto;
+  max-width: 500px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  /* Bölümün kendisi için hafif bir gecikme */
+  /* animation: ${fadeInUp} 0.8s 0.8s ease-out backwards; */
+  /* Opacity'yi 0 yapalım ki çocuklar animasyonla gelsin */
+  /* opacity: 0; */
 
-export const InfoLink = styled(NavLink)`
-  display: inline-block;
-  color: var(--primary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  margin-top: 1.5rem;
-  transition: all 0.3s ease;
-  position: relative;
-  padding-bottom: 0.2rem;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: var(--primary);
-    transition: width 0.3s ease;
-  }
-
-  &:hover::after {
-    width: 100%;
-  }
-
-  &:hover {
-    color: var(--secondary);
-  }
+  h3 {
+    color: var(--text-heading);
+    margin-bottom: 2rem;
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
+    font-weight: 600;
+    /* ====> YENİ: Başlık Animasyonu <==== */
+    opacity: 0; /* Başlangıçta gizle */
+    animation: ${fadeInUp} 0.6s 1.0s ease-out forwards; /* Kartlardan sonra başlasın */
+  }
 `;
 
-export const FaqSection = styled.section`
-  background: var(--card-bg);
-  padding: 1.5rem; /* Daha az padding */
-  border-radius: 0.8rem; /* Daha küçük border-radius */
-  margin-top: 2rem; /* Daha az üst boşluk */
-  border: 1px solid var(--card-border);
-  max-width: 500px; /* Sabit genişlik (opsiyonel) */
-  margin-left: auto;
-  margin-right: auto;
-  
-  h3 {
-    color: var(--text);
-    margin-bottom: 1.5rem; /* Başlık alt boşluğu azaltıldı */
-    font-size: 1.5rem; /* Daha küçük font */
-    text-align: center;
-  }
-`;
-
-export const FaqItem = styled.div`
-  padding: 1.5rem;
-  background: rgba(108, 92, 231, 0.05);
-  border-radius: 0.8rem;
-  margin-bottom: 1.5rem;
-  border: 1px solid var(--card-border);
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(108, 92, 231, 0.1);
-  }
-
-  dt {
-    color: var(--text);
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-  }
-
-  dd {
-    color: var(--text-light);
-    line-height: 1.6;
-    margin-left: 0;
-    font-size: 1rem;
-  }
-`;
-
-export const RunBox = styled.div`
-  margin-top: 2rem;
-  text-align: center;
-`;
-
-export const RunLink = styled(NavLink)`
-  text-decoration: none;
-`;
-
-export const Button = styled.button`
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 0.7rem;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
-  display: inline-block;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
-  }
-`;
-
-export const Image = styled.img`
-  max-width: 100%;
-  height: auto;
-  margin: 2rem 0;
-  border-radius: 0.8rem;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--card-border);
-`;
-// İletişim konteynırı
-export const ContactContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-`;
-
-// İletişim öğesi
-export const ContactItem = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  background: rgba(108, 92, 231, 0.05);
-  border-radius: 0.8rem;
-  border: 1px solid rgba(108, 92, 231, 0.1);
-
-  svg {
-    color: #6c5ce7;
-    flex-shrink: 0;
-  }
-
-  h4 {
-    color: #e6e6fa;
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-  }
-
-  p {
-    color: rgba(230, 230, 250, 0.8);
-    line-height: 1.6;
-  }
-
-  a {
-    color: #8477e6;
-    text-decoration: none;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #6c5ce7;
-      text-decoration: underline;
-    }
-  }
-`;
-
-// Sosyal medya linkleri
+// Sosyal Medya Linkleri (Animasyon eklendi)
 export const SocialLinks = styled.div`
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  margin-top: 3rem;
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  /* ====> YENİ: Link Grubu Animasyonu <==== */
+  opacity: 0; /* Başlangıçta gizle */
+  animation: ${fadeInUp} 0.6s 1.1s ease-out forwards; /* Başlıktan biraz sonra başlasın */
 
-  a {
-    color: #a8a5e6;
-    transition: color 0.3s ease;
 
-    &:hover {
-      color: #6c5ce7;
-    }
-  }
+  a {
+    color: var(--text-light);
+    transition: color 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+    display: inline-block;
+
+    &:hover {
+      color: var(--accent); // Yeni vurgu rengi
+      transform: scale(1.2);
+      /* Daha hafif hover glow */
+      filter: drop-shadow(0 0 4px var(--accent-glow-faded));
+    }
+
+    svg {
+      width: 26px;
+      height: 26px;
+    }
+  }
 `;
