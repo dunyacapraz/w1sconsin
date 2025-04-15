@@ -23,7 +23,7 @@ function Sidebar() {
         <>
           <S.Menu to="/Iowa-kumar-test">Iowa Kumar Testi</S.Menu>
           <S.Menu to="/d2-test-result">D2 Puan Hesaplaması</S.Menu>
-          <S.Menu to="/wcst-test-page">WCST Sonuç</S.Menu>
+          <S.Menu to="/wcst-test-result">WCST Sonuç</S.Menu>
           <S.LogoutButton onClick={logout}>
             Çıkış Yap
           </S.LogoutButton>
