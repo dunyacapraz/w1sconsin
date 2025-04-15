@@ -131,138 +131,147 @@ export const ClinicalSection = styled.div`
 `;
 
 export const DemographicSection = styled.div`
-  margin: 30px auto;
+
   width: 100%;
   max-width: 800px;
-  padding: 2rem;
-  border-radius: 16px;
-  border: 1px solid rgba(0, 167, 207, 0.3); // Ana mavi tonunda border
-  box-shadow: 0 8px 32px rgba(0, 167, 207, 0.1);
-  backdrop-filter: blur(12px);
+  padding: 2.5rem; /* Biraz daha fazla boşluk */
+  border-radius: 12px; /* Results ile aynı köşe yuvarlaklığı */
+  background-color: rgba(40, 40, 60, 0.65); /* Results ile benzer koyu arka plan */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Mavi yerine ince beyaz/gri border */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Results ile benzer gölge */
+  backdrop-filter: blur(10px); /* Blur efekti kalabilir, hoş durabilir */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:hover {
-    box-shadow: 0 8px 32px rgba(0, 167, 207, 0.2);
-  }
+  /* Hover efekti kaldırıldı veya daha nötr hale getirildi */
+  /* &:hover {
+     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25); // Hafifçe artan gölge
+  } */
 
   h3 {
-    color: #00a7cf; // Başlık rengi klinik yorumla aynı
-    font-size: 1.5rem;
-    font-weight: 600;
+    color: #ffffff; /* Başlık rengi beyaz (Results gibi) */
+    font-size: 1.6rem; /* Boyut Results ile tutarlı */
+    font-weight: 500; /* Kalınlık Results ile tutarlı */
     text-align: center;
     margin: 0 0 2rem 0;
     position: relative;
-    
+    padding-bottom: 1rem; /* Alt çizgi için boşluk */
+
     &::after {
       content: '';
       position: absolute;
-      bottom: -10px;
+      bottom: 0px; /* Tam altına */
       left: 50%;
       transform: translateX(-50%);
-      width: 60px;
-      height: 2px;
-      background: #00a7cf;
-      border-radius: 2px;
+      width: 50px; /* Genişlik biraz daha az */
+      height: 1px; /* Daha ince çizgi */
+      background: rgba(255, 255, 255, 0.2); /* Mavi yerine soluk beyaz/gri çizgi */
+      border-radius: 1px;
     }
   }
 
   .input-group {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1.75rem; /* Biraz daha fazla boşluk */
+    margin-bottom: 2.5rem; /* Alt boşluk */
   }
 
   .input-field {
     label {
-      color: rgba(255, 255, 255, 0.9); // Klinik yorum metin rengiyle uyumlu
-      font-size: 0.95rem;
-      margin-bottom: 0.5rem;
+      color: rgba(255, 255, 255, 0.75); /* Results etiket rengiyle aynı */
+      font-size: 0.9rem; /* Biraz daha küçük etiket */
+      margin-bottom: 0.6rem;
       display: block;
-      padding-left: 8px;
+      padding-left: 4px; /* Hafif iç boşluk */
+      font-weight: 400;
     }
 
     input, select {
       width: 100%;
       padding: 0.875rem 1.25rem;
-      border: 1px solid rgba(0, 167, 207, 0.3); // Ana mavi tonunda border
-      border-radius: 8px;
-      background: rgba(0, 167, 207, 0.05); // Hafif mavi arkaplan
+      border: 1px solid rgba(255, 255, 255, 0.15); /* İnce beyaz/gri border */
+      border-radius: 8px; /* Daha yumuşak köşe */
+      background: rgba(0, 0, 0, 0.2); /* Mavi yerine koyu transparan arka plan */
       color: white;
       font-size: 1rem;
       transition: all 0.3s ease;
 
       &::placeholder {
-        color: rgba(255, 255, 255, 0.4);
+        color: rgba(255, 255, 255, 0.4); /* Placeholder rengi iyi */
       }
 
       &:focus {
         outline: none;
-        border-color: #00a7cf;
-        box-shadow: 0 0 0 3px rgba(0, 167, 207, 0.2);
-        background: rgba(0, 167, 207, 0.1);
+        border-color: rgba(255, 255, 255, 0.5); /* Odaklanınca border rengi hafif belirginleşir */
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05); /* Çok hafif beyaz/gri glow */
+        background: rgba(0, 0, 0, 0.3); /* Odaklanınca arka plan hafif açılır */
       }
     }
 
     select {
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300a7cf'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+        /* Ok ikonu rengini değiştir (örneğin açık gri #aaaaaa) */
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23aaaaaa'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1em;
+      appearance: none; /* Tarayıcı varsayılan okunu kaldır */
+      padding-right: 2.5rem; /* Ok için yer aç */
     }
   }
 
   .download-section {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
 
     button {
-      background: linear-gradient(135deg, #00a7cf 0%, #0088cc 100%); // Klinik yorum gradienti
+      /* Önceki mor buton stilini kullan */
+      background: linear-gradient(
+        135deg,
+        rgba(99, 102, 241, 1) 0%,
+        rgba(79, 70, 229, 1) 100%
+      );
+       box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); /* Mor tonunda hafif gölge */
       color: white;
-      padding: 1rem 2.5rem;
+      padding: 0.875rem 2.25rem; /* Biraz daha kompakt buton */
       border: none;
       border-radius: 8px;
-      font-size: 1.1rem;
+      font-size: 1.05rem; /* Biraz daha küçük yazı */
+      font-weight: 600;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(
-          45deg,
-          transparent,
-          rgba(255, 255, 255, 0.15),
-          transparent
-        );
-        transform: rotate(45deg);
-        transition: all 0.5s ease;
-      }
+
+      /* Parlama efekti aynı kalabilir veya kaldırılabilir */
+      /* &::before { ... } */
 
       &:hover {
         transform: translateY(-2px);
-        &::before {
-          left: 100%;
-        }
+        box-shadow: 0 7px 20px rgba(99, 102, 241, 0.3); /* Hover'da gölgeyi artır */
+        /* &::before { left: 100%; } */
       }
 
+       &:active {
+         transform: translateY(0);
+         box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+       }
+
       &:disabled {
-        background: #2d3b4d;
+        background: #4a4866; /* Önceki disabled rengi */
         color: rgba(255, 255, 255, 0.4);
         cursor: not-allowed;
+        box-shadow: none;
       }
     }
 
     .download-note {
-      color: rgba(255, 255, 255, 0.6); // Klinik yorum ikincil metin rengi
-      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6); /* İkincil metin rengi iyi */
+      font-size: 0.85rem; /* Biraz daha küçük not */
       margin-top: 1rem;
-      max-width: 400px;
+      max-width: 450px; /* Genişliği ayarlanabilir */
       margin-left: auto;
       margin-right: auto;
+      line-height: 1.5; /* Okunabilirlik için satır yüksekliği */
     }
   }
 `;
@@ -393,93 +402,127 @@ export const PerseverativeSection = styled.div`
 `;
 
 export const Results = styled.div`
-  margin-top: 30px;
-  width: 100%; /* 44% yerine 100% */
-  max-width: 1600px; /* İsteğe bağlı maksimum genişlik */
-  margin-left: auto;
-  box-shadow: 0 8px 32px rgba(0, 167, 207, 0.1);
-  margin-right: auto;
-  
-  table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 8px;
-  table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 8px;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    background-color: transparent;
-    overflow: visible;
-  }
+  background-color: rgba(40, 40, 60, 0.6); /* Hafif yarı saydam koyu arka plan */
+  border-radius: 12px; /* Modern yuvarlak köşeler */
+  padding: 2rem 2.5rem; /* İç boşluk */
+  margin: 3rem auto; /* Dikey boşluk ve yatay ortalama */
+  max-width: 650px; /* Maksimum genişlik */
+  width: 90%;       /* Duyarlı genişlik */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Daha belirgin gölge */
+  color: #e0e0e0; /* Genel metin rengi (açık gri) */
 
-  thead {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    backdrop-filter: blur(4px);
-    color: #fff;
-  }
-
-  th {
-    padding: 15px 20px;
-    text-align: left;
-    font-weight: 500;
-    font-size: 0.95rem;
+  /* Başlık stili (h3) */
+  h3 {
+    text-align: center;
+    margin-bottom: 2rem; /* Başlık altı boşluk */
+    color: #ffffff; /* Saf beyaz başlık */
+    font-size: 1.8rem; /* Daha büyük başlık */
+    font-weight: 500; /* Orta kalınlık */
     letter-spacing: 0.5px;
-    border-bottom: ${(props) => (props.isSelected ? '2px solid #00a7cf' : 'none')}; /* Kategori seçildiğinde altına çizik ekle */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* Başlık altına ince çizgi */
+    padding-bottom: 1rem; /* Çizgi ile başlık arasına boşluk */
   }
 
-  td {
-    padding: 14px 20px;
-    background-color: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.3s ease;
-    backdrop-filter: blur(2px);
+  /* Yükleniyor mesajı stili */
+  .loading-message {
+     text-align: center;
+     color: rgba(255, 255, 255, 0.7); /* Biraz soluk */
+     font-style: italic;
+     padding: 3rem 0; /* Dikey boşluk */
+     font-size: 1.1rem;
   }
 
-  tbody tr:hover td {
-    background-color: rgba(255, 255, 255, 0.08);
-    transform: translateX(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  @media (max-width: 768px) {
-    padding: 15px;
-    td {
-      padding: 12px 15px;
-      font-size: 0.9rem;
+  /* Mobil cihazlar için ayarlamalar */
+  @media screen and (max-width: 700px) {
+    padding: 1.5rem;
+    max-width: 95%;
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .loading-message {
+        font-size: 1rem;
     }
   }
 `;
 
 export const DetailedTable = styled.table`
-  margin-top: 20px;
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  background-color: transparent;
-  overflow: visible;
-  th {
-    padding: 12px 20px;
-    text-align: left;
-    font-weight: 500;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
+  border-collapse: collapse; /* Hücre aralıklarını kaldır */
+  border-spacing: 0;
+
+  tbody tr {
+    /* Satırları ayıran ince çizgiler */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease-in-out; /* Hover efekti için geçiş */
+
+    &:last-child {
+      border-bottom: none; /* Son satırda çizgi olmasın */
+    }
+
+    /* Satır üzerine gelince hafif vurgu */
+    &:hover {
+       background-color: rgba(255, 255, 255, 0.05);
+    }
   }
 
   td {
-    padding: 10px 15px;
-    background-color: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.3s ease;
-    backdrop-filter: blur(2px);
+    padding: 1rem 0.75rem; /* Hücre içi boşluk (dikey daha fazla) */
+    vertical-align: middle; /* Dikey ortalama */
+    font-size: 1rem; /* Standart yazı boyutu */
+
+    /* Etiket sütunu (ilk hücre) */
+    &:first-child {
+      text-align: left;
+      color: rgba(255, 255, 255, 0.75); /* Etiketler biraz daha soluk */
+      padding-right: 1.5rem; /* Etiket ve değer arasına boşluk */
+      font-weight: 400; /* Normal kalınlık */
+    }
+
+    /* Değer sütunu (son hücre) */
+    &:last-child {
+      text-align: right;
+      font-weight: 600; /* Değerler daha kalın */
+      color: #ffffff; /* Değerler tam beyaz */
+      font-feature-settings: 'tnum'; /* Sayıların hizalı görünmesini sağlar (tabular nums) */
+      letter-spacing: 0.5px; /* Hafif harf aralığı */
+    }
   }
 
-  tbody tr:hover td {
-    background-color: rgba(255, 255, 255, 0.08);
-    transform: translateX(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* Küçük ekranlarda tablo hücreleri için ayarlama */
+  @media screen and (max-width: 480px) {
+     td {
+       padding: 0.8rem 0.4rem;
+       font-size: 0.9rem; /* Daha küçük yazı */
+
+       /* İsteğe bağlı: Etiketleri değerlerin üstüne yığma */
+       /*
+       display: block; // Blok element yap
+       text-align: left !important; // Hizalamayı sola zorla
+       width: 100%;
+
+       &:first-child {
+         padding-bottom: 0.1rem; // Etiket altı minik boşluk
+         color: rgba(255, 255, 255, 0.6);
+         font-weight: 500;
+         font-size: 0.8rem; // Etiketi daha küçük yap
+       }
+        &:last-child {
+          padding-left: 0; // Sol boşluğu sıfırla
+          font-weight: 600;
+       }
+       */
+     }
+     /* Küçük ekranda satır çizgilerini kaldırıp boşluk bırakma */
+     /*
+     tbody tr {
+        border-bottom: none;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+        display: block;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); // Bloklar arasına çizgi
+     }
+     */
   }
 `;
 
