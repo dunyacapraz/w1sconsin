@@ -1,23 +1,27 @@
+// src/App.jsx
+import React from "react"; // React importunu ekleyin (genellikle zaten vardır)
 import Sidebar from "./layouts/sidebar-layout";
 import ContentArea from "./layouts/content-area-layout";
 import { WcstProvider } from "./components/context";
+import { AuthProvider } from "./contexts/AuthContext"; // <-- AuthProvider'ı buraya import edin
 import { Helmet, HelmetProvider } from "react-helmet-async";
+// Eğer ContentArea Outlet kullanmıyorsa ve rotalarınız App'in children'ı ise Outlet'i import edin
+// import { Outlet } from "react-router-dom";
 
+// operationalMode'u AuthProvider ile sarın
 const operationalMode = (
-  <WcstProvider>
-    <HelmetProvider>
-      <Helmet>
-        <title>Cognitive Check</title>
-        <meta name="description" content="Wisconsin Kart Eşleme Testi (WCST) ile bilişsel esnekliğinizi değerlendirin. Kural değişimlerine nasıl uyum sağladığınızı ölçün." />
-        <meta property="og:title" content="Wisconsin Kart Eşleme Testi (WCST)" />
-        <meta property="og:description" content="Wisconsin Kart Eşleme Testi ile zihinsel esnekliğinizi test edin ve bilişsel yeteneklerinizi keşfedin." />
-        <meta property="og:image" content="https://w1sconsin.netlify.app/wcst-preview.jpg" />
-        <meta property="og:url" content="https://w1sconsin.netlify.app/" />
-      </Helmet>
-      <Sidebar />
-      <ContentArea />
-    </HelmetProvider>
-  </WcstProvider>
+  <AuthProvider> {/* <-- AuthProvider'ı en dışa veya WcstProvider'ın hemen dışına ekleyin */}
+    <WcstProvider>
+      <HelmetProvider>
+        <Helmet>
+          <title>Cognitive Check</title>
+          {/* Diğer meta etiketleri */}
+        </Helmet>
+        <Sidebar />
+        <ContentArea /> {/* Veya <Outlet /> */}
+      </HelmetProvider>
+    </WcstProvider>
+  </AuthProvider>
 );
 
 function App() {

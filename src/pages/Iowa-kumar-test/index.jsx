@@ -148,7 +148,7 @@ function IowaGamblingTask() {
     // Bir sonraki deneme için başlangıç zamanını güncelle (opsiyonel, her deneme için süre isterseniz)
     // startTimeRef.current = Date.now(); 
 
-    if (cardsSelected + 1 >= 100) {
+    if (cardsSelected + 1 >= 3) {
       setGameOver(true);
     }
   };
