@@ -286,33 +286,21 @@ function WcstWindow() {
 
     // setResult güncellemesi
     setResult((prevResult) => [
-      ...prevResult,
-      {
-        cardIndex: cardIndex, // Kart sırasını ekleyelim
-        response: currentCard,
-        targetMatch: { // Hedef kartla eşleşme detayları
-           color: colorMatch,
-           figure: figureMatch,
-           count: countMatch,
-        },
-        isCorrect: isCorrect,
-        isOther: isOther, // Hiçbir özellikle eşleşmeme durumu
-        isAmbiguous: isAmbiguousAnswer, // Birden fazla özellikle eşleşme durumu
-        responseCategories: responseCategories, // Kullanıcının hangi kategorilere göre eşleştirdiği
-        currentRule: category, // O an geçerli olan kural
-        // categoryComplete: categoryCorrect >= 10, // Kategori tamamlama durumu (bu anlık durum için yanıltıcı olabilir)
-        perseveration: {
-           isPerseverativeResponse: isPerseverativeResponse, // Genel perseveratif yanıt
-           isPerseverativeError: isPerseverativeError, // Perseveratif Hata
-           perseverativeCategory: perseverativeCategory, // Hangi kategoriye takıldığı
-        },
-        isNonPerseverativeError: isNonPerseverativeError, // Diğer hatalar
-        // --- İleri Düzey Skorlar (Henüz hesaplanmıyor) ---
-        // isConceptualLevel: false, // Kavramsal düzey yanıtı (örn: 3 doğru arka arkaya) - correctStreak ile ilgili
-        // isSetupFailure: false,    // Seti sürdürememe hatası
-        // isLearningToLearn: false, // Öğrenmeyi öğrenme
-      },
-    ]);
+  ...prevResult,
+  {
+    cardIndex: cardIndex,
+    response: currentCard,
+    targetMatch: {
+      color: colorMatch,
+      figure: figureMatch,
+      count: countMatch,
+    },
+    isCorrect: isCorrect,
+    isOther: isOther,
+    responseCategories: responseCategories,
+    currentRole: category,
+  },
+]);
 
     setWarn(isCorrect); // Görsel geri bildirim için
   };
