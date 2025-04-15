@@ -10,7 +10,7 @@ import {
   ResultContainer,
 } from "./styles";
 
-// Norm tablosu verileri
+// Norm tablosu verileri (değişmedi)
 const TN_NORM = [
   { min: 165, max: 171, percentile: 0.1 }, { min: 172, max: 178, percentile: 0.2 },
   { min: 179, max: 186, percentile: 0.3 }, { min: 187, max: 193, percentile: 0.4 },
@@ -108,14 +108,15 @@ const D2PuanHesaplama = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
+  // **Düzeltme 1: Percentile değerini 100 ile çarpmadan döndürüyoruz**
   const getPercentile = (value, type) => { 
     if (type === 'TN') {
       const entry = TN_NORM.find(e => value >= e.min && value <= e.max);
-      return entry ? entry.percentile * 100 : 0;
+      return entry ? entry.percentile : 0; // Çarpmayı kaldırdık
     }
     if (type === 'TN-E') {
       const entry = TN_E_NORM.find(e => value >= e.min && value <= e.max);
-      return entry ? entry.percentile * 100 : 0;
+      return entry ? entry.percentile : 0; // Çarpmayı kaldırdık
     }
     if (type === 'HataYuzdesi') {
       const entry = HATA_YUZDESI_NORM.find(e => value >= e.value);
@@ -128,6 +129,7 @@ const D2PuanHesaplama = () => {
     return 0;
   };
 
+  // **Düzeltme 2: Yorumlama mantığını orijinal percentile değerlerine göre ayarlıyoruz**
   const getInterpretation = (percentile, type) => {
     let interpretation = "";
     let color = "";
@@ -494,17 +496,15 @@ const D2PuanHesaplama = () => {
             </div>
           ))}
         </div>
- 
-
 
         {/* Konsantrasyon Puanı */}
         <div style={{
-        marginTop: 20,
-        padding: 20,
-        backgroundColor: "rgba(9, 82, 100, 0.2)",
-        borderRadius: 10,
-        border: "1px solid rgba(0, 0, 0, 0.1)",
-      }}>
+          marginTop: 20,
+          padding: 20,
+          backgroundColor: "rgba(9, 82, 100, 0.2)",
+          borderRadius: 10,
+          border: "1px solid rgba(0, 0, 0, 0.1)",
+        }}>
           <h4 style={{
             margin: "0 0 15px 0",
             color: "#00a7cf",
@@ -549,8 +549,6 @@ const D2PuanHesaplama = () => {
       </TitleContainer>
     
       <InputContainer>
-       
-        
         <InputRow>
           <Label>TN:</Label>
           <Input
