@@ -12,18 +12,10 @@ export const SideBar = styled.div`
   background-color: var(--sidebar-color);
 
   @media screen and (max-width: 700px) {
-  width: 100%;
-  position: fixed; /* Bu satır kenar çubuğunu sabitler */
-  top: 0; /* Bu satır onu en üste yerleştirir */
-  left: 50%; /* Bu satır onu yatay merkeze taşır */
-  transform: translateX(-50%); /* Bu satır genişliği hesaba katarak tam olarak ortalar */
-  display: flex;
-  align-items: center;
-  padding: 10px 0;
-  z-index: 100; /* Diğer içeriklerin üzerinde kalmasını sağlar */
-   flex-direction: row; /* Menü öğelerini yatay olarak düzenler */
-  justify-content: space-around;
-}
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
 `;
 
 export const Logo = styled(NavLink)`
@@ -241,12 +233,11 @@ export const LoginButton = styled.button`
   }
 
   /* Mobil Uyumluluk */
-@media (max-width: 768px) {
-  padding: 12px 20px;
-  margin: 15px auto; /* Bu satır butonu yatay olarak ortalar */
-  width: 80%; /* Genişliği istediğiniz gibi ayarlayın */
-  display: block; /* Blok seviyesinde bir element yapar */
-}
+  @media (max-width: 768px) {
+    padding: 12px 20px;
+    margin: 15px auto;
+    width: 85%;
+
     &:hover {
       transform: none;
       box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
