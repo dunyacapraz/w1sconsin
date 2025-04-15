@@ -1,3 +1,4 @@
+// anasayfa/index.jsx
 import React from "react";
 import { NavLink } from "react-router-dom";
 import * as S from "./styles"; // Stillere ek olarak GlobalStyle'ı da import et
@@ -67,7 +68,7 @@ function Anasayfa() {
         <S.Header>
           {/* Başlık ve Altbaşlık Header içinde stillendiriliyor */}
           <S.Title>CognitiveCheck</S.Title>
-          <S.Subtitle>created by Safer</S.Subtitle>
+          <S.Logo src="/images/logo.png" alt="logo" />
         </S.Header>
 
         <S.Content>
