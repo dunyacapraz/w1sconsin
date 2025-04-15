@@ -20,7 +20,7 @@ function WcstWindow() {
   const [correctStreak, setCorrectStreak] = useState(0);
 
   // Test durum kontrolü
-  const testCompleted = completedCategories >= 6 || cardIndex >= 127;
+  const testCompleted = completedCategories >= 2 || cardIndex >= 127;
 
   const clickHandle = ({ target }) => {
     if (open || testCompleted) return;
@@ -40,7 +40,7 @@ function WcstWindow() {
       const newStreak = correctStreak + 1;
       setCorrectStreak(newStreak);
       
-      if (newStreak === 10) {
+      if (newStreak === 3) {
         setCompletedCategories(prev => prev + 1);
         setCorrectStreak(0);
         setCategory(prev => 
