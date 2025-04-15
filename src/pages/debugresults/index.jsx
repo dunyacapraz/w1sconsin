@@ -218,7 +218,7 @@ export default function DebugResults() {
             }
         }
 
-      const canStartChain = firstCategoryDone && isPure && isIncorrect && !matchesPreviousCategory;
+        const canStartChain = firstCategoryDone && isPure && isIncorrect; // !matchesPreviousCategory kaldırıldı
 
        if (!details_pass1[i]) details_pass1[i] = {}; // Initialize if not exists
 
@@ -1332,50 +1332,43 @@ const globalIndex = columnStartIndex + index;
       <S.RightPanel> {/* RightPanel stilini kullanmaya devam edelim */}
 
         {/* Skor Tablosu (Güncellenmiş hali) */}
-        <S.Results>
-          <div style={{ marginBottom: 30 }}>
-            <h3 style={{textAlign: 'center', marginBottom: '20px', color: '#eee'}}>Test Skorları</h3>
-            {scores ? (
-              <S.DetailedTable> {/* Daha stilize tablo için DetailedTable kullanıldı */}
-                <tbody>
-                  {[
-                    {label: "Toplam tepki sayısı", key: "totalResponses"},
-                    {label: "Toplam yanlış sayısı", key: "totalErrors"},
-                    {label: "Toplam doğru sayısı", key: "totalCorrect"},
-                    {label: "Tamamlanan kategori sayısı", key: "completedCategories"},
-                    {label: "Perseveratif tepki (P+PH)", key: "perseverativeResponses"},
-                    {label: "Perseveratif hata (P)", key: "perseverativeErrors"},
-                    {label: "Perseveratif olmayan hata", key: "nonPerseverativeErrors"},
-                    {label: "Perseveratif hata yüzdesi (%)", key: "perseverativeResponsePercentage"},
-                    {label: "İlk kategori deneme sayısı", key: "firstCategoryTrials"},
-                    // ---->> YENİ EKLENEN SATIR <<----
-                    {label: "Kavramsal düzey tepki sayısı", key: "conceptualResponses"}, // Sayı eklendi
-                    // ---->>---------------------<<----
-                    {label: "Kavramsal düzey tepki yüzdesi (%)", key: "conceptualResponsePercentage"},
-                    {label: "Kurulumu sürdürmede başarısızlık", key: "failureToMaintainSet"},
-                    {label: "Öğrenmeyi öğrenme", key: "learningToLearn"},
-                  ].map(
-                    ({label, key}, i) =>
-                       (scores.hasOwnProperty(key) && scores[key] !== undefined && scores[key] !== null) && (
-                        <tr key={i}>
-                          <td>{label}</td>
-                          <td>
-                            {/* Değerleri formatla */}
-                            {typeof scores[key] === "number"
-                              ? scores[key].toFixed(Number.isInteger(scores[key]) ? 0 : 2)
-                              : scores[key] // String ise direkt yaz
-                            }
-                          </td>
-                        </tr>
-                      )
-                  )}
-                </tbody>
-              </S.DetailedTable>
-            ) : (
-               <p style={{textAlign: 'center', color: 'rgba(255,255,255,0.7)'}}>Skorlar hesaplanıyor...</p>
-            )}
-          </div>
-        </S.Results>
+       <S.Results>
+  <div className="mb-8">
+    <h3 className="text-center text-xl text-gray-200 mb-5">Test Skorları</h3>
+    {scores ? (
+      <S.DetailedTable>
+        <tbody>
+          {[
+            { label: "Toplam tepki sayısı", key: "totalResponses" },
+            { label: "Toplam yanlış sayısı", key: "totalErrors" },
+            { label: "Toplam doğru sayısı", key: "totalCorrect" },
+            { label: "Tamamlanan kategori sayısı", key: "completedCategories" },
+            { label: "Perseveratif tepki (P+PH)", key: "perseverativeResponses" },
+            { label: "Perseveratif hata (P)", key: "perseverativeErrors" },
+            { label: "Perseveratif olmayan hata", key: "nonPerseverativeErrors" },
+            { label: "Perseveratif hata yüzdesi (%)", key: "perseverativeResponsePercentage" },
+            { label: "İlk kategori deneme sayısı", key: "firstCategoryTrials" },
+            { label: "Kavramsal düzey tepki sayısı", key: "conceptualResponses" },
+            { label: "Kavramsal düzey tepki yüzdesi (%)", key: "conceptualResponsePercentage" },
+            { label: "Kurulumu sürdürmede başarısızlık", key: "failureToMaintainSet" },
+            { label: "Öğrenmeyi öğrenme", key: "learningToLearn" },
+          ].map(({ label, key }, index) => {
+            const value = scores[key];
+            if (value === undefined || value === null) return null;
+            return (
+              <tr key={index}>
+                <td>{label}</td>
+                <td>{typeof value === "number" ? value.toFixed(Number.isInteger(value) ? 0 : 2) : value}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </S.DetailedTable>
+    ) : (
+      <p className="text-center text-white/70">Skorlar hesaplanıyor...</p>
+    )}
+  </div>
+</S.Results>
 
         {/* Demografik Bilgiler ve İndirme (Değişiklik yok) */}
         <S.DemographicSection>
