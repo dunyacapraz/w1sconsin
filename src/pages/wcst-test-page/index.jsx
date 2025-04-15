@@ -82,7 +82,7 @@ function WcstWindow() {
 
   const totalCards = randomizedCards.length; // Toplam kart sayısını alalım
   const testCompleted =
-    completedCategories >= 6 || // >= 6 daha güvenli olabilir
+    completedCategories >= 1 || // >= 6 daha güvenli olabilir
     cardIndex >= 128 || // Maksimum kart sınırı
     (totalCards > 0 && cardIndex >= totalCards); // Veya destedeki tüm kartlar bittiğinde
 
@@ -198,7 +198,7 @@ function WcstWindow() {
       setCorrectStreak(newCorrectStreak);
       const newCategoryCorrect = categoryCorrect + 1;
       setCategoryCorrect(newCategoryCorrect);
-      if (newCategoryCorrect >= 10 && completedCategories < 6) { // Kategori tamamlama koşulu
+      if (newCategoryCorrect >= 3 && completedCategories < 6) { // Kategori tamamlama koşulu
         setPendingCategoryChange(true);
       }
       // Doğru cevapta persevaratif durum sıfırlanmalı mı?
