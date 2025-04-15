@@ -298,7 +298,8 @@ function WcstWindow() {
     isCorrect: isCorrect,
     isOther: isOther,
     responseCategories: responseCategories,
-    currentRole: category,
+    currentCategory: category,
+    prevCategory: prevCategory, // Eklenen alan
   },
 ]);
 
