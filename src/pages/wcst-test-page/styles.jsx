@@ -361,3 +361,19 @@ export const CategoryItem = styled.span`
   font-size: 1.2em;
   font-weight: bold;
 `;
+
+export const GeneralMessage = styled.p`
+  font-size: 1.2rem;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+export const ProgressIndicator = styled.div`
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-top: 20px;
+  text-align: center;
+  width: 100%; // Genişlik eklemek iyi olabilir
+  margin-left: 22px;
+`;
