@@ -236,7 +236,7 @@ export const LoginButton = styled.button`
   @media (max-width: 768px) {
     padding: 12px 20px;
     margin: 15px auto;
-    width: 85%;
+    width: 100%;
 
     &:hover {
       transform: none;
