@@ -67,7 +67,7 @@ function Anasayfa() {
         <S.Header>
           {/* Başlık ve Altbaşlık Header içinde stillendiriliyor */}
           <S.Title>CognitiveCheck</S.Title>
-          <S.Subtitle>Nöropsikolojik Yeteneklerinizi Keşfedin ve Geliştirin</S.Subtitle>
+          <S.Subtitle>created by Safer</S.Subtitle>
         </S.Header>
 
         <S.Content>
