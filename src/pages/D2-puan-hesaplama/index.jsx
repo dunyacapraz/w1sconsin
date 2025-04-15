@@ -11,7 +11,12 @@ import {
 } from "./styles"; // Orijinal stiller kullanılacak
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 // Norm tablosu verileri (değişmedi)
+=======
+// Norm tablosu verileri (TN_NORM, TN_E_NORM, HATA_YUZDESI_NORM, FR_NORM)
+// ... (Norm tabloları buraya gelecek - önceki koddan alınacak) ...
+>>>>>>> Stashed changes
 =======
 // Norm tablosu verileri (TN_NORM, TN_E_NORM, HATA_YUZDESI_NORM, FR_NORM)
 // ... (Norm tabloları buraya gelecek - önceki koddan alınacak) ...
@@ -111,6 +116,7 @@ const D2PuanHesaplama = () => {
   const [result, setResult] = useState(null);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   // **Düzeltme 1: Percentile değerini 100 ile çarpmadan döndürüyoruz**
   const getPercentile = (value, type) => { 
     if (type === 'TN') {
@@ -185,6 +191,64 @@ const D2PuanHesaplama = () => {
     let color = "";
     let explanation = "";
 =======
+=======
+  // getPercentile fonksiyonu
+  const getPercentile = (value, type) => {
+    const numericValue = parseFloat(value);
+    if (isNaN(numericValue)) return 0;
+
+    let normTable;
+    let lowerIsBetter = false;
+
+    switch (type) {
+      case 'TN': normTable = TN_NORM; break;
+      case 'TN-E': normTable = TN_E_NORM; break;
+      case 'HataYuzdesi': normTable = HATA_YUZDESI_NORM; lowerIsBetter = true; break;
+      case 'FR': normTable = FR_NORM; lowerIsBetter = true; break;
+      default: return 0;
+    }
+
+    if (!normTable || normTable.length === 0) return 0;
+
+    if (normTable[0].min !== undefined) { // Aralık bazlı norm (TN, TN-E)
+        const entry = normTable.find(e => numericValue >= e.min && numericValue <= e.max);
+        if (entry) return entry.percentile;
+        if (numericValue < normTable[0].min) return 0;
+        if (numericValue > normTable[normTable.length - 1].max) return 100;
+        return 0; // Aralığa düşmediyse (teorik olarak olmamalı)
+    } else { // Eşik bazlı norm (Hata%, FR)
+        let percentile = 0;
+        if (lowerIsBetter) {
+            // Yüksek değer düşük yüzdelik anlamına gelir
+            for (let i = 0; i < normTable.length; i++) {
+                if (numericValue <= normTable[i].value) {
+                    percentile = normTable[i].percentile;
+                } else {
+                    break; // Eşiği aştı, önceki yüzdelik geçerli
+                }
+            }
+            // En düşük eşikten bile iyiyse (çok az hata/fark) 100 döndür
+            if (percentile === normTable[normTable.length - 1].percentile && numericValue < normTable[normTable.length - 1].value) {
+                return 100;
+            }
+             // En yüksek eşikten bile kötüyse (çok hata/fark), 0 döndürelim (ya da en düşük yüzdelik)
+             if (percentile === 0 && numericValue > normTable[0].value) {
+                 return normTable[0].percentile > 0 ? normTable[0].percentile : 0; // En düşük %'yi döndür veya 0
+            }
+        } else {
+            // Yüksek değer yüksek yüzdelik anlamına gelir (bu D2'de yok ama genel yapı)
+            for (let i = normTable.length - 1; i >= 0; i--) {
+                if (numericValue >= normTable[i].value) {
+                    percentile = normTable[i].percentile;
+                    break;
+                }
+            }
+        }
+        return percentile;
+    }
+  };
+
+>>>>>>> Stashed changes
 // getInterpretation fonksiyonu (HER YORUM İÇİN AYRI AÇIKLAMA)
 const getInterpretation = (score, type) => {
   let interpretation = "";
@@ -199,6 +263,9 @@ const getInterpretation = (score, type) => {
   };
   let color = colors.na;
   let explanation = "Yorumlanamadı veya skor norm dışı."; // Varsayılan açıklama
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
   // Yüzdelik dilimlerini yorumlama
@@ -235,8 +302,132 @@ const getInterpretation = (score, type) => {
       interpretation = "Çok Yüksek";
       color = colors.excellent;
       explanation = `${metricName} yüzdeliği (${percentile}) sıra dışı düzeyde. ${isTN ? 'Olağanüstü hız ve verimlilik.' : 'Olağanüstü performans, maksimum verimlilik.'}`;
+<<<<<<< Updated upstream
+=======
     }
 
+  } else if (type === 'HataYuzdesi') {
+    const percentile = score;
+     if (percentile === 0 || percentile === 100 && score > HATA_YUZDESI_NORM[0].value) { // %0 veya çok yüksek hata için norm dışı
+         interpretation = "N/A"; color = colors.na; explanation = `Hata oranı (${score.toFixed(1)}%) norm tablosu dışında veya hesaplanamadı. Yüzdelik: ${percentile}.`;
+     }
+     else if (percentile < 10) {
+      interpretation = "Sorun"; color = colors.bad;
+      explanation = `Hata oranı yüzdeliği (${percentile}) çok düşük, bu da çok yüksek hata oranına işaret ediyor. Belirgin dikkat dağınıklığı veya odaklanma güçlüğü olabilir.`;
+    } else if (percentile <= 25) {
+      interpretation = "Sınırda"; color = colors.warning;
+      explanation = `Hata oranı yüzdeliği (${percentile}) düşük, bu da beklenenden yüksek hata oranını gösteriyor. Dikkatte dalgalanmalar olabilir.`;
+    } else if (percentile <= 75) {
+      interpretation = "Normal"; color = colors.normal;
+      explanation = `Hata oranı yüzdeliği (${percentile}) normal aralıkta. Yapılan hatalar beklenen sınırlar içinde. Yeterli odaklanma.`;
+    } else if (percentile <= 90) {
+      interpretation = "İyi"; color = colors.good;
+      explanation = `Hata oranı yüzdeliği (${percentile}) yüksek, bu da düşük hata oranına işaret ediyor. Dikkat performansı istikrarlı.`;
+    } else { // 90 üzeri (100 dahil)
+      interpretation = "Çok İyi / Yüksek"; color = colors.very_good;
+      explanation = `Hata oranı yüzdeliği (${percentile}) çok yüksek, bu da çok düşük hata oranını gösteriyor. Üstün odaklanma becerisi.`;
+    }
+
+  } else if (type === 'FR') {
+    const percentile = score;
+     if (percentile === 0 || percentile === 100 && score > FR_NORM[0].value) { // %0 veya çok yüksek FR için norm dışı
+         interpretation = "N/A"; color = colors.na; explanation = `Performans farkı (${score}) norm tablosu dışında veya hesaplanamadı. Yüzdelik: ${percentile}.`;
+     }
+     else if (percentile < 10) {
+      interpretation = "Kritik İstikrarsızlık"; color = colors.bad;
+      explanation = `Performans istikrarı yüzdeliği (${percentile}) çok düşük. Test bölümleri arasında aşırı hız farkları var. Motivasyon veya dikkat sürekliliğinde ciddi sorunlar olabilir.`;
+    } else if (percentile <= 25) {
+      interpretation = "Riskli Dağılım"; color = colors.warning;
+      explanation = `Performans istikrarı yüzdeliği (${percentile}) düşük. Test boyunca hız tutarlı değil. Dikkat yönetiminde zorluklar olabilir.`;
+    } else if (percentile <= 75) {
+      interpretation = "Normal Varyasyon"; color = colors.normal;
+      explanation = `Performans istikrarı yüzdeliği (${percentile}) normal aralıkta. Hızdaki hafif farklılıklar doğal konsantrasyon dalgalanmalarıyla uyumlu.`;
+    } else if (percentile <= 90) {
+      interpretation = "İstikrarlı Performans"; color = colors.good;
+      explanation = `Performans istikrarı yüzdeliği (${percentile}) yüksek. Çalışma hızı oldukça tutarlı. Dikkat sürekliliği iyi.`;
+    } else { // 90 üzeri (100 dahil)
+      interpretation = "Çok İstikrarlı / Yüksek"; color = colors.very_good;
+      explanation = `Performans istikrarı yüzdeliği (${percentile}) çok yüksek. Çalışma hızında minimum değişkenlik. Yüksek zihinsel dayanıklılık.`;
+    }
+
+  } else if (type === 'E1') {
+    const deger = parseInt(score);
+    if (isNaN(deger)) {
+        interpretation = "N/A";
+        color = colors.na;
+        explanation = "E1 değeri girilmedi.";
+    } else if (deger >= 30) {
+        interpretation = "Çok Düşük Seçici Dikkat";
+        color = colors.bad;
+        explanation = `E1 değeri yüksek (${deger}). Seçici dikkatin çok düşük olduğunu, uyaranları filtrelemede ciddi güçlükler yaşandığını gösteriyor.`;
+    } else if (deger >= 20) {
+        interpretation = "Düşük Seçici Dikkat";
+        color = colors.warning;
+        explanation = `E1 değeri (${deger}) belirgin derecede yüksek. Bu durum, seçici dikkatin düşük olduğunu ve dikkat dağıtıcı unsurlara karşı yetersiz kaldığınızı işaret ediyor.`;
+    } else if (deger >= 10) {
+        interpretation = "Orta Seçici Dikkat";
+        color = colors.normal;
+        explanation = `E1 değeri (${deger}) orta seviyede. Seçici dikkat performansınız ne çok düşük ne de ideal, dikkat dağıtıcı unsurlara karşı belirli bir direnç mevcut.`;
+    } else {
+        interpretation = "Yüksek Seçici Dikkat";
+        color = colors.good;
+        explanation = `E1 değeri düşük (${deger}). Bu, seçici dikkatinizin güçlü olduğunu, uyaranları etkili şekilde filtreleyebildiğinizi gösteriyor.`;
+    }
+  } else if (type === 'E2') {
+    const deger = parseInt(score);
+    if (isNaN(deger)) {
+        interpretation = "N/A";
+        color = colors.na;
+        explanation = "E2 değeri girilmedi.";
+    } else if (deger >= 30) {
+        interpretation = "Ciddi Öğrenme Güçlüğü";
+        color = colors.bad;
+        explanation = `Öğrenme sürecinde ciddi güçlükler var (${deger} hata). Özellikle zihinsel engelli bireylerde bu yüksek değer, görsel ayrımlaştırma ve yönergeye uyum sağlama konusunda belirgin sorunlar yaşandığını gösterir.`;
+    } else if (deger >= 20) {
+        interpretation = "Orta Derecede Öğrenme Güçlüğü";
+        color = colors.warning;
+        explanation = `Öğrenme sürecinde orta seviyede zorluklar mevcut (${deger} hata). Görsel ayrım ve yönergelere uyum sağlama konusunda belirli problemlerin yaşanabileceğini işaret ediyor.`;
+    } else if (deger >= 15) {
+        interpretation = "Hafif Öğrenme Güçlüğü";
+        color = colors.normal;
+        explanation = `Öğrenme sürecinde bazı aksaklıklar gözlenmiş (${deger} hata). Küçük çaplı görsel ayrım ve yönergeye uyum sorunları olabilse de genel performans kabul edilebilir seviyededir.`;
+    } else {
+        interpretation = "Normal Öğrenme Yeteneği";
+        color = colors.good;
+        explanation = `Öğrenme sürecinde çok az hata görülmüş (${deger} hata) veya hiç hata yapılmamış. Görsel ayrım ve yönergelere uyum konusunda başarılı bir performans sergilenmiş.`;
+    }
+}
+
+
+  // Açıklamaya yorumu ekleyen kısmı kaldırıyoruz, çünkü açıklamalar artık doğrudan atanıyor.
+  // if (explanation && interpretation !== "N/A" && interpretation !== "-") {
+  //     explanation += ` (${interpretation})`;
+  // } else if (!explanation && interpretation !== "N/A" && interpretation !== "-") {
+  //     explanation = interpretation;
+  // }
+
+  return { interpretation, color, explanation };
+};
+
+
+  // handleCalculate fonksiyonu (Opsiyonel alan kontrolü ile)
+  const handleCalculate = () => {
+    const mandatoryInputs = { TM, H1, H2, maxTM, minTM };
+    for (const key in mandatoryInputs) {
+      const value = mandatoryInputs[key];
+      if (value === "" || isNaN(parseInt(value)) || parseInt(value) < 0) { // Negatif kontrolü eklendi
+        alert(`Lütfen '${key.toUpperCase()}' alanı için geçerli, negatif olmayan bir sayısal değer girin. Bu alan zorunludur.`);
+        return;
+      }
+>>>>>>> Stashed changes
+    }
+    const tmInt = parseInt(TM);
+    const h1Int = parseInt(H1);
+    const h2Int = parseInt(H2);
+    const maxTMInt = parseInt(maxTM);
+    const minTMInt = parseInt(minTM);
+
+<<<<<<< Updated upstream
   } else if (type === 'HataYuzdesi') {
     const percentile = score;
      if (percentile === 0 || percentile === 100 && score > HATA_YUZDESI_NORM[0].value) { // %0 veya çok yüksek hata için norm dışı
@@ -367,6 +558,18 @@ const getInterpretation = (score, type) => {
          return;
      }
 
+=======
+    // Min/Max kontrolü
+    if (minTMInt > maxTMInt) {
+        alert("Minimum Satır TN, Maksimum Satır TN değerinden büyük olamaz.");
+        return;
+    }
+     if (maxTMInt > tmInt) {
+         alert("Maksimum Satır TN, Toplam İşaretlenen Madde (TN) sayısından büyük olamaz.");
+         return;
+     }
+
+>>>>>>> Stashed changes
 
     const ilk4Int = (ilk4 !== "" && !isNaN(parseInt(ilk4)) && parseInt(ilk4)>=0) ? parseInt(ilk4) : null;
     const orta6Int = (orta6 !== "" && !isNaN(parseInt(orta6)) && parseInt(orta6)>=0) ? parseInt(orta6) : null;
@@ -515,6 +718,7 @@ const getInterpretation = (score, type) => {
         </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         {/* Konsantrasyon Puanı */}
         <div style={{
           marginTop: 20,
@@ -537,6 +741,8 @@ const getInterpretation = (score, type) => {
               <div style={{ fontSize: 18, fontWeight: 600, color: "#00a7cf" }}>
                 %{result.ilk4Sonuc.toFixed(2)}
 =======
+=======
+>>>>>>> Stashed changes
         {/* Konsantrasyon Puanı (Sadece hesaplandıysa göster) - Orijinal */}
         {result.KP !== null && result.ilk4Sonuc !== null && result.orta6Sonuc !== null && result.son4Sonuc !== null && (
           <div className="konsantrasyon-analizi"> {/* Bu sınıf adı styles.jsx'te tanımlı olmalı */}
@@ -553,6 +759,9 @@ const getInterpretation = (score, type) => {
               <div className="konsantrasyon-item">
                  <div className="konsantrasyon-item-label">Son 4 Satır Ort.</div>
                  <div className="konsantrasyon-item-value">{result.son4Sonuc.toFixed(2)}</div>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
               </div>
             </div>
@@ -574,6 +783,7 @@ const getInterpretation = (score, type) => {
       </TitleContainer>
 
       <InputContainer>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         <InputRow>
           <Label>TN:</Label>
@@ -649,6 +859,8 @@ const getInterpretation = (score, type) => {
     
         <Button onClick={handleCalculate}>Puanı hesapla</Button>
 =======
+=======
+>>>>>>> Stashed changes
          {/* Zorunlu Alanlar */}
          <InputRow>
            <Label>TN (Toplam İşaretlenen):</Label>
@@ -686,6 +898,9 @@ const getInterpretation = (score, type) => {
           </InputRow>
 
         <Button onClick={handleCalculate}>Puanı Hesapla</Button>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       </InputContainer>
 
