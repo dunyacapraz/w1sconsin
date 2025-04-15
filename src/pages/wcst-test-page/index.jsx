@@ -2,21 +2,21 @@ import React, { useContext, useState, useEffect } from "react";
 import { Card } from "../../components/card";
 import { targetCards } from "../../services/target-cards";
 import { responseCards } from "../../services/response-cards";
-import * as S from "./styles"; // Stil dosyasını import ettiğinizi varsayıyorum
+import * as S from "./styles";
 import { WcstContext } from "../../components/context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function WcstWindow() {
   const {
     result,
     setResult,
-    counter, // counter state'i burada tanımlı ama handleStart içinde tekrar set ediliyor. Kullanılmıyorsa kaldırılabilir.
+    counter,
     setCounter,
     completedCategories,
     setCompletedCategories,
   } = useContext(WcstContext);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const [cardIndex, setCardIndex] = useState(0);
   const [open, setOpen] = useState(false);
@@ -37,59 +37,75 @@ function WcstWindow() {
   const [pendingCategoryChange, setPendingCategoryChange] = useState(false);
 
   const [responseChain, setResponseChain] = useState([]);
-  const [chainBroken, setChainBroken] = useState(false); // Bu state tanımlanmış ama kullanılmıyor gibi duruyor. Gözden geçirin.
+  const [chainBroken, setChainBroken] = useState(false);
   const [lastPerseverativeResponse, setLastPerseverativeResponse] =
-    useState(null); // Bu state tanımlanmış ama kullanılmıyor gibi duruyor. Gözden geçirin.
+    useState(null);
 
+  // Güncellenmiş Sandviç Kuralı Kontrolü
   const checkSandwichRule = (responseChain, perseverativeCategory) => {
-    // ... (fonksiyon içeriği aynı kalır)
+    // Zincir en az 3 eleman içermeli
     if (responseChain.length < 3) return false;
+    // Zincirin başı ve sonunun saf perseveratif cevap olup olmadığını kontrol et
     const firstResponse = responseChain[0];
     const lastResponse = responseChain[responseChain.length - 1];
+    // Başlangıç ve bitiş saf perseveratif cevap mı kontrolü
     const isFirstPurePerseverative =
       firstResponse.length === 1 &&
       firstResponse.includes(perseverativeCategory);
+
     const isLastPurePerseverative =
       lastResponse.length === 1 && lastResponse.includes(perseverativeCategory);
+    // Eğer başlangıç ve bitiş saf perseveratif değilse, kural geçerli değil
     if (!isFirstPurePerseverative || !isLastPurePerseverative) {
       return false;
     }
+    // Ara kartların kontrol edilmesi
     const middleResponses = responseChain.slice(1, -1);
+
+    // 2 saf perseveratif cevap arasındaki DOĞRU eşleşmeleri say
     const correctMiddleResponses = middleResponses.filter(
-      (response) => response.length > 1 // Doğru cevaplar birden fazla kategori içerir varsayımı
+      (response) => response.length > 1 // Birden fazla kategoride eşleşme
     );
-    // Not: checkSandwichRule mantığı karmaşık ve test edilmesi gerekir.
-    // 'correctMiddleResponses' tanımı doğru cevapları nasıl filtrelediğine bağlı.
-    // Şu anki filtreleme (`response.length > 1`), belirsiz (ambiguous) doğru cevapları sayar.
-    // Saf (pure) doğru cevapları mı yoksa tüm doğru cevapları mı sayması gerektiği net değil.
     return {
       isSandwichRule: true,
       correctMiddleResponseCount: correctMiddleResponses.length,
     };
   };
 
-  // Değişiklik 1: Kart karıştırma kaldırıldı (bu zaten yapılmıştı)
+  // Kartları karıştırmak için Fisher-Yates shuffle algoritması
+  const shuffleCards = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  // Başlangıçta kartları karıştır
   useEffect(() => {
     if (testInfo && randomizedCards.length === 0) {
-      // handleStart içinde zaten set ediliyor, bu useEffect gereksiz olabilir.
-      // Eğer testInfo değiştiğinde kartları tekrar set etmek gerekmiyorsa kaldırılabilir.
-      // setRandomizedCards([...responseCards]); // Direkt orijinal diziyi kullan
+      setRandomizedCards(shuffleCards(responseCards));
     }
-  }, [testInfo, randomizedCards.length]); // randomizedCards.length bağımlılığı döngüye neden olabilir, dikkat.
+  }, [testInfo]);
 
+  // Kart bilgisi - karıştırılmış kartlardan al
   const currentCard = randomizedCards[cardIndex] || {};
   const { resCount, resColor, resFigure } = currentCard;
 
-  const totalCards = randomizedCards.length; // Toplam kart sayısını alalım
   const testCompleted =
-    completedCategories >= 2 || // >= 6 daha güvenli olabilir
-    cardIndex >= 128 || // Maksimum kart sınırı
-    (totalCards > 0 && cardIndex >= totalCards); // Veya destedeki tüm kartlar bittiğinde
+    completedCategories === 2 ||
+    cardIndex >= 128 ||
+    cardIndex >= randomizedCards.length;
 
+  // Kategori değişimi için useEffect
   useEffect(() => {
     if (pendingCategoryChange) {
+      // Eski kategoriyi kaydet
       setPrevCategory(category);
       setCategoryChanged(true);
+
+      // Yeni kategoriye geç
       if (category === "color") {
         setCategory("figure");
       } else if (category === "figure") {
@@ -97,34 +113,48 @@ function WcstWindow() {
       } else if (category === "count") {
         setCategory("color");
       }
+
+      // Değişimleri yap
       setCategoryCorrect(0);
       setCompletedCategories((prevCompleted) => prevCompleted + 1);
       setConsecutivePureIncorrect(0);
       setLastPureIncorrectCategory(null);
       setPendingCategoryChange(false);
-      setCorrectStreak(0); // Kategori değiştiğinde sıfırlanmalı
-      setResponseChain([]); // Kategori değiştiğinde sıfırlanmalı
-      // setChainBroken(false); // Kullanılmıyorsa bu satıra gerek yok
-      // setLastPerseverativeResponse(null); // Kullanılmıyorsa bu satıra gerek yok
-      // setPerseverativeCategory(null); // Kategori değişince persevaratif durum sıfırlanmalı mı? WCST kurallarına bakın.
-    }
-  }, [pendingCategoryChange, category, completedCategories]); // Bağımlılıkları kontrol edin
 
+      setCorrectStreak(0);
+
+      setResponseChain([]);
+      setChainBroken(false);
+      setLastPerseverativeResponse(null);
+
+      // console.log(
+      //  "Kategori değişimi tamamlandı. Yeni kategoris:",
+      //  category === "color"
+      //    ? "figure"
+      //    : category === "figure"
+      //    ? "count"
+      //    : "color"
+      // );
+    }
+  }, [pendingCategoryChange, category, completedCategories]);
+
+  // Target kartlar listesi
   const targetCardsList = (
     <>
       {targetCards.map((target, index) => (
         <div
           key={index}
           onClick={() => {
-            if (!open && !testCompleted) { // Test bittiyse tıklamayı engelle
+            if (!open) {
+              // Sadece 'open' false ise tıklamayı işle
               clickHandle({ target });
             }
           }}
           style={{
-            opacity: open || testCompleted ? 0.5 : 1, // Test bittiyse de opak yap
-            pointerEvents: open || testCompleted ? "none" : "auto", // Test bittiyse de tıklamayı engelle
-            transition: "opacity 0.3s ease-in-out",
-            cursor: open || testCompleted ? "default" : "pointer",
+            opacity: open ? 0.5 : 1, // 'open' true ise opacity'i düşür
+            pointerEvents: open ? "none" : "auto", // 'open' true ise tıklamayı engelle
+            transition: "opacity 0.3s ease-in-out", // İsteğe bağlı: Yumuşak geçiş için
+            cursor: open ? "default" : "pointer", // İsteğe bağlı: İmleci de değiştir
           }}
         >
           <Card
@@ -137,6 +167,7 @@ function WcstWindow() {
     </>
   );
 
+  // Response kartlar listesi
   const responseCardsList = (
     <>
       {resCount && resColor && resFigure ? (
@@ -145,18 +176,13 @@ function WcstWindow() {
           <S.Warning>{open && (warn ? "✅ DOĞRU" : "❌ YANLIŞ!")}</S.Warning>
         </>
       ) : (
-         // Bu durum testin başlangıcında veya bittiğinde görülebilir.
-         // Eğer testInfo true ama kart yoksa gösterilecek mesajı netleştirebiliriz.
-         // Örneğin: testCompleted ? <div>Test Tamamlandı</div> : <div>Kartlar Yükleniyor...</div>
-         // Ama testCompleted kontrolü zaten dışarıda yapılıyor.
-         // Bu kısım muhtemelen test bittiğinde değil, başlangıçta currentCard boşken çalışır.
-         <div></div> // Başlangıçta boş göstermek daha iyi olabilir
+        <div>Test Tamamlandı</div>
       )}
     </>
   );
 
+  // Yanıtın hangi kategorileri içerdiğini belirleyen yardımcı fonksiyon
   const getResponseCategories = (colorMatch, figureMatch, countMatch) => {
-     // ... (fonksiyon içeriği aynı kalır)
     const categories = [];
     if (colorMatch) categories.push("color");
     if (figureMatch) categories.push("figure");
@@ -165,11 +191,12 @@ function WcstWindow() {
   };
 
   const switchCondition = (target) => {
-    // ... (fonksiyonun büyük kısmı aynı kalır)
+    // Eşleşme kontrolü
     const colorMatch = resColor === target.targColor;
     const figureMatch = resFigure === target.targFigure;
     const countMatch = resCount === target.targCount;
 
+    // Seçilen kategoriye göre doğruluğu belirle
     let isCorrect = false;
     if (category === "color") {
       isCorrect = colorMatch;
@@ -179,46 +206,55 @@ function WcstWindow() {
       isCorrect = countMatch;
     }
 
+    // Hiçbir kategori ile eşleşmeme durumu
     const isOther = !colorMatch && !figureMatch && !countMatch;
-    const isAmbiguousAnswer =
-      (colorMatch && figureMatch && countMatch) || // Üçlü eşleşme de belirsizdir
-      (colorMatch && figureMatch && !countMatch) ||
-      (colorMatch && !figureMatch && countMatch) ||
-      (!colorMatch && figureMatch && countMatch);
 
+    // Belirsiz cevap kontrolü (birden fazla kategoride eşleşme var)
+    const isAmbiguousAnswer =
+      (colorMatch && figureMatch) ||
+      (colorMatch && countMatch) ||
+      (figureMatch && countMatch);
+
+    // Yanıtın içerdiği kategorileri belirle
     const responseCategories = getResponseCategories(
       colorMatch,
       figureMatch,
       countMatch
     );
 
-    // --- Doğru / Yanlış Durumları ---
+    // Doğru cevap sayılarını güncelle
     if (isCorrect) {
       const newCorrectStreak = correctStreak + 1;
       setCorrectStreak(newCorrectStreak);
+
       const newCategoryCorrect = categoryCorrect + 1;
       setCategoryCorrect(newCategoryCorrect);
-      if (newCategoryCorrect >= 3 && completedCategories < 6) { // Kategori tamamlama koşulu
+
+      // Kategori değişimi kontrolü - 3 ardışık doğru cevap
+      if (newCategoryCorrect >= 3) {
+        // console.log("3 doğru cevap tamamlandı, kategori değişimi başlatılıyor");
         setPendingCategoryChange(true);
       }
-      // Doğru cevapta persevaratif durum sıfırlanmalı mı?
+
+      // Doğru cevap gelince ardışık saf yanlış sayısını sıfırla
       setConsecutivePureIncorrect(0);
       setLastPureIncorrectCategory(null);
-      // setPerseverativeCategory(null); // Eğer doğru cevap persevarasyonu kırıyorsa
-      setChainBroken(true); // Doğru cevap zinciri bozar
     } else {
+      // Yanlış cevap geldiğinde hem correctStreak hem de categoryCorrect sıfırlanıyor
       setCorrectStreak(0);
-      // Yanlış cevap kategori sayacını sıfırlamaz (WCST kuralı)
-      // setCategoryCorrect(0); // Bu satır kaldırılmalı
+      setCategoryCorrect(0);
     }
 
-    // --- Perseverasyon Mantığı ---
+    // Saf cevap kontrolü - sadece tek bir kategoride eşleşme var
     const isPureColorMatch = colorMatch && !figureMatch && !countMatch;
     const isPureFigureMatch = figureMatch && !colorMatch && !countMatch;
     const isPureCountMatch = countMatch && !colorMatch && !figureMatch;
+
+    // Genel saf cevap
     const isPureAnswer =
       isPureColorMatch || isPureFigureMatch || isPureCountMatch;
 
+    // Seçilen saf yanlış cevabın kategorisini belirle
     let currentResponseCategory = null;
     if (isPureAnswer) {
       if (isPureColorMatch) currentResponseCategory = "color";
@@ -226,202 +262,279 @@ function WcstWindow() {
       else if (isPureCountMatch) currentResponseCategory = "count";
     }
 
-    // Yanlış cevaplar için perseverasyon kontrolü
+    // Belirsiz cevap veya saf olmayan cevap geldiğinde ardışık saf yanlış sayacını sıfırla
+    if (isAmbiguousAnswer || !isPureAnswer || isOther) {
+      // console.log(
+      //  "Belirsiz veya saf olmayan cevap - Ardışık saf yanlış sayacı sıfırlandı"
+      // );
+      setConsecutivePureIncorrect(0);
+    }
+
+    // Perseveratif hesaplama logic'i - SADECE YANLIŞ CEVAPLAR İÇİN
+    let isPerseverative = false;
     let isPerseverativeError = false;
-    let isPerseverativeResponse = false; // Genel perseveratif yanıt (doğru veya yanlış)
 
-    if (isPureAnswer && currentResponseCategory === prevCategory && categoryChanged && !isCorrect) {
-      // Kategori yeni değiştiyse ve önceki kategoriye göre *yanlış* cevap verildiyse, bu birincil perseveratif hatadır.
-      isPerseverativeError = true;
-      isPerseverativeResponse = true;
-      setPerseverativeCategory(currentResponseCategory); // Perseveratif kategori set edilir.
-      setCategoryChanged(false); // İşlendi olarak işaretle
-    } else if (perseverativeCategory && currentResponseCategory === perseverativeCategory && !isCorrect) {
-       // Zaten bir perseveratif kategori varsa ve ona göre *yanlış* cevap verildiyse
-       isPerseverativeError = true;
-       isPerseverativeResponse = true;
-    } else if (perseverativeCategory && currentResponseCategory === perseverativeCategory && isCorrect) {
-       // Perseveratif kategoriye göre *doğru* cevap verildiyse (ama mevcut kurala göre yanlışsa)
-       // Bu genellikle "Perseverative Response" olarak sayılır, "Error" değil.
-       isPerseverativeResponse = true;
-       // isPerseverativeError = false; // Bu durum hata değil, sadece perseveratif yanıttır.
+    // PERSEVERASYON İLKESİ KONTROLÜ - SADECE YANLIŞ CEVAPLAR İÇİN
+    if (!isCorrect) {
+      // 1. Belirsiz olmayan saf yanlış cevaplar için (tek kategoride eşleşen)
+      if (isPureAnswer && !isAmbiguousAnswer) {
+        // Son saf yanlış kategori ile aynı mı kontrol et
+        if (lastPureIncorrectCategory === currentResponseCategory) {
+          // Ardışık sayısını arttır
+          const newConsecutiveCount = consecutivePureIncorrect + 1;
+          setConsecutivePureIncorrect(newConsecutiveCount);
+
+          // Minimum 2 ardışık saf yanlış olması şartını ekle
+          if (newConsecutiveCount >= 2) {
+            // console.log(
+            //  `Gerçek ardışık saf yanlış cevap (${newConsecutiveCount}) - Perseveratif ilke belirlendi:`,
+            //  currentResponseCategory
+            // );
+            setPerseverativeCategory(currentResponseCategory);
+            isPerseverative = true;
+            isPerseverativeError = true;
+            setLastPerseverativeResponse(currentResponseCategory);
+
+            setCategoryChanged(false);
+            setPrevCategory(null);
+          }
+        }
+        // Farklı bir saf yanlış kategoriyse
+        else {
+          setLastPureIncorrectCategory(currentResponseCategory);
+          setConsecutivePureIncorrect(1);
+          // console.log(
+          //  "Yeni saf yanlış cevap kategorisi:",
+          //  currentResponseCategory
+          // );
+        }
+
+        // Perseveratif ilke belirlenmiş ve cevap o ilkeye uyuyorsa
+        if (
+          perseverativeCategory &&
+          perseverativeCategory === currentResponseCategory
+        ) {
+          isPerseverative = true;
+          isPerseverativeError = true;
+          // console.log(
+          //  "Perseveratif hata - İlkeye göre:",
+          //  currentResponseCategory
+          // );
+          setLastPerseverativeResponse(currentResponseCategory);
+        }
+      }
+
+      // Kategori değişiminden sonraki kontrol
+      if (
+        categoryChanged &&
+        prevCategory &&
+        isPureAnswer &&
+        !perseverativeCategory
+      ) {
+        // Yeni bir perseveratif ilke belirlenmemişse önceki kategoriye göre kontrol yap
+        if (prevCategory === "color" && colorMatch) {
+          // console.log(
+          //  "Kategori değişimi sonrası önceki kategoriye (color) göre perseveratif hata. Yeni perseveratif ilke: color"
+          // );
+          setPerseverativeCategory("color");
+          isPerseverative = true;
+          isPerseverativeError = true;
+          setLastPerseverativeResponse("color");
+        } else if (prevCategory === "figure" && figureMatch) {
+          // console.log(
+          //  "Kategori değişimi sonrası önceki kategoriye (figure) göre perseveratif hata. Yeni perseveratif ilke: figure"
+          // );
+          setPerseverativeCategory("figure");
+          isPerseverative = true;
+          isPerseverativeError = true;
+          setLastPerseverativeResponse("figure");
+        } else if (prevCategory === "count" && countMatch) {
+          // console.log(
+          //  "Kategori değişimi sonrası önceki kategoriye (count) göre perseveratif hata. Yeni perseveratif ilke: count"
+          // );
+          setPerseverativeCategory("count");
+          isPerseverative = true;
+          isPerseverativeError = true;
+          setLastPerseverativeResponse("count");
+        }
+      }
     }
 
-    // Not: Heaton'ın orijinal skorlaması daha detaylıdır (örn: Failure to Maintain Set).
-    // Bu implementasyon temel perseveratif hataları yakalamaya odaklanıyor.
-
-    // 'Sandwich Rule' implementasyonu riskli ve karmaşık, dikkatli test gerektirir.
-    // Şimdilik yoruma alıyorum, ihtiyaç halinde tekrar aktif edilebilir.
-    /*
+    // Güncellenmiş Sandviç Kuralı Kontrolü Kullanımı
     const sandwichResult = checkSandwichRule(
-       responseChain,
-       perseverativeCategory
-     );
-     if (sandwichResult && sandwichResult.isSandwichRule) {
-       const middleResponseCount = sandwichResult.correctMiddleResponseCount;
-       if (isCorrect) {
-         // Doğru cevap sandviçi kırar mı? Kurala bağlı.
-         isPerseverativeError = false; // Sandviç kuralı uygulanıyorsa hata durumu değişebilir
-       } else {
-          // Yanlış cevap sandviçi devam ettirir.
-          isPerseverativeError = true; // Hata durumu teyit edilir veya set edilir.
-       }
-     }
-    */
+      responseChain,
+      perseverativeCategory
+    );
+    if (sandwichResult && sandwichResult.isSandwichRule) {
+      // console.log("Sandviç Kuralı Uygulandı!");
+      const middleResponseCount = sandwichResult.correctMiddleResponseCount;
 
-    // Cevap Zinciri (Sandviç kuralı için gerekli)
-    // Zincir sadece belirli türdeki cevapları mı içermeli? Yoksa tüm cevapları mı?
-    // Genellikle saf (pure) perseveratif cevaplar ve aradaki doğru cevaplar izlenir.
-    // Şimdilik tüm cevap kategorilerini ekleyelim:
-    if (!chainBroken) { // Eğer zincir kırılmadıysa (yani arada doğru cevap gelmediyse)
-       const newChain = [...responseChain, responseCategories];
-       setResponseChain(newChain);
-    } else { // Zincir kırıldıysa (doğru cevap geldiyse) yeni zincir başlar.
-       setResponseChain([responseCategories]);
-       setChainBroken(false); // Zincir tekrar başladı.
+      if (isCorrect) {
+        // Doğru yanıtta: Perseveratif işaretleme yapılmaz,
+        // doğru tepkiyi güçlendirmek için counter'dan middleResponseCount çıkarılır.
+        setConsecutivePureIncorrect((prev) =>
+          Math.max(prev - middleResponseCount, 0)
+        );
+        isPerseverative = false;
+        isPerseverativeError = false;
+      } else {
+        // Yanlış yanıtta: doğrudan perseveratif tepki eklenir.
+        setConsecutivePureIncorrect((prev) => prev + middleResponseCount);
+        isPerseverative = true;
+        isPerseverativeError = true;
+
+        // Eğer perseveratif hata yapıldıysa, hata sayısını 1 azalt
+        // setPerseverativeErrorCount((prev) => Math.max(prev - 1, 0));
+      }
     }
 
+    // Yanıt zincirini güncelle (sadece saf ve belirsiz cevaplar için)
+    if (isPureAnswer || isAmbiguousAnswer) {
+      const newChain = [...responseChain, responseCategories];
+      setResponseChain(newChain);
+    }
 
+    // Non-perseveratif hata kontrolü (Yanlış ve perseveratif olmayan)
     const isNonPerseverativeError = !isCorrect && !isPerseverativeError;
 
-    // setResult güncellemesi
-    setResult((prevResult) => [
-  ...prevResult,
-  {
-    cardIndex: cardIndex,
-    response: currentCard,
-    targetMatch: {
-      color: colorMatch,
-      figure: figureMatch,
-      count: countMatch,
-    },
-    isCorrect: isCorrect,
-    isOther: isOther,
-    responseCategories: responseCategories,
-    currentCategory: category,
-    prevCategory: prevCategory, // Eklenen alan
-  },
-]);
+    // console.log("Sonuç:", {
+    //  cardIndex,
+    //  response: currentCard,
+    //  currentCategory: category,
+    //  prevCategory,
+    //  currentResponseCategory,
+    //  responseCategories,
+    //  color: colorMatch,
+    //  figure: figureMatch,
+    //  count: countMatch,
+    //  isCorrect,
+    //  perseverativeCategory,
+    //  isPerseverative,
+    //  isPerseverativeError,
+    //  isNonPerseverativeError,
+    //  categoryChanged,
+    //  isAmbiguousAnswer,
+    //  chainBroken,
+    //  responseChain: responseChain.length,
+    //  lastPerseverativeResponse,
+    //  consecutivePureIncorrect:
+    //    isPureAnswer && !isCorrect
+    //      ? lastPureIncorrectCategory === currentResponseCategory
+    //        ? consecutivePureIncorrect + 1
+    //        : 1
+    //      : 0,
+    //  lastPureIncorrectCategory,
+    //  categoryCorrect,
+    // });
 
-    setWarn(isCorrect); // Görsel geri bildirim için
+    // Sonucu kaydet
+    setResult([
+      ...result,
+      {
+        response: currentCard,
+        color: colorMatch,
+        figure: figureMatch,
+        count: countMatch,
+        other: isOther,
+        isCorrect: isCorrect,
+        categoryComplete: categoryCorrect >= 2,
+        category: category === "color" ? 1 : category === "figure" ? 2 : 3,
+        responseCategories: responseCategories,
+        currentCategory: category,
+        prevCategory,
+        cardIndex,
+      },
+    ]);
+
+    setWarn(isCorrect);
   };
 
   const clickHandle = ({ target }) => {
-    if (open || testCompleted) return; // Eğer kart dönüyorsa veya test bittiyse işlem yapma
-
-    setOpen(true); // Kartı çevir/geri bildirim göster
-    switchCondition(target); // Hesaplamaları yap (bu setResult'u tetikler)
-
+    setOpen(true);
     setTimeout(() => {
-      // Zamanlayıcı içinde state'lerin güncel halini almak riskli olabilir.
-      // Özellikle testCompleted durumu switchCondition içinde değişebilir.
-      // Doğrudan bir sonraki index'e geçmek daha güvenli.
-      const nextCardIndex = cardIndex + 1;
+      setOpen(false);
+      setCardIndex(cardIndex + 1);
+    }, 1200);
 
-      // Testin bitip bitmediğini tekrar kontrol et
-      const isNextTestCompleted =
-        completedCategories >= 6 ||
-        nextCardIndex >= 128 ||
-        (totalCards > 0 && nextCardIndex >= totalCards);
-
-      if (!isNextTestCompleted) {
-         setCardIndex(nextCardIndex); // Bir sonraki karta geç
-      } else {
-         // Test bittiğinde son kartın ardından index'i artırmayı durdur.
-         // İsteğe bağlı: Test bitti flag'ini burada set edebilirsiniz.
-         // Ancak zaten testCompleted state'i render'ı kontrol ediyor.
-      }
-
-      setOpen(false); // Geri bildirimi gizle
-      setWarn(false); // Geri bildirim rengini sıfırla
-      setCategoryChanged(false); // Bir sonraki kart için sıfırla
-      setPrevCategory(null); // Bir sonraki kart için sıfırla (kategori değişimi olmadıysa)
-
-    }, 1200); // Geri bildirim süresi
+    switchCondition(target);
   };
 
-  // Değişiklik 2: HandleStart fonksiyonu güncellendi (bu zaten yapılmıştı)
   const handleStart = () => {
-    setResult([]); // Sonuçları sıfırla
-    setCounter(0); // Sayaç (kullanılıyorsa) sıfırla
-    setCompletedCategories(0); // Tamamlanan kategori sayısını sıfırla
-    setCategory("color"); // Başlangıç kuralı
-    setCategoryCorrect(0); // Mevcut kategori doğru sayısını sıfırla
-    setCorrectStreak(0); // Doğru serisini sıfırla
-    setPrevCategory(null); // Önceki kategori yok
-    setConsecutivePureIncorrect(0); // Arka arkaya saf yanlış sayısı
-    setLastPureIncorrectCategory(null); // Son saf yanlış kategori
-    setPerseverativeCategory(null); // Perseveratif kategori yok
-    setCategoryChanged(false); // Kategori henüz değişmedi
-    setPendingCategoryChange(false); // Kategori değişikliği beklemede değil
-    setResponseChain([]); // Cevap zinciri boş
-    // setChainBroken(false); // Kullanılmıyorsa gerek yok
-    // setLastPerseverativeResponse(null); // Kullanılmıyorsa gerek yok
+    setCounter(0);
+    setTestInfo(true);
+    setResult([]);
+    setCompletedCategories(0);
+    setCategoryCorrect(0);
+    setCorrectStreak(0);
+    setPrevCategory(null);
+    setConsecutivePureIncorrect(0);
+    setLastPureIncorrectCategory(null);
+    setPerseverativeCategory(null);
+    setCategoryChanged(false);
+    setPendingCategoryChange(false);
+    setCategory("color");
 
-    // Kartları ayarla (shuffle olmadan)
-    const initialCards = [...responseCards];
-    setRandomizedCards(initialCards);
+    setResponseChain([]);
+    setChainBroken(false);
+    setLastPerseverativeResponse(null);
 
-    setCardIndex(0); // İlk karttan başla (index 0)
-    setTestInfo(true); // Test ekranını göster
-    setOpen(false); // Başlangıçta kart dönmüyor
-    setWarn(false); // Başlangıçta uyarı yok
+    setRandomizedCards(shuffleCards(responseCards));
+    setCardIndex(0);
   };
 
-  const handleShowResults = () => {
-    navigate("/wcst-test-result"); // Sonuç sayfasına yönlendir
-  };
-
-  // --- EKLENEN KISIM: Kart Sayacı ---
-  const renderCardCounter = () => {
-    // randomizedCards yüklenmediyse veya test başlamadıysa gösterme
-    if (!testInfo || totalCards === 0) {
-      return null;
+  const downloadResultsAsJson = () => {
+    if (!result || result.length === 0) {
+      console.warn("İndirilecek sonuç bulunamadı");
+      return;
     }
-    // Geçerli kart numarasını hesapla (1'den başlar)
-    const currentCardNumber = cardIndex + 1;
-    // Eğer test bittiyse son kart numarasını göster
-    const displayCardNumber = currentCardNumber > totalCards ? totalCards : currentCardNumber;
 
-    // Eğer stil dosyası (S) içinde tanımlı bir component yoksa, basit bir div kullanabiliriz:
-    // return <div style={{ textAlign: 'center', margin: '10px 0', fontWeight: 'bold' }}>
-    //          Kart {displayCardNumber} / {totalCards}
-    //        </div>;
+    // Sadece istenen alanları içeren yeni bir dizi oluştur
+    const simplifiedResults = result.map((item) => ({
+      response: item.response,
+      categoryComplete: item.categoryComplete,
+      category: item.category,
+      responseCategories: item.responseCategories,
+      currentCategory: item.currentCategory,
+      prevCategory: item.prevCategory,
+      cardIndex: item.cardIndex,
+    }));
 
-    // Stil dosyası kullanılıyorsa:
-    return (
-      <S.CardCounter> {/* styles.js içinde S.CardCounter tanımlanmalı */}
-        Kart {displayCardNumber} / {totalCards}
-      </S.CardCounter>
-    );
+    try {
+      const blob = new Blob([JSON.stringify(simplifiedResults, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `wcst-results-${new Date().toISOString()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("JSON indirme hatası:", error);
+    }
   };
-  // --- EKLENEN KISIM BİTTİ ---
 
+  const handleShowAndDownload = () => {
+    downloadResultsAsJson();
+    navigate("/wcst-test-result");
+  };
 
   return (
     <S.WcstWindow>
       {testInfo ? (
         testCompleted ? (
           <S.CompletedOptions>
-            <div> Test Tamamlandı </div> 
-            <div>
-              <S.Button onClick={handleShowResults}>
-                Sonuçları Göster
-              </S.Button>
-            </div>
-             {/* İsteğe bağlı: Testi tekrar başlatma butonu */}
-             {/* <div>
-               <S.Button onClick={handleStart}>
-                 Tekrar Başlat
-               </S.Button>
-             </div> */}
+            {/* Removed the S.NavLinkButton and modified the S.Button */}
+            <S.Button onClick={handleShowAndDownload}>
+              Sonuçları Göster ve İndir
+            </S.Button>
           </S.CompletedOptions>
         ) : (
           <>
-           
             <S.TargetCards>{targetCardsList}</S.TargetCards>
             <S.ResponseCards>{responseCardsList}</S.ResponseCards>
-            {renderCardCounter()}
           </>
         )
       ) : (
