@@ -423,3 +423,180 @@ button:hover::after {
   }
 }
 
+.game-over {
+  background-color: var(--bg-secondary); /* Arka planı ana konteynerle aynı yapalım */
+  padding: 2rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+  border: 1px solid var(--border-color);
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.game-over h2 {
+  color: var(--accent-purple);
+  margin-bottom: 1rem;
+}
+
+.game-over p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Analiz Bölümü Genel Stili */
+.analysis-section {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: left; /* İçerikleri sola hizala */
+}
+
+.analysis-section h3 {
+    text-align: center; /* Başlığı ortala */
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+/* === YENİ, MODERNLEŞTİRİLMİŞ SONUÇ TABLOSU STİLLERİ === */
+
+.results-table {
+  width: 100%;
+  /* border-collapse: collapse; yerine separate kullanarak daha fazla kontrol sağlayabiliriz veya border'ları sadece alta ekleyebiliriz. Altta border kullanalım: */
+  border-collapse: collapse;
+  margin-bottom: 2.5rem; /* Grafik ile arasına biraz daha boşluk */
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  overflow: hidden; /* Kenar yuvarlaklığı için gerekli */
+  font-size: 0.9rem; /* Genel font boyutu */
+}
+
+.results-table th,
+.results-table td {
+  padding: 1rem 1.25rem; /* Hücre içi boşlukları artıralım (dikey/yatay) */
+  text-align: center;
+  /* Artık her hücreye border vermiyoruz */
+  border: none; /* Eski border'ı kaldıralım */
+}
+
+/* Başlık Hücreleri (thead > tr > th) */
+.results-table thead th {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 600;
+  /* Başlık harflerini büyütelim (isteğe bağlı) */
+  /* text-transform: uppercase; */
+  /* letter-spacing: 0.5px; */ /* Harf aralığı (isteğe bağlı) */
+  border-bottom: 2px solid var(--accent-blue); /* Başlığın altına belirgin bir ayırıcı */
+}
+
+/* Gövde Hücreleri (tbody > tr > td) */
+.results-table tbody td {
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color); /* Satırlar arasına ince ayırıcı */
+}
+
+/* Son satırın altındaki çizgiyi kaldıralım (daha temiz görünüm) */
+.results-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Gövde İçindeki Çift Satırlar (zebra deseni) */
+.results-table tbody tr:nth-child(even) {
+  background-color: rgba(33, 38, 45, 0.3); /* Daha ince bir ton farkı */
+}
+
+/* Gövde Satırlarının Üzerine Gelince (Hover) */
+.results-table tbody tr:hover {
+  background-color: rgba(108, 92, 231, 0.1); /* --accent-blue'nun hafif bir tonu */
+  color: var(--text-primary); /* Hover sırasında yazı rengi değişebilir */
+}
+/* Hover sırasında td renginin değişmesini istemiyorsak yukarıdaki color'ı silip şunu ekleyebiliriz: */
+/* .results-table tbody tr:hover td { color: var(--text-primary); } */
+
+
+/* Alt Bilgi Hücreleri (tfoot > tr > th) */
+.results-table tfoot th {
+  background-color: var(--bg-secondary);
+  font-weight: 700; /* Daha kalın */
+  color: var(--accent-blue); /* Zaten belirgin bir renk */
+  /* tfoot'un üstüne de bir ayırıcı ekleyelim */
+  border-top: 2px solid var(--border-color);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Küçük Ekranlar İçin Ayarlamalar (Mevcut responsive kodunuzdan alıntı, gerekirse güncellenebilir) */
+@media (max-width: 768px) {
+  .results-table th,
+  .results-table td {
+    padding: 0.75rem 0.5rem; /* Daha küçük ekranlarda padding'i azalt */
+    font-size: 0.85rem;
+  }
+  /* Gerekirse tabloyu yatay kaydırılabilir yapabilirsiniz */
+  /* .analysis-section { overflow-x: auto; } */
+}
+
+.results-display-container {
+  width: 100%; /* Ana container genişliğine uysun */
+  max-width: 900px; /* Veya game-container ile aynı */
+  background-color: var(--bg-secondary); /* Arka plan */
+  border-radius: 12px; /* Köşe yuvarlaklığı */
+  padding: 2rem 2.5rem; /* İç boşluk */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* Gölge */
+  margin: 2rem auto; /* Üst/alt ve yanlardan ortalama */
+  border: 1px solid var(--border-color); /* İsteğe bağlı kenarlık */
+}
+
+/* .analysis-section için ek ayarlar (eğer gerekirse) */
+.results-display-container .analysis-section {
+  margin-top: 0; /* Üst boşluğa gerek kalmayabilir */
+  text-align: center; /* Başlığı ortalamak için */
+}
+
+.results-display-container .analysis-section h3 {
+   margin-bottom: 1.5rem; /* Başlık alt boşluğu */
+}
+
+/* İsteğe bağlı: Yükleme mesajı için stil */
+.loading-analysis {
+  text-align: center;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 500px;
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+}
+
+.chart-container {
+  max-width: 750px; /* Genişliği biraz artırabiliriz */
+  margin: 2.5rem auto; /* Üst/alt boşluğu artıralım */
+  padding: 1.5rem 2rem; /* İç boşlukları artıralım (dikey/yatay) */
+  background-color: var(--bg-tertiary); /* Arka plan aynı kalabilir veya --bg-secondary deneyebilirsiniz */
+  border-radius: 10px; /* Kenar yuvarlaklığını biraz artıralım */
+  /* Daha belirgin bir gölge */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  /* Daha belirgin bir kenarlık (isteğe bağlı, accent rengiyle) */
+  border: 1px solid var(--accent-blue);
+  /* Veya daha ince bir kenarlık: */
+  /* border: 1px solid var(--border-color); */
+  overflow: hidden; /* İçerik taşmasını önlemek için */
+}
+
+/* Grafik canvas'ının container'a tam oturmasını sağlayalım (genellikle Chart.js bunu yapar ama emin olalım) */
+.chart-container canvas {
+  max-width: 100%;
+  height: auto !important; /* Chart.js'nin otomatik boyutlandırmasına izin ver */
+}
+
+/* Küçük Ekranlar İçin Ayarlamalar */
+@media (max-width: 768px) {
+  .chart-container {
+    padding: 1rem 1.2rem; /* Daha küçük ekranlarda padding */
+  }
+}
+@media (max-width: 480px) {
+    .chart-container {
+        padding: 0.8rem;
+    }
+}
