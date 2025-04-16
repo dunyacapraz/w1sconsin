@@ -15,38 +15,62 @@ export const SideBar = styled.div`
     width: 100%;
     height: auto;
     position: relative;
+    display: flex;          // <-- EKLENDİ: Flex container yap
+    flex-wrap: wrap;        // <-- EKLENDİ: Sığmazsa alt satıra at
+    justify-content: center; // <-- EKLENDİ: Öğeleri yatayda ortala
+    align-items: center;    // <-- EKLENDİ: Öğeleri dikeyde ortala (çok satırlı olursa)
+    padding: 10px 5px;      // <-- EKLENDİ: Üst/alt ve yan boşluklar
   }
 `;
 
 export const Logo = styled(NavLink)`
+  display: block; // Kendi başına bir satır kaplaması için (veya flex order ile yönet)
+  text-align: center; // İçindeki resmi ortalamak için
+  width: 100%; // Flex container içinde tam genişlik alabilir
+  order: -1; // Flex sıralamasında en başa alabilir (isteğe bağlı)
+  margin-bottom: 5px; // Altına biraz boşluk
+
   img {
     opacity: 0.5;
-    height: 160px;
-    margin: auto;
+    height: 100px; // <-- Mobil için boyutu küçültüldü
+    margin: auto; // text-align ile zaten ortalanmalı ama garanti olsun
+    display: inline-block; // text-align'ın çalışması için
 
     &:hover {
       opacity: 1;
       transition: var(--transition);
     }
   }
+
+   @media screen and (max-width: 700px) {
+      width: auto; // Ya da otomatik genişlik, flex zaten ortalayacak
+      margin-bottom: 10px; // Mobil için boşluk
+      order: 0; // Mobil için sıralama (isteğe bağlı)
+   }
 `;
 
 export const Menu = styled(NavLink)`
-  display: block;
+  display: block; // Veya inline-block flex item gibi davranması için
   text-align: center;
   text-decoration: none;
-  margin-top: 20px;
-  padding: 16px;
+  margin-top: 20px; // Masaüstü boşluğu
+  padding: 16px;   // Masaüstü padding
   color: var(--text-color);
+  flex-shrink: 0; // Küçülmesini engelle (özellikle az sayıda öğe varsa)
 
   &:hover {
     color: var(--title-color);
   }
 
   @media screen and (max-width: 700px) {
-    float: left;
+    float: none;          // <-- KALDIRILDI: Float artık yok
+    padding: 10px 15px; // Mobil için padding ayarı
+    margin: 5px;        // <-- DEĞİŞTİ: float yerine margin ile boşluk
+    display: inline-block; // Yan yana durmaları için
   }
 `;
+
+
 export const IconDiv = styled.div`
   display: block;
   margin-left: 2rem;
@@ -59,9 +83,11 @@ export const IconDiv = styled.div`
     color: var(--title-color);
   }
 
-  @media screen and (max-width: 700px) {
-    float: right;
-    margin-top: 22px;
+   @media screen and (max-width: 700px) {
+    float: none; // <-- KALDIRILDI
+    margin: 5px 10px; // <-- Margin ayarı
+    padding: 10px;  // <-- Padding ayarı
+    // order: 5; // <-- Gerekirse flex sıralamasını ayarlayın
   }
 `;
 
@@ -146,6 +172,15 @@ export const LogoutButton = styled.button`
     outline: 2px solid var(--red-300, #fca5a5);
     outline-offset: 2px;
   }
+
+  @media screen and (max-width: 700px) { // <-- Breakpoint'i 700px yapalım tutarlılık için
+    // width: 100%; // Eğer ayrı bir satırda olmasını istiyorsanız kalsın
+    width: auto; // Diğer öğelerle yan yana ortalanacaksa auto yapın
+    padding: 10px 20px; // Padding ayarı
+    font-size: 0.875rem;
+    margin: 5px; // Margin ayarı
+    // order: 10; // Sıralama ayarı
+  }
 `;
 
 export const FooterText = styled.p`
@@ -155,11 +190,13 @@ export const FooterText = styled.p`
   padding: 15px 0; /* Üst/alt boşluk */
   margin-top: 20px; /* Üstündeki elemandan (muhtemelen buton) boşluk bırak */
   /* Mobil görünümde gerekirse ek ayar yapılabilir */
-  @media screen and (max-width: 700px) {
-     margin-top: 5px; /* Mobil için daha az boşluk */
+   @media screen and (max-width: 700px) {
+     margin-top: 15px; /* Üst boşluk */
      padding: 10px 0;
-     clear: both; /* Eğer mobil görünümde float kullanılıyorsa */
-     width: 100%; /* Genişliği yay */
+     clear: none; /* <-- KALDIRILDI: float yoksa clear gerekmez */
+     width: 100%; /* Tam genişlik */
+     order: 99; /* Flex sıralamasında en sona koy */
+     text-align: center; /* Metni ortala */
   }
 `;
 
@@ -232,11 +269,12 @@ export const LoginButton = styled.button`
     100% { left: 100%; }
   }
 
-  /* Mobil Uyumluluk */
-  @media (max-width: 768px) {
-    padding: 12px 20px;
-    margin: 15px auto;
-    width: 100%;
+   @media screen and (max-width: 700px) { // <-- Breakpoint'i 700px yapalım
+    // width: 100%; // Ayrı satırda olacaksa kalsın
+    width: auto; // Diğerleriyle ortalanacaksa auto
+    padding: 10px 20px;
+    margin: 5px; // Margin ayarı
+    // order: 10; // Sıralama ayarı
 
     &:hover {
       transform: none;

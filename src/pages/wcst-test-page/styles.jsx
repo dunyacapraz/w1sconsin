@@ -21,13 +21,14 @@ export const WcstWindow = styled.div`
   margin: auto;
   color: white;
   border-radius: var(--border-radius);
-  background: var(--test-zone);
+  background: var(--test-zone); // Arka plan bu elemente ait ve sabit kalacak
   position: relative;
+  padding-top: 4rem; // <-- DEĞİŞİKLİK BURADA: Üstten iç boşluk eklendi
 
   @media screen and (max-width: 700px) {
     font-size: var(--font-s);
+    padding-top: 2rem; // <-- DEĞİŞİKLİK BURADA: Mobil için farklı iç boşluk
   }
-    
 `;
 
 export const CompletedOptions = styled.div`
@@ -51,12 +52,16 @@ export const TargetCards = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
+  /* margin-top: 4rem; */ // <-- KALDIRILDI
 
   @media screen and (max-width: 700px) {
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0 10px;
+    /* margin-top: 2rem; */ // <-- KALDIRILDI
   }
 `;
+
 
 export const ResponseCards = styled.div`
   display: flex;
@@ -66,6 +71,7 @@ export const ResponseCards = styled.div`
   margin-top: 2rem;
   padding: 1rem;
 `;
+
 
 // Uyarı mesajı için stil (animasyonlu)
 export const Warning = styled.div`
@@ -371,9 +377,16 @@ export const GeneralMessage = styled.p`
 
 export const ProgressIndicator = styled.div`
   color: #ccc;
-  font-size: 0.9rem;
-  margin-top: 20px;
+  font-size: 0.9rem;    // Varsayılan yazı boyutu
+  margin-top: 20px;     // Varsayılan üst boşluk
   text-align: center;
-  width: 100%; // Genişlik eklemek iyi olabilir
-  margin-left: 22px;
+  width: 100%;
+  padding: 10px 0;      // Biraz dikey iç boşluk ekleyelim
+
+  @media screen and (max-width: 700px) {
+    font-size: 0.8rem; // Mobil için biraz daha küçük yazı tipi
+    margin-top: 15px;  // Mobil için biraz daha az üst boşluk
+    // İsterseniz altına da boşluk ekleyebilirsiniz:
+    // margin-bottom: 15px;
+  }
 `;
