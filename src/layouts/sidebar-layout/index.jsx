@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Bu satırı ekleyin
+// import { Link } from "react-router-dom"; // Link'e artık gerek yok
 import * as S from "./styles";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext"; // useAuth import edildi
 
 function Sidebar() {
-  const { isAdmin, logout } = useAuth();
+  // Auth context'ten gerekli değerleri al
+  const { isAdmin, logout, openLoginModal } = useAuth();
 
   return (
     <S.SideBar>
@@ -16,11 +17,13 @@ function Sidebar() {
       <S.Menu to="/wcst-test">Wisconsin Testi</S.Menu>
 
       {!isAdmin ? (
-        <S.LoginButton as={Link} to="/login">
+        // ---> Link yerine onClick ile modal açan button <---
+        <S.LoginButton onClick={openLoginModal}>
           Giriş Yap
         </S.LoginButton>
       ) : (
         <>
+          {/* Admin menüleri aynı kalır */}
           <S.Menu to="/Iowa-kumar-test">Iowa Kumar Testi</S.Menu>
           <S.Menu to="/d2-test-result">D2 Puan Hesaplaması</S.Menu>
           <S.Menu to="/wcst-test-result">WCST Sonuç</S.Menu>
@@ -30,10 +33,9 @@ function Sidebar() {
         </>
       )}
 
-<S.FooterText>
+      <S.FooterText>
         Created by Safer
-    
-          </S.FooterText>
+      </S.FooterText>
 
     </S.SideBar>
   );

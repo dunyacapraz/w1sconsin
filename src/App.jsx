@@ -1,24 +1,38 @@
 // src/App.jsx
-import React from "react"; // React importunu ekleyin (genellikle zaten vardır)
+import React from "react";
 import Sidebar from "./layouts/sidebar-layout";
 import ContentArea from "./layouts/content-area-layout";
 import { WcstProvider } from "./components/context";
-import { AuthProvider } from "./contexts/AuthContext"; // <-- AuthProvider'ı buraya import edin
+import { AuthProvider, useAuth } from "./contexts/AuthContext"; // useAuth da import edildi
 import { Helmet, HelmetProvider } from "react-helmet-async";
-// Eğer ContentArea Outlet kullanmıyorsa ve rotalarınız App'in children'ı ise Outlet'i import edin
-// import { Outlet } from "react-router-dom";
+import LoginModal from "./components/LoginModal"; // LoginModal import edildi
+
+// App içeriğini ayrı bir bileşene taşıyalım ki useAuth kullanabilelim
+function AppContent() {
+  const { isLoginModalOpen, closeLoginModal } = useAuth(); // Modal state'ini ve kapatma fonksiyonunu al
+
+  return (
+    <>
+      <Helmet>
+        <title>Cognitive Check</title>
+        {/* Diğer meta etiketleri */}
+      </Helmet>
+      <Sidebar />
+      <ContentArea />
+      {/* Modal'ı burada koşullu olarak render et */}
+      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
+    </>
+  );
+}
+
 
 // operationalMode'u AuthProvider ile sarın
 const operationalMode = (
-  <AuthProvider> {/* <-- AuthProvider'ı en dışa veya WcstProvider'ın hemen dışına ekleyin */}
+  <AuthProvider> {/* AuthProvider en dışta */}
     <WcstProvider>
       <HelmetProvider>
-        <Helmet>
-          <title>Cognitive Check</title>
-          {/* Diğer meta etiketleri */}
-        </Helmet>
-        <Sidebar />
-        <ContentArea /> {/* Veya <Outlet /> */}
+         {/* AppContent useAuth kullanabilsin diye Provider'ların içinde */}
+         <AppContent />
       </HelmetProvider>
     </WcstProvider>
   </AuthProvider>
