@@ -67,7 +67,7 @@ function Anasayfa() {
       <S.Wrapper>
         <S.Header>
           {/* Başlık ve Altbaşlık Header içinde stillendiriliyor */}
-          <S.Title>CognitiveCheck</S.Title>
+          <S.Title>BetBah</S.Title>
           <S.Logo src="/images/logo.png" alt="logo" />
         </S.Header>
 
