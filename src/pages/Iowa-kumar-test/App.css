@@ -569,34 +569,263 @@ button:hover::after {
 }
 
 .chart-container {
-  max-width: 750px; /* Genişliği biraz artırabiliriz */
-  margin: 2.5rem auto; /* Üst/alt boşluğu artıralım */
-  padding: 1.5rem 2rem; /* İç boşlukları artıralım (dikey/yatay) */
-  background-color: var(--bg-tertiary); /* Arka plan aynı kalabilir veya --bg-secondary deneyebilirsiniz */
-  border-radius: 10px; /* Kenar yuvarlaklığını biraz artıralım */
-  /* Daha belirgin bir gölge */
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-  /* Daha belirgin bir kenarlık (isteğe bağlı, accent rengiyle) */
-  border: 1px solid var(--accent-blue);
-  /* Veya daha ince bir kenarlık: */
-  /* border: 1px solid var(--border-color); */
-  overflow: hidden; /* İçerik taşmasını önlemek için */
+  /* Mevcut stiller (bazıları değiştirilecek veya eklenecek) */
+  max-width: 850px; /* <-- DEĞİŞİKLİK: Genişliği artırdık (örn: 750px -> 850px veya daha fazla) */
+  margin: 3rem auto; /* <-- DEĞİŞİKLİK: Üst/alt boşluğu biraz artırdık */
+  padding: 2rem 2.5rem; /* <-- DEĞİŞİKLİK: İç boşlukları artırdık (grafiğe daha fazla nefes alanı) */
+  background-color: var(--bg-tertiary);
+  border-radius: 12px; /* <-- DEĞİŞİKLİK: Kenar yuvarlaklığını biraz artırdık */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* <-- DEĞİŞİKLİK: Gölgeyi biraz daha belirginleştirdik */
+  border: 1px solid var(--border-color); /* <-- DEĞİŞİKLİK: Daha ince bir kenarlık */
+  overflow: hidden;
+
+  /* ====> YENİ: Yüksekliği ayarlayabiliriz (isteğe bağlı) <==== */
+  height: 450px; /* <-- ÖRNEK: Sabit bir yükseklik verilebilir. Chart.js ayarlarında maintainAspectRatio: false gerekir. */
+  /* Veya min-height kullanabilirsiniz: */
+  /* min-height: 400px; */
 }
 
-/* Grafik canvas'ının container'a tam oturmasını sağlayalım (genellikle Chart.js bunu yapar ama emin olalım) */
+/* Grafik canvas'ının container'a tam oturmasını sağlayalım */
 .chart-container canvas {
   max-width: 100%;
-  height: auto !important; /* Chart.js'nin otomatik boyutlandırmasına izin ver */
+  /* ====> DEĞİŞİKLİK: Eğer yukarıda sabit height verdiyseniz, burası önemli <==== */
+  height: 100% !important; /* Konteyner yüksekliğini doldurması için (maintainAspectRatio: false ile birlikte) */
+  /* Eğer yukarıda height vermediyseniz 'auto !important' kalabilir */
+  /* height: auto !important; */
 }
 
-/* Küçük Ekranlar İçin Ayarlamalar */
+/* Küçük Ekranlar İçin Ayarlamalar (Mevcutlar korunabilir veya ayarlanabilir) */
 @media (max-width: 768px) {
   .chart-container {
-    padding: 1rem 1.2rem; /* Daha küçük ekranlarda padding */
+    padding: 1.5rem; /* Daha küçük ekranlarda padding */
+    max-width: 95%; /* Mobil için genişlik */
+    height: 350px; /* Mobil için farklı yükseklik (isteğe bağlı) */
   }
 }
 @media (max-width: 480px) {
     .chart-container {
-        padding: 0.8rem;
+        padding: 1rem;
+        height: 300px; /* Daha küçük mobil için farklı yükseklik (isteğe bağlı) */
     }
+}
+
+
+.results-display-container {
+  width: 100%; /* Ana container genişliğine uysun */
+  max-width: 900px; /* Veya game-container ile aynı */
+  background-color: var(--bg-secondary); /* Arka plan */
+  border-radius: 12px; /* Köşe yuvarlaklığı */
+  padding: 2rem 2.5rem; /* İç boşluk */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* Gölge */
+  margin: 2rem auto; /* Üst/alt ve yanlardan ortalama */
+  border: 1px solid var(--border-color); /* İsteğe bağlı kenarlık */
+}
+
+.analysis-section {
+    margin-top: 0; /* results-display-container içinde olduğu için */
+    margin-bottom: 1.5rem;
+    text-align: left; /* İçerikleri sola hizala */
+}
+
+.analysis-section h3 {
+    text-align: center; /* Başlığı ortala */
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2.5rem;
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.results-table th,
+.results-table td {
+  padding: 1rem 1.25rem;
+  text-align: center;
+  border: none;
+}
+
+.results-table thead th {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--accent-blue);
+}
+
+.results-table tbody td {
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.results-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.results-table tbody tr:nth-child(even) {
+  background-color: rgba(33, 38, 45, 0.3);
+}
+
+.results-table tbody tr:hover {
+  background-color: rgba(108, 92, 231, 0.1);
+}
+
+.results-table tfoot th {
+  background-color: var(--bg-secondary);
+  font-weight: 700;
+  color: var(--accent-blue);
+  border-top: 2px solid var(--border-color);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.chart-container {
+  max-width: 850px;
+  margin: 3rem auto;
+  padding: 2rem 2.5rem;
+  background-color: var(--bg-tertiary);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  height: 450px; /* Sabit yükseklik */
+}
+
+.chart-container canvas {
+  max-width: 100%;
+  height: 100% !important; /* Konteyner yüksekliğini doldur */
+}
+
+.interpretation-section {
+  margin-top: 2.5rem; /* Grafik ile arasına boşluk */
+  padding: 1.5rem;
+  background-color: var(--bg-tertiary); /* Tablo ile aynı veya biraz farklı bir arka plan */
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-purple); /* Soluna vurgu rengi */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.interpretation-section h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--accent-purple); /* Başlık rengi */
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.interpretation-text {
+  color: var(--text-secondary); /* İkincil metin rengi */
+  font-size: 0.95rem;
+  line-height: 1.7; /* Okunabilirlik için satır yüksekliği */
+}
+
+.loading-analysis {
+  text-align: center;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 500px;
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+}
+
+
+/* Responsive Ayarlamalar */
+@media (max-width: 768px) {
+  .game-container,
+  .results-display-container {
+    padding: 1.5rem;
+  }
+  .results-table th,
+  .results-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+  .chart-container {
+    padding: 1.5rem;
+    max-width: 95%;
+    height: 350px;
+  }
+  .interpretation-section {
+     padding: 1.2rem;
+     margin-top: 2rem;
+  }
+  .interpretation-section h4 {
+     font-size: 1rem;
+  }
+   .interpretation-text {
+      font-size: 0.9rem;
+   }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 15px;
+  }
+  .game-container,
+  .results-display-container {
+    padding: 1.25rem;
+  }
+  .chart-container {
+    padding: 1rem;
+    height: 300px;
+  }
+   .interpretation-section {
+     padding: 1rem;
+   }
+   .interpretation-text {
+      font-size: 0.85rem;
+   }
+}
+
+.form-container .button-group {
+  display: flex;
+  flex-direction: column; /* Butonları alt alta sırala */
+  align-items: center; /* Butonları ortala */
+  gap: 1rem; /* Butonlar arası boşluk */
+  margin-top: 1.5rem; /* Üstten boşluk */
+}
+
+/* Form içindeki tüm butonlara ortak stil (genişlik vb.) */
+.form-container .button-group button {
+  width: 80%; /* Buton genişliği */
+  max-width: 250px; /* Maksimum genişlik */
+  padding: 0.8rem 1.5rem; /* İç boşluk */
+  margin: 0; /* Grup içindeki marjini sıfırla */
+}
+
+/* "Testi Başlat" butonu (isteğe bağlı özelleştirme) */
+.form-container .start-button {
+  /* Gerekirse ek stiller */
+}
+
+/* ====> YENİ: "Data Kullan" Butonu Stili <==== */
+.form-container .use-data-button {
+  background: linear-gradient(135deg, #5f6773 0%, #343a40 100%); /* Farklı bir renk gradyanı */
+  box-shadow: 0 4px 15px rgba(80, 80, 90, 0.2); /* Farklı gölge */
+}
+
+.form-container .use-data-button:hover {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  box-shadow: 0 6px 20px rgba(80, 80, 90, 0.3);
+}
+
+.form-container .use-data-button:active {
+   box-shadow: 0 2px 10px rgba(80, 80, 90, 0.2);
+}
+/* ====> Data Kullan Buton Stili Sonu <==== */
+
+/* ====> YENİ: Tekrar Oyna Butonu Stili <==== */
+.game-over .restart-button {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%); /* Data Kullan ile aynı olabilir */
+  box-shadow: 0 4px 15px rgba(80, 80, 90, 0.2);
+}
+.game-over .restart-button:hover {
+  background: linear-gradient(135deg, #7a828a 0%, #5a6268 100%);
+  box-shadow: 0 6px 20px rgba(80, 80, 90, 0.3);
 }

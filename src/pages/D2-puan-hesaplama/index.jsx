@@ -99,14 +99,16 @@ const D2PuanHesaplama = () => {
   const [TM, setTM] = useState("");
   const [H1, setH1] = useState("");
   const [H2, setH2] = useState("");
-  const [ilk4, setIlk4] = useState(""); // Opsiyonel
-  const [orta6, setOrta6] = useState(""); // Opsiyonel
-  const [son4, setSon4] = useState(""); // Opsiyonel
+  // --- DEĞİŞİKLİK: State isimleri işaretlenen yerine hata olarak güncellendi ---
+  const [ilk4Hata, setIlk4Hata] = useState(""); // Opsiyonel - İlk 4 satırdaki toplam hata
+  const [orta6Hata, setOrta6Hata] = useState(""); // Opsiyonel - Orta 6 satırdaki toplam hata
+  const [son4Hata, setSon4Hata] = useState(""); // Opsiyonel - Son 4 satırdaki toplam hata
+  // --- DEĞİŞİKLİK SONU ---
   const [maxTM, setMaxTM] = useState("");
   const [minTM, setMinTM] = useState("");
   const [result, setResult] = useState(null);
 
-  // getPercentile fonksiyonu
+  // getPercentile fonksiyonu (Değişiklik yok)
   const getPercentile = (value, type) => {
     const numericValue = parseFloat(value);
     if (isNaN(numericValue)) return 0;
@@ -162,7 +164,7 @@ const D2PuanHesaplama = () => {
     }
   };
 
-// getInterpretation fonksiyonu (HER YORUM İÇİN AYRI AÇIKLAMA)
+// getInterpretation fonksiyonu (Değişiklik yok)
 const getInterpretation = (score, type) => {
   let interpretation = "";
   const colors = {
@@ -317,7 +319,7 @@ const getInterpretation = (score, type) => {
 };
 
 
-  // handleCalculate fonksiyonu (Opsiyonel alan kontrolü ile)
+  // handleCalculate fonksiyonu (Opsiyonel alan kontrolü ve KP HESAPLAMA GÜNCELLENDİ)
   const handleCalculate = () => {
     const mandatoryInputs = { TM, H1, H2, maxTM, minTM };
     for (const key in mandatoryInputs) {
@@ -343,61 +345,71 @@ const getInterpretation = (score, type) => {
          return;
      }
 
+    // --- DEĞİŞİKLİK: Opsiyonel Hata Girdilerini Al ---
+    const ilk4HataInt = (ilk4Hata !== "" && !isNaN(parseInt(ilk4Hata)) && parseInt(ilk4Hata)>=0) ? parseInt(ilk4Hata) : null;
+    const orta6HataInt = (orta6Hata !== "" && !isNaN(parseInt(orta6Hata)) && parseInt(orta6Hata)>=0) ? parseInt(orta6Hata) : null;
+    const son4HataInt = (son4Hata !== "" && !isNaN(parseInt(son4Hata)) && parseInt(son4Hata)>=0) ? parseInt(son4Hata) : null;
+    // --- DEĞİŞİKLİK SONU ---
 
-    const ilk4Int = (ilk4 !== "" && !isNaN(parseInt(ilk4)) && parseInt(ilk4)>=0) ? parseInt(ilk4) : null;
-    const orta6Int = (orta6 !== "" && !isNaN(parseInt(orta6)) && parseInt(orta6)>=0) ? parseInt(orta6) : null;
-    const son4Int = (son4 !== "" && !isNaN(parseInt(son4)) && parseInt(son4)>=0) ? parseInt(son4) : null;
+    // Toplam Hata (H) hesaplaması
+    const H = h1Int + h2Int;
 
-    // Opsiyonel alanların toplamının TN'yi geçmemesi kontrolü (eğer hepsi girildiyse)
-    if (ilk4Int !== null && orta6Int !== null && son4Int !== null) {
-        if ((ilk4Int + orta6Int + son4Int) > tmInt) {
-             alert("İlk 4, Orta 6 ve Son 4 satırların toplamı, Toplam İşaretlenen Madde (TN) sayısını geçemez.");
+    // --- DEĞİŞİKLİK: Opsiyonel hata alanlarının toplamının Toplam Hata (H)'yı geçmemesi kontrolü (eğer hepsi girildiyse) ---
+    if (ilk4HataInt !== null && orta6HataInt !== null && son4HataInt !== null) {
+        if ((ilk4HataInt + orta6HataInt + son4HataInt) > H) {
+             alert("İlk 4, Orta 6 ve Son 4 satırlardaki hataların toplamı, Toplam Hata (E1+E2) sayısını geçemez.");
              return;
         }
     }
+    // --- DEĞİŞİKLİK SONU ---
 
-
-    const H = h1Int + h2Int;
     // Hataların TN'den büyük olamayacağı kontrolü
     if (H > tmInt) {
         alert("Toplam hata sayısı (E1 + E2), Toplam İşaretlenen Madde (TN) sayısından büyük olamaz.");
         return;
     }
 
+    // Diğer standart skorlar
     const hataYuzdesi = tmInt > 0 ? parseFloat(((H / tmInt) * 100).toFixed(2)) : 0;
-    const TM_H = tmInt - H;
-    const DO = maxTMInt - minTMInt;
+    const TM_H = tmInt - H; // Bu TN-E'dir
+    const DO = maxTMInt - minTMInt; // Bu FR'dir
+
+    // --- DEĞİŞİKLİK: KP Hesabı (Hata Ortalamaları Üzerinden) ve Ortalama Hata Değişkenleri ---
     let KP = null;
-    let ilk4Ortalama = null;
-    let orta6Ortalama = null;
-    let son4Ortalama = null;
-    if (ilk4Int !== null && orta6Int !== null && son4Int !== null) {
-      KP = (ilk4Int / 4) + (orta6Int / 6) + (son4Int / 4);
-      ilk4Ortalama = ilk4Int / 4;
-      orta6Ortalama = orta6Int / 6;
-      son4Ortalama = son4Int / 4;
+    let ilk4HataOrt = null;
+    let orta6HataOrt = null;
+    let son4HataOrt = null;
+    if (ilk4HataInt !== null && orta6HataInt !== null && son4HataInt !== null) {
+      KP = (ilk4HataInt / 4) + (orta6HataInt / 6) + (son4HataInt / 4);
+      ilk4HataOrt = ilk4HataInt / 4;
+      orta6HataOrt = orta6HataInt / 6;
+      son4HataOrt = son4HataInt / 4;
     }
-    setResult({
+    // --- DEĞİŞİKLİK SONU ---
+
+    setResult({ // Sonuçları state'e kaydet
       TM: tmInt,
       TM_percentile: getPercentile(tmInt, 'TN'),
       H,
       hataYuzdesi,
       hataYuzdesi_percentile: getPercentile(hataYuzdesi, 'HataYuzdesi'),
-      TM_H,
+      TM_H, // TN-E
       TM_H_percentile: getPercentile(TM_H, 'TN-E'),
       H1: h1Int,
       H2: h2Int,
-      DO,
+      DO, // FR
       DO_percentile: getPercentile(DO, 'FR'),
-      KP: KP !== null ? parseFloat(KP.toFixed(2)) : null,
-      ilk4Sonuc: ilk4Ortalama !== null ? parseFloat(ilk4Ortalama.toFixed(2)) : null,
-      orta6Sonuc: orta6Ortalama !== null ? parseFloat(orta6Ortalama.toFixed(2)) : null,
-      son4Sonuc: son4Ortalama !== null ? parseFloat(son4Ortalama.toFixed(2)) : null
+      KP: KP !== null ? parseFloat(KP.toFixed(2)) : null, // Hata bazlı KP
+      // --- DEĞİŞİKLİK: Hata ortalamalarını kaydet ---
+      ilk4HataOrt: ilk4HataOrt !== null ? parseFloat(ilk4HataOrt.toFixed(2)) : null,
+      orta6HataOrt: orta6HataOrt !== null ? parseFloat(orta6HataOrt.toFixed(2)) : null,
+      son4HataOrt: son4HataOrt !== null ? parseFloat(son4HataOrt.toFixed(2)) : null
+      // --- DEĞİŞİKLİK SONU ---
     });
   };
 
 
-  // generateClinicalComment fonksiyonu (Orijinal JSX yapısı ile)
+  // generateClinicalComment fonksiyonu (Değişiklik yok, ancak KP yorumu GÜNCELLENDİ)
   const generateClinicalComment = () => {
     if (!result) return null;
 
@@ -414,8 +426,8 @@ const getInterpretation = (score, type) => {
         { label: "E2 (Öğrenme Güçlüğü)", scoreKey: "H2", valueKey: "H2", type: 'E2' },
       ],
       IstikrarVeKonsantrasyon: [
-        { label: "FR (Dikkat Salınımı)", scoreKey: "DO_percentile", valueKey: "DO", type: 'FR' },
-        ...(result.KP !== null ? [{ label: "KP (Konsantrasyon P.)", scoreKey: "KP", valueKey: "KP", type: null }] : [])
+        { label: "FR (Dikkat Salınımı)", scoreKey: "DO_percentile", valueKey: "DO", type: 'FR' }
+       
       ],
     };
 
@@ -490,30 +502,32 @@ const getInterpretation = (score, type) => {
           ))}
         </div>
 
-        {/* Konsantrasyon Puanı (Sadece hesaplandıysa göster) - Orijinal */}
-        {result.KP !== null && result.ilk4Sonuc !== null && result.orta6Sonuc !== null && result.son4Sonuc !== null && (
-          <div className="konsantrasyon-analizi"> {/* Bu sınıf adı styles.jsx'te tanımlı olmalı */}
-            <h4 className="konsantrasyon-title">Konsantrasyon Analizi</h4> {/* Bu sınıf adı styles.jsx'te tanımlı olmalı */}
-            <div className="konsantrasyon-grid"> {/* Bu sınıf adı styles.jsx'te tanımlı olmalı */}
-              <div className="konsantrasyon-item"> {/* Bu sınıf adı styles.jsx'te tanımlı olmalı */}
-                <div className="konsantrasyon-item-label">İlk 4 Satır Ort.</div> {/* Bu sınıf adı styles.jsx'te tanımlı olmalı */}
-                <div className="konsantrasyon-item-value">{result.ilk4Sonuc.toFixed(2)}</div> {/* Bu sınıf adı styles.jsx'te tanımlı olmalı */}
+        {/* --- DEĞİŞİKLİK: Konsantrasyon Puanı yerine Bölümsel Hata Analizi --- */}
+        {result.KP !== null && result.ilk4HataOrt !== null && result.orta6HataOrt !== null && result.son4HataOrt !== null && (
+          <div className="konsantrasyon-analizi">
+            <h4 className="konsantrasyon-title">Bölümsel Hata Analizi </h4> {/* Başlık güncellendi */}
+            <div className="konsantrasyon-grid">
+              <div className="konsantrasyon-item">
+                <div className="konsantrasyon-item-label">İlk 4 Satır Ort. Hata</div> {/* Etiket güncellendi */}
+                <div className="konsantrasyon-item-value">{result.ilk4HataOrt.toFixed(2)}</div> {/* Değer güncellendi */}
               </div>
               <div className="konsantrasyon-item">
-                 <div className="konsantrasyon-item-label">Orta 6 Satır Ort.</div>
-                 <div className="konsantrasyon-item-value">{result.orta6Sonuc.toFixed(2)}</div>
+                 <div className="konsantrasyon-item-label">Orta 6 Satır Ort. Hata</div> {/* Etiket güncellendi */}
+                 <div className="konsantrasyon-item-value">{result.orta6HataOrt.toFixed(2)}</div> {/* Değer güncellendi */}
               </div>
               <div className="konsantrasyon-item">
-                 <div className="konsantrasyon-item-label">Son 4 Satır Ort.</div>
-                 <div className="konsantrasyon-item-value">{result.son4Sonuc.toFixed(2)}</div>
+                 <div className="konsantrasyon-item-label">Son 4 Satır Ort. Hata</div> {/* Etiket güncellendi */}
+                 <div className="konsantrasyon-item-value">{result.son4HataOrt.toFixed(2)}</div> {/* Değer güncellendi */}
               </div>
             </div>
-            <div className="konsantrasyon-yorum"> {/* Bu sınıf adı styles.jsx'te tanımlı olmalı */}
-              KP Skoru: {result.KP.toFixed(2)} - {' '}
-              {result.KP >= 4 ? "Yüksek konsantrasyon seviyesi" : result.KP >= 3 ? "Orta düzey konsantrasyon" : "Düşük konsantrasyon seviyesi"}
+            <div className="konsantrasyon-yorum">
+              KP Skoru (Ort. Hata Toplamı): {result.KP.toFixed(2)}
+              {/* Basit yorum kaldırıldı, çünkü hata bazlı KP'nin normatif yorumu belirsiz.
+                  Yüksek KP artık daha fazla ortalama hataya işaret eder. */}
             </div>
           </div>
         )}
+        {/* --- DEĞİŞİKLİK SONU --- */}
       </div>
     );
   }; // generateClinicalComment sonu
@@ -526,7 +540,7 @@ const getInterpretation = (score, type) => {
       </TitleContainer>
 
       <InputContainer>
-         {/* Zorunlu Alanlar */}
+         {/* Zorunlu Alanlar (Değişiklik yok) */}
          <InputRow>
            <Label>TN (Toplam İşaretlenen):</Label>
            <Input value={TM} onChange={(e) => setTM(e.target.value)} placeholder="Zorunlu" type="number" min="0" required/>
@@ -548,19 +562,20 @@ const getInterpretation = (score, type) => {
             <Input value={minTM} onChange={(e) => setMinTM(e.target.value)} placeholder="Zorunlu" type="number" min="0" required/>
           </InputRow>
 
-          {/* Opsiyonel Alanlar */}
+          {/* --- DEĞİŞİKLİK: Opsiyonel Alanlar Hata Girişleri İçin Güncellendi --- */}
           <InputRow>
-            <Label>İlk 4 Satır İşaretlenen (Opsiyonel):</Label>
-            <Input value={ilk4} onChange={(e) => setIlk4(e.target.value)} placeholder="KP Hesabı için giriniz" type="number" min="0"/>
+            <Label>İlk 4 Satır Toplam Hata (Opsiyonel):</Label> {/* Etiket Güncellendi */}
+            <Input value={ilk4Hata} onChange={(e) => setIlk4Hata(e.target.value)} placeholder="KP Hesabı için giriniz (Hata Sayısı)" type="number" min="0"/> {/* State, onChange, placeholder güncellendi */}
           </InputRow>
           <InputRow>
-            <Label>Orta 6 Satır İşaretlenen (Opsiyonel):</Label>
-            <Input value={orta6} onChange={(e) => setOrta6(e.target.value)} placeholder="KP Hesabı için giriniz" type="number" min="0"/>
+            <Label>Orta 6 Satır Toplam Hata (Opsiyonel):</Label> {/* Etiket Güncellendi */}
+            <Input value={orta6Hata} onChange={(e) => setOrta6Hata(e.target.value)} placeholder="KP Hesabı için giriniz (Hata Sayısı)" type="number" min="0"/> {/* State, onChange, placeholder güncellendi */}
           </InputRow>
           <InputRow>
-            <Label>Son 4 Satır İşaretlenen (Opsiyonel):</Label>
-            <Input value={son4} onChange={(e) => setSon4(e.target.value)} placeholder="KP Hesabı için giriniz" type="number" min="0"/>
+            <Label>Son 4 Satır Toplam Hata (Opsiyonel):</Label> {/* Etiket Güncellendi */}
+            <Input value={son4Hata} onChange={(e) => setSon4Hata(e.target.value)} placeholder="KP Hesabı için giriniz (Hata Sayısı)" type="number" min="0"/> {/* State, onChange, placeholder güncellendi */}
           </InputRow>
+          {/* --- DEĞİŞİKLİK SONU --- */}
 
         <Button onClick={handleCalculate}>Puanı Hesapla</Button>
       </InputContainer>
@@ -570,8 +585,8 @@ const getInterpretation = (score, type) => {
         {result && generateClinicalComment()}
          {/* Sonuç yoksa başlangıç mesajı */}
          {!result && (
-            <p style={{ textAlign: 'center', color: 'var(--text-light)', fontStyle: 'italic', padding: '2rem' }}>
-                Hesaplama yapmak için lütfen zorunlu alanları girin ve 'Puanı Hesapla' düğmesine basın. KP ve konsantrasyon analizi için opsiyonel alanları doldurabilirsiniz.
+            <p style={{ textAlign: 'center', color: 'var(--text-light)', fontStyle: 'italic', padding: '2rem', lineHeight: '1.5' }}>
+                Hesaplama yapmak için lütfen zorunlu alanları girin ve 'Puanı Hesapla' düğmesine basın. KP ve bölümsel hata analizi için opsiyonel alanları doldurabilirsiniz.
             </p>
          )}
       </ResultContainer>
