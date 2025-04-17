@@ -98,7 +98,7 @@ function Anasayfa() {
           </S.TestSection>
 
           <S.ContactSection>
-            <h3>Bize Ulaşın</h3>
+            <h3>Bize Ulaşın BetBah</h3>
             <S.SocialLinks>
               <a href="https://facebook.com/cognitivecheck" target="_blank" rel="noreferrer" aria-label="CognitiveCheck Facebook Sayfası">
                 <FaFacebook /> {/* Size prop'u stil tarafına taşındı */}

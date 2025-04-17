@@ -14,7 +14,7 @@ function AppContent() {
   return (
     <>
       <Helmet>
-        <title>Cognitive Check</title>
+        <title>BetBah</title>
         {/* Diğer meta etiketleri */}
       </Helmet>
       <Sidebar />
