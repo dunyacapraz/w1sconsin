@@ -242,7 +242,7 @@ const getInterpretation = (score, type) => {
      if (percentile === 0 || percentile === 100 && score > FR_NORM[0].value) { // %0 veya çok yüksek FR için norm dışı
          interpretation = "N/A"; color = colors.na; explanation = `Performans farkı (${score}) norm tablosu dışında veya hesaplanamadı. Yüzdelik: ${percentile}.`;
      }
-     else if (percentile < 10) {
+     else if (percentile <= 10) {
       interpretation = "Kritik İstikrarsızlık"; color = colors.bad;
       explanation = `Performans istikrarı yüzdeliği (${percentile}) çok düşük. Test bölümleri arasında aşırı hız farkları var. Motivasyon veya dikkat sürekliliğinde ciddi sorunlar olabilir.`;
     } else if (percentile <= 25) {
