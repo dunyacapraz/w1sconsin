@@ -238,20 +238,26 @@ const getInterpretation = (score, type) => {
 
   } else if (type === 'FR') {
     const percentile = score;
-     if (percentile === 0 || percentile === 100 && score > FR_NORM[0].value) { // %0 veya çok yüksek FR için norm dışı
-         interpretation = "N/A"; color = colors.na; explanation = `Performans farkı (${score}) norm tablosu dışında veya hesaplanamadı. Yüzdelik: ${percentile}.`;
+     if (percentile === 0) { // Sadece %0 için norm dışı kontrolü
+         interpretation = "N/A"; 
+         color = colors.na; 
+         explanation = `Performans farkı (${score}) norm tablosu dışında veya hesaplanamadı. Yüzdelik: ${percentile}.`;
      }
      else if (percentile <= 10) {
-      interpretation = "Kritik İstikrarsızlık"; color = colors.bad;
+      interpretation = "Kritik İstikrarsızlık"; 
+      color = colors.bad;
       explanation = `Performans istikrarı yüzdeliği (${percentile}) çok düşük. Test bölümleri arasında aşırı hız farkları var. Motivasyon veya dikkat sürekliliğinde ciddi sorunlar olabilir.`;
     } else if (percentile <= 25) {
-      interpretation = "Riskli Dağılım"; color = colors.warning;
+      interpretation = "Riskli Dağılım"; 
+      color = colors.warning;
       explanation = `Performans istikrarı yüzdeliği (${percentile}) düşük. Test boyunca hız tutarlı değil. Dikkat yönetiminde zorluklar olabilir.`;
     } else if (percentile <= 75) {
-      interpretation = "Normal Varyasyon"; color = colors.normal;
+      interpretation = "Normal Varyasyon"; 
+      color = colors.normal;
       explanation = `Performans istikrarı yüzdeliği (${percentile}) normal aralıkta. Hızdaki hafif farklılıklar doğal konsantrasyon dalgalanmalarıyla uyumlu.`;
     } else {
-      interpretation = "İstikrarlı Performans"; color = colors.good;
+      interpretation = "İstikrarlı Performans"; 
+      color = colors.good;
       explanation = `Performans istikrarı yüzdeliği (${percentile}) yüksek. Çalışma hızı oldukça tutarlı. Dikkat sürekliliği iyi.`;
     }
 
