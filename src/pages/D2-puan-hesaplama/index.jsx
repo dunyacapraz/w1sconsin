@@ -90,8 +90,8 @@ const FR_NORM = [
  { value: 21, percentile: 10 },
  { value: 16, percentile: 25 },
  { value: 11, percentile: 50 },
- { value: 10, percentile: 75 },
- { value: 7, percentile: 90 }
+ { value: 10, percentile: 75 }
+ 
 ];
 
 
