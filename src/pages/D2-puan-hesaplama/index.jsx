@@ -91,7 +91,7 @@ const FR_NORM = [
  { value: 16, percentile: 25 },
  { value: 11, percentile: 50 },
  { value: 10, percentile: 75 }
- 
+
 ];
 
 
@@ -147,17 +147,16 @@ const D2PuanHesaplama = () => {
             if (percentile === normTable[normTable.length - 1].percentile && numericValue < normTable[normTable.length - 1].value) {
                 return 100;
             }
-             // En yüksek eşikten bile kötüyse (çok hata/fark), 0 döndürelim (ya da en düşük yüzdelik)
-             if (percentile === 0 && numericValue > normTable[0].value) {
-                 return normTable[0].percentile > 0 ? normTable[0].percentile : 0; // En düşük %'yi döndür veya 0
+            // 75'ten büyük değerler için 75-100 arası interpolasyon yap
+            if (percentile === 75 && numericValue < normTable[normTable.length - 1].value) {
+                // 75 ile 100 arasında doğrusal interpolasyon
+                const range = normTable[normTable.length - 1].value - normTable[0].value;
+                const position = (numericValue - normTable[0].value) / range;
+                return 75 + (position * 25); // 75'ten 100'e kadar
             }
-        } else {
-            // Yüksek değer yüksek yüzdelik anlamına gelir (bu D2'de yok ama genel yapı)
-            for (let i = normTable.length - 1; i >= 0; i--) {
-                if (numericValue >= normTable[i].value) {
-                    percentile = normTable[i].percentile;
-                    break;
-                }
+            // En yüksek eşikten bile kötüyse (çok hata/fark), 0 döndürelim
+            if (percentile === 0 && numericValue > normTable[0].value) {
+                return normTable[0].percentile > 0 ? normTable[0].percentile : 0;
             }
         }
         return percentile;
@@ -251,12 +250,9 @@ const getInterpretation = (score, type) => {
     } else if (percentile <= 75) {
       interpretation = "Normal Varyasyon"; color = colors.normal;
       explanation = `Performans istikrarı yüzdeliği (${percentile}) normal aralıkta. Hızdaki hafif farklılıklar doğal konsantrasyon dalgalanmalarıyla uyumlu.`;
-    } else if (percentile <= 90) {
+    } else {
       interpretation = "İstikrarlı Performans"; color = colors.good;
       explanation = `Performans istikrarı yüzdeliği (${percentile}) yüksek. Çalışma hızı oldukça tutarlı. Dikkat sürekliliği iyi.`;
-    } else { // 90 üzeri (100 dahil)
-      interpretation = "Çok İstikrarlı / Yüksek"; color = colors.very_good;
-      explanation = `Performans istikrarı yüzdeliği (${percentile}) çok yüksek. Çalışma hızında minimum değişkenlik. Yüksek zihinsel dayanıklılık.`;
     }
 
   } else if (type === 'E1') {
